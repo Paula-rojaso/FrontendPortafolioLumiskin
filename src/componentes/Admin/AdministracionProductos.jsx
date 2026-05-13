@@ -58,18 +58,39 @@ export function AdministracionProductos() {
     cargarProductos();
   }, []);
 
-  const filtrados = useMemo(() => {
-    const texto = filtroTexto.toLowerCase().trim();
-    const cat = filtroCategoria.trim();
-    return productos.filter((p) => {
-      const okCat = !cat || p.categoria?.nombre === cat;
-      const okTxt =
-        !texto ||
-        p.nombre?.toLowerCase().includes(texto) ||
-        p.descripcion?.toLowerCase().includes(texto);
-      return okCat && okTxt;
-    });
-  }, [productos, filtroTexto, filtroCategoria]);
+  const normalizarTexto = (valor) => {
+  return String(valor || "")
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+};
+
+const filtrados = useMemo(() => {
+  const texto = normalizarTexto(filtroTexto);
+  const cat = normalizarTexto(filtroCategoria);
+
+  return productos.filter((p) => {
+    const categoriaProducto = normalizarTexto(
+      p.categoria?.nombre ||
+      p.categoriaNombre ||
+      p.categoria ||
+      ""
+    );
+
+    const nombreProducto = normalizarTexto(p.nombre);
+    const descripcionProducto = normalizarTexto(p.descripcion);
+
+    const okCat = !cat || categoriaProducto === cat;
+
+    const okTxt =
+      !texto ||
+      nombreProducto.includes(texto) ||
+      descripcionProducto.includes(texto);
+
+    return okCat && okTxt;
+  });
+}, [productos, filtroTexto, filtroCategoria]);
 
   function abrirModalCrear() {
     setModo("crear");
@@ -118,9 +139,11 @@ export function AdministracionProductos() {
     <div className="container my-4">
       <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <h1 className="m-0">ADMINISTRACIÓN DE PRODUCTOS</h1>
+        
         <button className="btn btn-primary" onClick={abrirModalCrear}>
           ＋ Agregar producto
         </button>
+        
       </div>
 
       <div className="row g-2 mb-3 mt-2">
@@ -146,7 +169,7 @@ export function AdministracionProductos() {
             <option>Cuidado Personal</option>
           </select>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <button
             className="btn btn-outline-secondary w-100"
             onClick={() => {
@@ -156,6 +179,8 @@ export function AdministracionProductos() {
           >
             Limpiar filtros
           </button>
+          
+          
         </div>
       </div>
 
@@ -216,7 +241,7 @@ export function AdministracionProductos() {
                     )}
                   </td>
                   <td>{p.nombre}</td>
-                  <td>{p.categoria?.nombre || "-"}</td>
+                  <td>{p.categoria?.nombre || p.categoriaNombre || p.categoria || "-"}</td>
                   <td>${Number(p.precio || 0).toLocaleString()} CLP</td>
 
                   {/* 🔴🟢 Stock con colores según cantidad */}

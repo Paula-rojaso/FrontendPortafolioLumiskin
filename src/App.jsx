@@ -21,6 +21,9 @@ import Pago from './componentes/Pago/Pago'
 import CompraExitosa from './compra-exitosa/compra-exitosa'
 import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
+import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
+import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
+
 
 function App() {
   
@@ -45,6 +48,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/inventario" element={<AdministracionProductos />} />
+        <Route path="/admin" element={<PanelAdministracion />} />
+        <Route path="/admin/usuarios" element={<AdministracionUsuarios />} />
+        <Route path="/admin/ordenes" element={<Ordenes />} />
         <Route path="/usuario" element={<Usuario/>} />
         <Route path="/Perfil" element={<MiPerfil/>}/>
         <Route path="/pago" element={<Pago/>}/>
