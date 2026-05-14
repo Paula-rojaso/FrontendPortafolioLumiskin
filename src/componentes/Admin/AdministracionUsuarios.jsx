@@ -18,7 +18,7 @@ export function AdministracionUsuarios() {
     direccion: "",
     departamento: "",
     infoEnvio: "",
-    rol_id: 2,
+    rol_id: 1,
     estado: 1,
   });
 
@@ -96,7 +96,7 @@ export function AdministracionUsuarios() {
       direccion: "",
       departamento: "",
       infoEnvio: "",
-      rol_id: 2,
+      rol_id: 1,
       estado: 1,
     });
 
@@ -129,7 +129,7 @@ export function AdministracionUsuarios() {
       direccion: usuario.direccion || "",
       departamento: usuario.departamento || "",
       infoEnvio: usuario.infoEnvio || "",
-      rol_id: usuario.rol_id || usuario.rol?.id || 2,
+      rol_id: usuario.rol_id || usuario.rol?.id || 1,
       estado: usuario.estado === true || usuario.estado === 1 ? 1 : 0,
     });
 
@@ -334,12 +334,21 @@ export function AdministracionUsuarios() {
   };
 
   const formatearRol = (usuario) => {
-    if (typeof usuario.rol === "string") return usuario.rol;
-    if (usuario.rol?.nombre) return usuario.rol.nombre;
-    if (usuario.rol_id === 1) return "admin";
-    if (usuario.rol_id === 2) return "cliente";
-    return "cliente";
-  };
+  const rolId = usuario.rol_id || usuario.rol?.id;
+
+  if (typeof usuario.rol === "string") {
+    return usuario.rol.toLowerCase();
+  }
+
+  if (usuario.rol?.nombre) {
+    return usuario.rol.nombre.toLowerCase();
+  }
+
+  if (rolId === 2) return "admin";
+  if (rolId === 1) return "cliente";
+
+  return "cliente";
+};
 
   const obtenerEstadoActivo = (usuario) => {
     return usuario.estado === 1 || usuario.estado === true;
@@ -662,8 +671,8 @@ export function AdministracionUsuarios() {
                       value={formulario.rol_id}
                       onChange={handleChange}
                     >
-                      <option value={1}>Administrador</option>
-                      <option value={2}>Cliente</option>
+                      <option value={1}>Cliente</option>
+                      <option value={2}>Administrador</option>
                     </select>
                   </div>
 
