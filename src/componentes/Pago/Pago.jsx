@@ -476,7 +476,7 @@ export default function Pago() {
         if (!email) return;
 
         const res = await fetch(
-          `http://localhost:8082/api/usuarios/email/${email}`
+          `https://backend-usuario.onrender.com/api/usuarios/email/${email}`
         );
 
         if (!res.ok) return;
@@ -546,12 +546,12 @@ export default function Pago() {
 
       for (const item of carrito) {
         await fetch(
-          `http://localhost:8081/api/productos/${item.id}/descontar?cantidad=${item.cantidad}`,
+          `https://backendportafolio-635z.onrender.com/api/productos/${item.id}/descontar?cantidad=${item.cantidad}`,
           { method: "PATCH" }
         );
       }
 
-      const res = await fetch("http://localhost:8083/api/pagos/confirmar", {
+      const res = await fetch("https://backend-pago.onrender.com/api/pagos/confirmar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -158,8 +158,8 @@ export function ModalUsuario({ modo, usuario, onGuardar, roles }) {
 
     try {
       const url = esEditar
-        ? `http://localhost:8082/api/usuarios/${form.id}`
-        : "http://localhost:8082/api/usuarios";
+        ? `https://backend-usuario.onrender.com/api/usuarios/${form.id}`
+        : "https://backend-usuario.onrender.com/api/usuarios";
       const metodo = esEditar ? "PUT" : "POST";
 
       const base = {

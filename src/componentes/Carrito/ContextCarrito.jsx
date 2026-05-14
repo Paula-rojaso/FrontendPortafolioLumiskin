@@ -35,7 +35,7 @@ export const CarritoProvider = ({ children }) => {
 
   const obtenerStockBackend = async (idProducto) => {
     try {
-      const res = await fetch(`http://localhost:8081/api/productos/${idProducto}`);
+      const res = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${idProducto}`);
       const data = await res.json();
       return data.stock;
     } catch (e) {

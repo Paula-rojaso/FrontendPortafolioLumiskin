@@ -16,13 +16,13 @@ export function PanelAdministracion() {
     setCargando(true);
 
     try {
-      const resPagos = await fetch("http://localhost:8083/api/pagos");
+      const resPagos = await fetch("https://backend-pago.onrender.com/api/pagos");
       if (resPagos.ok) {
         const dataPagos = await resPagos.json();
         setBoletas(Array.isArray(dataPagos) ? dataPagos : []);
       }
 
-      const resUsuarios = await fetch("http://localhost:8082/api/usuarios");
+      const resUsuarios = await fetch("https://backend-usuario.onrender.com/api/usuarios");
       if (resUsuarios.ok) {
         const dataUsuarios = await resUsuarios.json();
         setUsuarios(Array.isArray(dataUsuarios) ? dataUsuarios : []);

@@ -61,7 +61,7 @@ export function AdministracionUsuarios() {
         throw new Error("No hay token de sesión. Inicia sesión nuevamente.");
       }
 
-      const res = await fetch("http://localhost:8082/api/usuarios", {
+      const res = await fetch("https://backend-usuario.onrender.com/api/usuarios", {
         method: "GET",
         headers: headersAuth(),
       });
@@ -194,8 +194,8 @@ export function AdministracionUsuarios() {
 
       const url =
         modo === "crear"
-          ? "http://localhost:8082/api/usuarios"
-          : `http://localhost:8082/api/usuarios/${usuarioSeleccionado.id}`;
+          ? "https://backend-usuario.onrender.com/api/usuarios"
+          : `https://backend-usuario.onrender.com/api/usuarios/${usuarioSeleccionado.id}`;
 
       const metodo = modo === "crear" ? "POST" : "PUT";
 
@@ -266,7 +266,7 @@ export function AdministracionUsuarios() {
       }
 
       const res = await fetch(
-        `http://localhost:8082/api/usuarios/${usuario.id}/desactivar`,
+        `https://backend-usuario.onrender.com/api/usuarios/${usuario.id}/desactivar`,
         {
           method: "PATCH",
           headers: headersAuth(),
@@ -307,7 +307,7 @@ export function AdministracionUsuarios() {
       }
 
       const res = await fetch(
-        `http://localhost:8082/api/usuarios/${usuario.id}`,
+        `https://backend-usuario.onrender.com/api/usuarios/${usuario.id}`,
         {
           method: "DELETE",
           headers: headersAuth(),

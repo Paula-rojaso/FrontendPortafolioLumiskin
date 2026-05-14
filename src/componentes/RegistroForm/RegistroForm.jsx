@@ -162,7 +162,7 @@ export function RegistroForm() {
         };
 
         try {
-          const respuesta = await fetch("http://localhost:8082/api/usuarios", {
+          const respuesta = await fetch("https://backend-usuario.onrender.com/api/usuarios", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos),

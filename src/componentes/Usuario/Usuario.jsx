@@ -17,7 +17,7 @@ export function Usuario() {
   try {
     const token = localStorage.getItem("token"); 
     console.log("TOKEN:", token);
-    const res = await fetch("http://localhost:8082/api/usuarios", {
+    const res = await fetch("https://backend-usuario.onrender.com/api/usuarios", {
       headers: {
         "Authorization": `Bearer ${token}` 
       }
@@ -35,7 +35,7 @@ export function Usuario() {
     setCargando(false);
   }
 }
-fetch("http://localhost:8082/api/usuarios", {
+fetch("https://backend-usuario.onrender.com/api/usuarios", {
   headers: {
     "Authorization": "Bearer " + localStorage.getItem("token")
   }
@@ -44,7 +44,7 @@ fetch("http://localhost:8082/api/usuarios", {
   async function cargarRoles() {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8082/api/roles", {
+      const res = await fetch("https://backend-usuario.onrender.com/api/roles", {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
@@ -108,7 +108,7 @@ fetch("http://localhost:8082/api/usuarios", {
   async function eliminarUsuario(id) {
     if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
     try {
-      const res = await fetch(`http://localhost:8082/api/usuarios/${id}`, {
+      const res = await fetch(`https://backend-usuario.onrender.com/api/usuarios/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("No se pudo eliminar");

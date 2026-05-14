@@ -14,7 +14,7 @@ export function AdministracionProductos() {
     setCargando(true);
     setMensaje(null);
     try {
-      const res = await fetch("http://localhost:8081/api/productos");
+      const res = await fetch("https://backendportafolio-635z.onrender.com/api/productos");
       if (!res.ok) throw new Error("Error al obtener productos");
       const data = await res.json();
       setProductos(Array.isArray(data) ? data : []);
@@ -36,7 +36,7 @@ export function AdministracionProductos() {
     formData.append("archivo", archivo);
 
     try {
-      const res = await fetch(`http://localhost:8081/api/productos/${id}/imagen`, {
+      const res = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${id}/imagen`, {
         method: "POST",
         body: formData,
       });
@@ -109,7 +109,7 @@ const filtrados = useMemo(() => {
   async function eliminarProducto(id) {
     if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
     try {
-      const res = await fetch(`http://localhost:8081/api/productos/${id}`, {
+      const res = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("No se pudo eliminar");

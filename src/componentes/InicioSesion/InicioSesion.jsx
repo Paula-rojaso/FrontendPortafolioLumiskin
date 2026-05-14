@@ -67,7 +67,7 @@ export function InicioSesion() {
     setCargando(true);
 
     try {
-      const respuesta = await fetch("http://localhost:8082/api/usuarios/login", {
+      const respuesta = await fetch("https://backend-usuario.onrender.com/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

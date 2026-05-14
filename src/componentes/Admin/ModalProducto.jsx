@@ -78,7 +78,7 @@ export function ModalProducto({ modo, producto, onGuardar }) {
   useEffect(() => {
     (async () => {
       try {
-        const r = await fetch("http://localhost:8081/api/categorias");
+        const r = await fetch("https://backendportafolio-635z.onrender.com/api/categorias");
         if (!r.ok) throw new Error("No se pudieron cargar categorías");
         const data = await r.json();
         setCategorias(Array.isArray(data) ? data : []);
@@ -142,8 +142,8 @@ export function ModalProducto({ modo, producto, onGuardar }) {
 
     try {
       const url = esEditar
-        ? `http://localhost:8081/api/productos/${producto.id}`
-        : "http://localhost:8081/api/productos";
+        ? `https://backendportafolio-635z.onrender.com/api/productos/${producto.id}`
+        : "https://backendportafolio-635z.onrender.com/api/productos";
       const metodo = esEditar ? "PUT" : "POST";
 
       const payload = {
@@ -168,7 +168,7 @@ export function ModalProducto({ modo, producto, onGuardar }) {
       if (archivo && productId) {
         const fd = new FormData();
         fd.append("archivo", archivo);
-        const up = await fetch(`http://localhost:8081/api/productos/${productId}/imagen`, {
+        const up = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${productId}/imagen`, {
           method: "POST",
           body: fd,
         });
