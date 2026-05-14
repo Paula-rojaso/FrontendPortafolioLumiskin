@@ -23,7 +23,7 @@ import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
 import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
 import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
-
+import { WhatsappChat } from "./componentes/WhatsappChat/WhatsappChat";
 
 function App() {
   
@@ -59,7 +59,9 @@ function App() {
 
 
       </Routes>
+      <WhatsappChat />
     </Router>
+    
     </>
   )
 }
