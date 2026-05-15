@@ -25,7 +25,7 @@ export function HomeSection() {
             </div>
 
             <div className="carousel-item">
-              <img src="/img/fotoCar2.jpg" alt="Slide 2" className="d-block w-100" />
+              <img src="/img/fotoCar2.png" alt="Slide 2" className="d-block w-100" />
             </div>
 
             <div className="carousel-item">
