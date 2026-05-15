@@ -269,8 +269,8 @@ export default function CompraExitosa() {
                             <div className="d-flex align-items-center gap-3">
                               <img
                                 src={
-                                  item.imagen_url ||
-                                  item.imagen_url ||
+                                  item.imagenUrl ||
+                                  item.imagenUrl ||
                                   item.imagen ||
                                   "/sin-imagen.png"
                                 }

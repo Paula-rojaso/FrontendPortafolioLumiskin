@@ -225,9 +225,9 @@ const filtrados = useMemo(() => {
                 <tr key={p.id}>
                   <td>{p.id}</td>
                   <td>
-                    {p.imagen_url ? (
+                    {p.imagenUrl ? (
                       <img
-                        src={p.imagen_url}
+                        src={p.imagenUrl}
                         alt={p.nombre}
                         style={{
                           width: 58,

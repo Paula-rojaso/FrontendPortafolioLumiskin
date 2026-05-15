@@ -571,7 +571,7 @@ export default function Pago() {
             cantidad: item.cantidad,
             precioUnitario: item.precio,
             subtotal: item.precio * item.cantidad,
-            imagen_url: item.imagen_url,
+            imagenUrl: item.imagenUrl,
           })),
           subtotal,
           iva,
@@ -738,7 +738,7 @@ export default function Pago() {
                                 <td>
                                   <div className="d-flex align-items-center gap-3">
                                     <img
-                                      src={item.imagen_url || item.foto}
+                                      src={item.imagenUrl || item.foto}
                                       alt={item.nombre}
                                       style={{
                                         width: 78,

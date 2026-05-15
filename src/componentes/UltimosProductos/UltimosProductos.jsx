@@ -84,8 +84,8 @@ export function UltimosProductos() {
                 data-bs-toggle="modal"
                 data-bs-target={`#modal${p.id}`}
               >
-                {p.imagen_url ? (
-                  <img src={p.imagen_url} alt={p.nombre} className="card-img-top" />
+                {p.imagenUrl ? (
+                  <img src={p.imagenUrl} alt={p.nombre} className="card-img-top" />
                 ) : (
                   <div
                     className="d-flex align-items-center justify-content-center bg-light"
@@ -160,7 +160,7 @@ export function UltimosProductos() {
 
                     <div className="modal-body text-center">
                       <img
-                        src={p.imagen_url}
+                        src={p.imagenUrl}
                         alt={p.nombre}
                         className="img-fluid rounded mb-3"
                       />

@@ -96,10 +96,10 @@ export function ModalProducto({ modo, producto, onGuardar }) {
         precio: producto.precio ?? "",
         stock: producto.stock ?? "",
         descripcion: producto.descripcion || "",
-        imagen: producto.imagen_url || producto.imagen || "",
+        imagen: producto.imagenUrl || producto.imagen || "",
         categoriaId: producto.categoria?.id || producto.categoriaId || "",
       });
-      setPreview(producto.imagen_url || producto.imagen || null);
+      setPreview(producto.imagenUrl || producto.imagen || null);
       setArchivo(null);
     } else {
       setForm({

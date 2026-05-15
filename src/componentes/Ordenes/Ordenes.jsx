@@ -131,7 +131,7 @@ export default function Ordenes() {
                         <tr key={i}>
                           <td>
                             <img
-                              src={d.imagen_url || "/sin-imagen.png"}
+                              src={d.imagenUrl || "/sin-imagen.png"}
                               alt={d.producto}
                               style={{
                                 width: 60,

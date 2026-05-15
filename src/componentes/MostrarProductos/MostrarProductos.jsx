@@ -113,9 +113,9 @@ setProductos(productosFiltrados);
                 data-bs-toggle="modal"
                 data-bs-target={`#modal${p.id}`}
               >
-                {p.imagen_url ? (
+                {p.imagenUrl ? (
                   <img
-                    src={p.imagen_url}
+                    src={p.imagenUrl}
                     alt={p.nombre}
                     className="card-img-top"
                   />
@@ -192,7 +192,7 @@ setProductos(productosFiltrados);
 
                       <div className="modal-body text-center py-3">
                         <img
-                          src={p.imagen_url}
+                          src={p.imagenUrl}
                           alt={p.nombre}
                           className="img-fluid rounded mb-3"
                           style={{
