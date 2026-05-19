@@ -7,9 +7,21 @@ export default function CompraExitosa() {
 
   useEffect(() => {
     const guardada = localStorage.getItem("boleta");
+    const yaDescontado = localStorage.getItem("stock_descontado");
 
     if (guardada) {
-      setBoleta(JSON.parse(guardada));
+      const boletaData = JSON.parse(guardada);
+      setBoleta(boletaData);
+
+      if (!yaDescontado) {
+        boletaData.detalles.forEach((item) => {
+          fetch(
+            `http://localhost:8081/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
+            { method: "PATCH" }
+          );
+        });
+        localStorage.setItem("stock_descontado", "true");
+      }
     }
   }, []);
 
@@ -85,12 +97,7 @@ export default function CompraExitosa() {
               <tr key={index}>
                 <td>
                   <img
-                    src={
-                      item.imagenUrl ||
-                      item.imagen_url ||
-                      item.imagen ||
-                      "/sin-imagen.png"
-                    }
+                    src={item.imagenUrl || item.imagen_url || item.imagen || "/sin-imagen.png"}
                     alt={item.nombre}
                     style={{
                       width: 70,
@@ -139,7 +146,8 @@ export default function CompraExitosa() {
         <button
           className="btn button2"
           onClick={() => {
-            localStorage.removeItem("boleta"); 
+            localStorage.removeItem("boleta");
+            localStorage.removeItem("stock_descontado");
             navigate("/");
           }}
         >
