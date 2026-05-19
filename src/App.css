@@ -102,37 +102,103 @@ body {
   margin: 0;
   justify-content: center;
 }
+/* ===== NAVBAR LUMISKIN MEJORADO ===== */
 .mi-navbar {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%) !important;
   width: 100%;
-  padding-top: 18px;
-  padding-bottom: 18px;
-}
-
-.mi-navbar .nav-link {
-  color: #5a2a27 !important;
-  font-weight: 600;
-  font-size: 1.3rem;
-}
-
-.mi-navbar .nav-link:hover {
-  color: #d63384 !important;
-}
-
-.mi-navbar .navbar-brand {
-  color: #5a2a27 !important;
-}
-
-.mi-navbar .nav-link:hover {
-  color: #d63384 !important;
+  min-height: 20px;
+  padding: 16px 32px;
+  box-shadow: 0 4px 18px rgba(90, 42, 39, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .mi-navbar .container-fluid {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
+/* Logo */
+.mi-navbar .navbar-brand {
+  margin-right: 30px;
+}
+
+.mi-navbar .navbar-brand img {
+  width: 145px;
+  height: auto;
+  display: block;
+}
+
+/* Menú principal más a la izquierda */
+.menu-principal-navbar {
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+/*espacio entre pestañas*/
+.menu-principal-navbar .nav-item {
+  margin-right: 2px;
+}
+/*tamaño de letras Home, Productos , Nosotros , Blogs Contacto*/
+.mi-navbar .nav-link {
+  color: #4b2b32 !important;
+  font-weight: 300;
+  font-size: 1.2rem;
+  letter-spacing: 0.1px;
+  padding: 10px 13px !important;
+  border-radius: 500px;
+  transition: all 0.25s ease;
+}
+
+.mi-navbar .nav-link:hover {
+  color: #8f3f53 !important;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Panel admin como botón bonito */
+.mi-navbar .admin-link {
+  background-color: rgba(255, 255, 255, 0.45);
+  color: #7a3f4b !important;
+  font-weight: 700 !important;
+  padding: 10px 16px !important;
+}
+
+.mi-navbar .admin-link:hover {
+  background-color: #4b2b32 !important;
+  color: #ffffff !important;
+}
+
+/* Dropdown productos */
+.mi-navbar .dropdown-menu {
+  font-size: 1rem;
+  min-width: 160px;
+  border-radius: 18px;
+  padding: 10px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(75, 43, 50, 0.15);
+  background-color: #ffffff;
+}
+
+.mi-navbar .dropdown-item {
+  font-size: 1rem;
+  padding: 10px 14px;
+  color: #4b2b32 !important;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.mi-navbar .dropdown-item:hover {
+  background-color: #fff1f4 !important;
+  color: #c46a7a !important;
+}
+
+.mi-navbar .dropdown-item:active {
+  background-color: #f7dbe2 !important;
+  color: #4b2b32 !important;
+}
+
+/* Iconos del navbar */
 .iconos-navbar {
   display: flex;
   align-items: center;
@@ -147,88 +213,62 @@ body {
   background: transparent;
   border: none;
   padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.iconos-navbar button:hover {
+  transform: translateY(-2px);
 }
 
 .iconos-navbar img {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   display: block;
 }
 
-.mi-navbar .navbar-brand img {
-  width: 150px;
-  height: auto;
-  display: block;
-}
-
-.mi-navbar .dropdown-menu {
-  font-size: 1.2rem;
-  min-width: 300px;
-  border-radius: 12px;
-  padding: 10px 0;
-  border: 1px solid #e7b2c3;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.mi-navbar .dropdown-item {
-  font-size: 1.1rem;
-  padding: 12px 20px;
-  color: #5a2a27 !important;
-  transition: all 0.2s ease;
-}
-
-.mi-navbar .dropdown-item:hover {
-  background-color: #f8c7d6 !important;
-  color: #d63384 !important;
-}
-
-.mi-navbar .dropdown-item:active {
-  background-color: #f29db1 !important;
-  color: #5a2a27 !important;
+/* Texto saludo usuario */
+.saludo-usuario-navbar {
+  color: #4b2b32;
+  font-weight: 200;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
 }
 
 /* ===== BUSCADOR NAVBAR ===== */
 .buscador-navbar {
-  max-width: 330px;
+  max-width: 350px;
   width: 100%;
 }
 
 .buscador-navbar .form-control {
-  height: 40px;
-  border-radius: 12px;
-  border: 2px solid #c9b7ff;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid #e8b8c2;
   box-shadow: none;
-  font-size: 0.95rem;
-  padding-left: 12px;
+  font-size: 0.92rem;
+  padding-left: 15px;
   transition: all 0.2s ease;
 }
 
 .buscador-navbar .form-control:focus {
-  border-color: #9e85ff;
-  box-shadow: 0 0 0 0.2rem rgba(158, 133, 255, 0.2);
-}
-
-@media (max-width: 576px) {
-  .buscador-navbar {
-    max-width: 100%;
-  }
-
-  .buscador-navbar .form-control {
-    font-size: 0.95rem;
-  }
+  border-color: #c46a7a;
+  box-shadow: 0 0 0 0.2rem rgba(196, 106, 122, 0.18);
 }
 
 .btn-buscar-navbar {
-  height: 40px;
-  min-width: 82px;
-  border: 1px solid #7b5ea7;
-  border-radius: 12px;
-  background-color: #7b5ea7;
+  height: 20px;
+  min-width: 90px;
+  border: 1px solid #7a3f4b;
+  border-radius: 999px;
+  background-color: #7a3f4b;
   color: #fff !important;
   font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0 14px;
+  font-size: 0.92rem;
+  padding: 0 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -236,23 +276,49 @@ body {
 }
 
 .btn-buscar-navbar:hover {
-  background-color: #6a4f94;
-  border-color: #6a4f94;
+  background-color: #cc5d75;
+  border-color: #d97c90;
   color: #fff !important;
 }
 
 .btn-buscar-navbar:focus,
 .btn-buscar-navbar:active {
-  background-color: #6a4f94 !important;
-  border-color: #6a4f94 !important;
+  background-color: #4b2b32 !important;
+  border-color: #d67086 !important;
   color: #fff !important;
   box-shadow: none;
 }
 
-.menu-principal-navbar {
-  margin-left: 35px;
+/* Responsive */
+@media (max-width: 991px) {
+  .mi-navbar {
+    padding: 14px 18px;
+  }
+
+  .menu-principal-navbar {
+    margin-left: 0;
+    margin-top: 15px;
+    gap: 6px;
+  }
+
+  .mi-navbar .nav-link {
+    font-size: 1rem;
+  }
+
+  .buscador-navbar {
+    max-width: 100%;
+  }
 }
 
-.menu-principal-navbar .nav-item {
-  margin-right: 10px;
+@media (max-width: 576px) {
+  .iconos-navbar img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mi-navbar .navbar-brand img {
+    width: 125px;
+  }
+
 }
+

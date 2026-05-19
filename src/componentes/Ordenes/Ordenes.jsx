@@ -9,7 +9,7 @@ export default function Ordenes() {
   useEffect(() => {
     async function cargar() {
       try {
-        const res = await fetch("http://localhost:8083/api/pagos");
+        const res = await fetch("https://backend-pago.onrender.com/api/pagos");
         const data = await res.json();
 
         const ordenesFormateadas = data.map((p) => ({

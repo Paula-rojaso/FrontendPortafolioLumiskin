@@ -67,7 +67,7 @@ export function InicioSesion() {
     setCargando(true);
 
     try {
-      const respuesta = await fetch("http://localhost:8082/api/usuarios/login", {
+      const respuesta = await fetch("https://backend-usuario.onrender.com/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -143,7 +143,7 @@ export function InicioSesion() {
     <main className="container container-login">
       <h2 className="mb-3"><strong>Inicio de Sesión</strong></h2>
       <h3 className="text-muted mb-4">
-        Inicia sesión para acceder a tu cuenta y continuar tu experiencia en Armario De Sombra.
+        Inicia sesión para acceder a tu cuenta y continuar tu experiencia en LumiSkin.
       </h3>
 
       <div className="card card-login">

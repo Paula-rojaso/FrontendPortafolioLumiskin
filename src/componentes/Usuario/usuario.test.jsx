@@ -144,7 +144,7 @@ describe("Usuario component", () => {
 
     // asegurar llamada DELETE
     expect(global.fetch).toHaveBeenCalledWith(
-      "http://localhost:8082/api/usuarios/1",
+      "https://backend-usuario.onrender.com/api/usuarios/1",
       expect.any(Object)
     );
   });

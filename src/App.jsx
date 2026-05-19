@@ -13,7 +13,7 @@ import { Blogs } from './pages/Blogs/Blogs'
 import { Login } from './pages/Login/Login';
 import { Registro } from './pages/Registro/Registro';
 import { Navbar } from './componentes/Navbar/Navbar';
-import { TopBar } from './componentes/Topbar/Topbar';
+import { TopBar } from './componentes/TopBar/TopBar';
 import { AdministracionProductos } from './componentes/Admin/AdministracionProductos';
 import { Usuario } from './componentes/Usuario/Usuario';
 import { MiPerfil } from './componentes/MiPerfil/MiPerfil'
@@ -21,6 +21,9 @@ import Pago from './componentes/Pago/Pago'
 import CompraExitosa from './compra-exitosa/compra-exitosa'
 import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
+import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
+import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
+import { WhatsappChat } from "./componentes/WhatsappChat/WhatsappChat";
 
 function App() {
   
@@ -45,6 +48,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/inventario" element={<AdministracionProductos />} />
+        <Route path="/admin" element={<PanelAdministracion />} />
+        <Route path="/admin/usuarios" element={<AdministracionUsuarios />} />
+        <Route path="/admin/ordenes" element={<Ordenes />} />
         <Route path="/usuario" element={<Usuario/>} />
         <Route path="/Perfil" element={<MiPerfil/>}/>
         <Route path="/pago" element={<Pago/>}/>
@@ -53,7 +59,9 @@ function App() {
 
 
       </Routes>
+      <WhatsappChat />
     </Router>
+    
     </>
   )
 }

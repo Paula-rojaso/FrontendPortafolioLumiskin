@@ -116,7 +116,7 @@ export function MiPerfil() {
       }
 
       const res = await fetch(
-        `http://localhost:8082/api/usuarios/${usuario.id}/perfil`,
+        `https://backend-usuario.onrender.com/api/usuarios/${usuario.id}/perfil`,
         {
           method: "PATCH",
           headers: {

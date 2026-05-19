@@ -15,8 +15,8 @@ export function UltimosProductos() {
     async function cargar() {
       try {
         const [resProd, resCat] = await Promise.all([
-          fetch("http://localhost:8081/api/productos"),
-          fetch("http://localhost:8081/api/categorias"),
+          fetch("https://backendportafolio-635z.onrender.com/api/productos"),
+          fetch("https://backendportafolio-635z.onrender.com/api/categorias"),
         ]);
 
         const dataProd = await resProd.json();

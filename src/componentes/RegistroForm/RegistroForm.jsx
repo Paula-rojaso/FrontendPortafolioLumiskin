@@ -162,7 +162,7 @@ export function RegistroForm() {
         };
 
         try {
-          const respuesta = await fetch("http://localhost:8082/api/usuarios", {
+          const respuesta = await fetch("https://backend-usuario.onrender.com/api/usuarios", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos),
@@ -208,99 +208,100 @@ export function RegistroForm() {
   }, []);
 
   return (
-    <>
-      <main className="container container-register">
-        <h2 className="mb-2">
-          <strong>Registro de usuario</strong>
-        </h2>
-        <h3 className="text-muted mb-4">
-          Ingresa tus datos y forma parte de Armario De Sombra. ¡Te esperamos!
-        </h3>
+  <>
+    <main className="container container-register">
+      <h2 className="mb-2">
+        <strong>Crea tu cuenta</strong>
+      </h2>
 
-        <div className="card card-register">
-          <form id="registroForm" action="" method="post">
-            <div className="mb-3">
-              <label htmlFor="nombre" className="form-label">
-                Nombre
-              </label>
-              <input type="text" className="form-control" id="nombre" placeholder="Tu nombre" />
-              <div id="err-nombre" className="invalid-feedback"></div>
-              <div id="ok-nombre" className="valid-feedback"></div>
-            </div>
+      <h3 className="text-muted mb-4">
+        Únete a LumiSkin y descubre productos pensados para cuidar y resaltar tu piel.
+      </h3>
 
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Correo electrónico
-              </label>
-              <input type="email" className="form-control" id="email" placeholder="tucorreo@ejemplo.com" />
-              <div id="err-email" className="invalid-feedback"></div>
-              <div id="ok-email" className="valid-feedback"></div>
-            </div>
+      <div className="card card-register">
+        <form id="registroForm" action="" method="post">
+          <div className="mb-3">
+            <label htmlFor="nombre" className="form-label">
+              Nombre
+            </label>
+            <input type="text" className="form-control" id="nombre" placeholder="Tu nombre" />
+            <div id="err-nombre" className="invalid-feedback"></div>
+            <div id="ok-nombre" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-3">
-              <label htmlFor="confirmEmail" className="form-label">
-                Confirmar correo electrónico
-              </label>
-              <input type="email" className="form-control" id="confirmEmail" placeholder="Repite tu correo" />
-              <div id="err-confirmEmail" className="invalid-feedback"></div>
-              <div id="ok-confirmEmail" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Correo electrónico
+            </label>
+            <input type="email" className="form-control" id="email" placeholder="tucorreo@ejemplo.com" />
+            <div id="err-email" className="invalid-feedback"></div>
+            <div id="ok-email" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Contraseña
-              </label>
-              <input type="password" className="form-control" id="password" placeholder="Crea una contraseña" />
-              <div id="err-password" className="invalid-feedback"></div>
-              <div id="ok-password" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="confirmEmail" className="form-label">
+              Confirmar correo electrónico
+            </label>
+            <input type="email" className="form-control" id="confirmEmail" placeholder="Repite tu correo" />
+            <div id="err-confirmEmail" className="invalid-feedback"></div>
+            <div id="ok-confirmEmail" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label">
-                Confirmar contraseña
-              </label>
-              <input type="password" className="form-control" id="confirmPassword" placeholder="Repite tu contraseña" />
-              <div id="err-confirmPassword" className="invalid-feedback"></div>
-              <div id="ok-confirmPassword" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Contraseña
+            </label>
+            <input type="password" className="form-control" id="password" placeholder="Crea una contraseña" />
+            <div id="err-password" className="invalid-feedback"></div>
+            <div id="ok-password" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-3">
-              <label htmlFor="telefono" className="form-label">
-                Teléfono
-              </label>
-              <input type="tel" className="form-control" id="telefono" placeholder="Ej: 912345678" />
-              <div id="err-telefono" className="invalid-feedback"></div>
-              <div id="ok-telefono" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirmar contraseña
+            </label>
+            <input type="password" className="form-control" id="confirmPassword" placeholder="Repite tu contraseña" />
+            <div id="err-confirmPassword" className="invalid-feedback"></div>
+            <div id="ok-confirmPassword" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-3">
-              <label htmlFor="region" className="form-label">
-                Región
-              </label>
-              <select id="region" className="form-select"></select>
-              <div id="err-region" className="invalid-feedback"></div>
-              <div id="ok-region" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="telefono" className="form-label">
+              Teléfono
+            </label>
+            <input type="tel" className="form-control" id="telefono" placeholder="Ej: 912345678" />
+            <div id="err-telefono" className="invalid-feedback"></div>
+            <div id="ok-telefono" className="valid-feedback"></div>
+          </div>
 
-            <div className="mb-4">
-              <label htmlFor="comuna" className="form-label">
-                Comuna
-              </label>
-              <select id="comuna" className="form-select" disabled></select>
-              <div id="err-comuna" className="invalid-feedback"></div>
-              <div id="ok-comuna" className="valid-feedback"></div>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="region" className="form-label">
+              Región
+            </label>
+            <select id="region" className="form-select"></select>
+            <div id="err-region" className="invalid-feedback"></div>
+            <div id="ok-region" className="valid-feedback"></div>
+          </div>
 
-            <button type="submit" className="btn w-100 button1">
-              Registrarse
-            </button>
+          <div className="mb-4">
+            <label htmlFor="comuna" className="form-label">
+              Comuna
+            </label>
+            <select id="comuna" className="form-select" disabled></select>
+            <div id="err-comuna" className="invalid-feedback"></div>
+            <div id="ok-comuna" className="valid-feedback"></div>
+          </div>
 
-            <p className="text-center mt-3 mb-0">
-              ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
-            </p>
-          </form>
-        </div>
-      </main>
-    </>
-  );
+          <button type="submit" className="btn w-100 button1">
+            Registrarme en LumiSkin
+          </button>
+
+          <p className="text-center mt-3 mb-0">
+            ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión aquí</Link>
+          </p>
+        </form>
+      </div>
+    </main>
+  </>
+);
 }
