@@ -30,7 +30,7 @@ export function ModalProductos({ categoriaNombre }) {
 
        let productosFiltrados = dataProd;
 
-// Filtrar por categoría si viene categoriaNombre
+
           if (categoriaNombre) {
             const categoria = dataCat.find(
               (c) => c.nombre.toLowerCase() === categoriaNombre.toLowerCase()
