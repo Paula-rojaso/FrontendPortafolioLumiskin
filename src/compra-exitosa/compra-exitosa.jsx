@@ -296,8 +296,8 @@ export default function CompraExitosa() {
                             </span>
                           </td>
 
-                          <td className="text-center">${boleta.formatearPrecio(item.precioUnitario)}</td>
-                          <td className="text-end" style={{ color: "#4b2b32", fontWeight: "800" }}>${boleta.formatearPrecio(item.subtotal)}</td>
+                          <td className="text-center">${formatearPrecio(item.precioUnitario)}</td>
+                          <td className="text-end" style={{ color: "#4b2b32", fontWeight: "800" }}>${formatearPrecio(item.subtotal)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -334,19 +334,19 @@ export default function CompraExitosa() {
 
                 <div className="d-flex justify-content-between mb-3">
                   <span className="text-muted">Subtotal</span>
-                  <strong>${boleta.formatearPrecio(subtotal)}</strong>
+                  <strong>${formatearPrecio(subtotal)}</strong>
                 </div>
 
                 <div className="d-flex justify-content-between mb-3">
                   <span className="text-muted">IVA 19%</span>
-                  <strong>${boleta.formatearPrecio(iva)}</strong>
+                  <strong>${formatearPrecio(iva)}</strong>
                 </div>
 
                 <hr />
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <span style={{ color: "#4b2b32", fontWeight: "900", fontSize: "20px" }}>Total</span>
-                  <span style={{ color: "#c46a7a", fontWeight: "900", fontSize: "30px" }}>${boleta.formatearPrecio(total)}</span>
+                  <span style={{ color: "#c46a7a", fontWeight: "900", fontSize: "30px" }}>${formatearPrecio(total)}</span>
                 </div>
 
                 <button
