@@ -5,6 +5,9 @@ export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
+  const formatearPrecio = (valor) => {
+    return Number(valor || 0).toLocaleString("es-CL");
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
