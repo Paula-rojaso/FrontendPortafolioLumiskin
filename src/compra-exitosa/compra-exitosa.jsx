@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
+  const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,16 +27,33 @@ export default function CompraExitosa() {
             });
             localStorage.setItem("stock_descontado", "true");
           }
+        })
+        .finally(() => {
+          setCargando(false);
         });
     } else {
       const guardada = localStorage.getItem("boleta");
       if (guardada) setBoleta(JSON.parse(guardada));
+      setCargando(false);
     }
   }, []);
 
-  const formatearPrecio = (valor) => {
-    return Number(valor || 0).toLocaleString("es-CL");
-  };
+  if (cargando) {
+    return (
+      <main
+        className="py-5 d-flex align-items-center"
+        style={{
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
+        }}
+      >
+        <div className="container text-center">
+          <div className="spinner-border mb-4" style={{ color: "#c46a7a", width: "3rem", height: "3rem" }} role="status"></div>
+          <p className="text-muted fs-5">Cargando tu boleta...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!boleta) {
     return (
@@ -278,8 +296,8 @@ export default function CompraExitosa() {
                             </span>
                           </td>
 
-                          <td className="text-center">${formatearPrecio(item.precioUnitario)}</td>
-                          <td className="text-end" style={{ color: "#4b2b32", fontWeight: "800" }}>${formatearPrecio(item.subtotal)}</td>
+                          <td className="text-center">${boleta.formatearPrecio(item.precioUnitario)}</td>
+                          <td className="text-end" style={{ color: "#4b2b32", fontWeight: "800" }}>${boleta.formatearPrecio(item.subtotal)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -311,24 +329,24 @@ export default function CompraExitosa() {
 
                 <div className="rounded-4 p-3 mb-4" style={{ backgroundColor: "#fff1f4" }}>
                   <small className="text-muted">Fecha de compra</small>
-                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.fecha}</p>
+                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.fechaPago}</p>
                 </div>
 
                 <div className="d-flex justify-content-between mb-3">
                   <span className="text-muted">Subtotal</span>
-                  <strong>${formatearPrecio(subtotal)}</strong>
+                  <strong>${boleta.formatearPrecio(subtotal)}</strong>
                 </div>
 
                 <div className="d-flex justify-content-between mb-3">
                   <span className="text-muted">IVA 19%</span>
-                  <strong>${formatearPrecio(iva)}</strong>
+                  <strong>${boleta.formatearPrecio(iva)}</strong>
                 </div>
 
                 <hr />
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <span style={{ color: "#4b2b32", fontWeight: "900", fontSize: "20px" }}>Total</span>
-                  <span style={{ color: "#c46a7a", fontWeight: "900", fontSize: "30px" }}>${formatearPrecio(total)}</span>
+                  <span style={{ color: "#c46a7a", fontWeight: "900", fontSize: "30px" }}>${boleta.formatearPrecio(total)}</span>
                 </div>
 
                 <button
