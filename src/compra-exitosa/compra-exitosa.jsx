@@ -6,22 +6,30 @@ export default function CompraExitosa() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const guardada = localStorage.getItem("boleta");
-    const yaDescontado = localStorage.getItem("stock_descontado");
+    const params = new URLSearchParams(window.location.search);
+    const idBoleta = params.get("idBoleta");
 
-    if (guardada) {
-      const boletaData = JSON.parse(guardada);
-      setBoleta(boletaData);
+    if (idBoleta) {
+      fetch(`https://backend-pago.onrender.com/api/pagos/boleta/${idBoleta}`)
+        .then(res => res.json())
+        .then(data => {
+          setBoleta(data);
+          localStorage.setItem("boleta", JSON.stringify(data));
 
-      if (!yaDescontado) {
-        boletaData.detalles.forEach((item) => {
-          fetch(
-            `https://backendportafolio-635z.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
-            { method: "PATCH" }
-          );
+          const yaDescontado = localStorage.getItem("stock_descontado");
+          if (!yaDescontado) {
+            data.detalles.forEach((item) => {
+              fetch(
+                `https://backend-pago.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
+                { method: "PATCH" }
+              );
+            });
+            localStorage.setItem("stock_descontado", "true");
+          }
         });
-        localStorage.setItem("stock_descontado", "true");
-      }
+    } else {
+      const guardada = localStorage.getItem("boleta");
+      if (guardada) setBoleta(JSON.parse(guardada));
     }
   }, []);
 
