@@ -146,6 +146,9 @@ export default function Pago() {
       const user = JSON.parse(localStorage.getItem("usuario"));
       const tokenUsuario = user?.token;
 
+      const headers = { "Content-Type": "application/json" };
+      if (tokenUsuario) headers["Authorization"] = `Bearer ${tokenUsuario}`;
+
       const body = {
         nombreCliente: usuario.nombre,
         correoCliente: usuario.email,
@@ -168,10 +171,7 @@ export default function Pago() {
 
       const res = await fetch("https://backend-pago.onrender.com/api/webpay/crear", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenUsuario ? `Bearer ${tokenUsuario}` : "",
-        },
+        headers,
         body: JSON.stringify(body),
       });
 
