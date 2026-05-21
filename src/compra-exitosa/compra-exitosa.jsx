@@ -20,7 +20,7 @@ export default function CompraExitosa() {
           if (!yaDescontado) {
             data.detalles.forEach((item) => {
               fetch(
-                `https://backend-pago.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
+                `https://backend-inventario.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
                 { method: "PATCH" }
               );
             });
