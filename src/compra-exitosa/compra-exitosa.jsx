@@ -102,9 +102,9 @@ export default function CompraExitosa() {
     );
   }
 
-  const subtotal = boleta.subtotal;
-  const iva = boleta.iva;
-  const total = boleta.total;
+  const subtotal = boleta.pago?.subtotal;
+  const iva = boleta.pago?.iva;
+  const total = boleta.pago?.total;
 
   return (
     <main
@@ -273,7 +273,7 @@ export default function CompraExitosa() {
                             <div className="d-flex align-items-center gap-3">
                               <img
                                 src={item.imagenUrl || item.imagen || "/sin-imagen.png"}
-                                alt={item.nombre}
+                                alt={item.no}
                                 style={{
                                   width: 78,
                                   height: 78,
@@ -327,12 +327,12 @@ export default function CompraExitosa() {
 
                 <div className="rounded-4 p-3 mb-4" style={{ backgroundColor: "#fff1f4" }}>
                   <small className="text-muted">Método de compra</small>
-                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.metodoPago}</p>
+                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.pago?.metodoPago}</p>
                 </div>
 
                 <div className="rounded-4 p-3 mb-4" style={{ backgroundColor: "#fff1f4" }}>
                   <small className="text-muted">Fecha de compra</small>
-                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.fechaPago}</p>
+                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.pago?.fechaPago}</p>
                 </div>
 
                 <div className="d-flex justify-content-between mb-3">
