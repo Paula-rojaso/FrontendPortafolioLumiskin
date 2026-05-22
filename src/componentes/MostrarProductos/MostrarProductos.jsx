@@ -17,8 +17,8 @@ export function ModalProductos({ categoriaNombre }) {
     async function cargar() {
       try {
         const [resProd, resCat] = await Promise.all([
-          fetch("https://backend-usuario.onrender.com/api/productos"),
-          fetch("https://backend-usuario.onrender.com/api/categorias"),
+          fetch("https://backend-inventario.onrender.com/api/productos"),
+          fetch("https://backend-inventario.onrender.com/api/categorias"),
         ]);
 
         const dataProd = await resProd.json();
