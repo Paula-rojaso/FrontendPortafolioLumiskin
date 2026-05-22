@@ -15,7 +15,7 @@ export function Productos() {
         <ModalProductos categoriaNombre="Cuidado facial" />
         <ModalProductos categoriaNombre="Cuidado corporal" />
         <ModalProductos categoriaNombre="Cuidado personal" />
-        <ModalProductos categoriaNombre="Perfumes y fragancias" />
+        <ModalProductos categoriaNombre="Fragancias" />
       </div>
       <Footer />
     </>
