@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCarrito } from "../context/CarritoContext";
 
 export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
@@ -8,6 +9,7 @@ export default function CompraExitosa() {
   const formatearPrecio = (valor) => {
     return Number(valor || 0).toLocaleString("es-CL");
   };
+  const { vaciarCarrito } = useCarrito();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -19,6 +21,7 @@ export default function CompraExitosa() {
         .then(data => {
           setBoleta(data);
           localStorage.setItem("boleta", JSON.stringify(data));
+          vaciarCarrito();
 
           const yaDescontado = localStorage.getItem("stock_descontado");
           if (!yaDescontado) {
