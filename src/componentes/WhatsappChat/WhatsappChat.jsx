@@ -6,6 +6,8 @@ export function WhatsappChat() {
   const [abierto, setAbierto] = useState(false);
   const location = useLocation();
 
+  const numeroWhatsapp = "56997788351";
+
   const rutasSinWhatsapp = [
     "/admin",
     "/administrador",
@@ -20,10 +22,33 @@ export function WhatsappChat() {
 
   if (ocultarWhatsapp) return null;
 
-  const numeroWhatsapp = "56997788351";
+  const opcionesWhatsapp = [
+    {
+      texto: "Ver productos",
+      mensaje: "Hola LumiSkin, quiero consultar por sus productos.",
+    },
+    {
+      texto: "Consultar mi pedido",
+      mensaje: "Hola LumiSkin, quiero consultar por el estado de mi pedido.",
+    },
+    {
+      texto: "Hablar con una asesora",
+      mensaje:
+        "Hola LumiSkin, necesito ayuda para elegir un producto para mi piel.",
+    },
+    {
+      texto: "Promociones disponibles",
+      mensaje: "Hola LumiSkin, quiero saber si tienen promociones disponibles.",
+    },
+  ];
 
   const abrirWhatsapp = (mensaje) => {
-    const texto = encodeURIComponent(mensaje);
+    const paginaActual = window.location.href;
+
+    const mensajeFinal = `${mensaje}\n\nVengo desde esta página: ${paginaActual}`;
+
+    const texto = encodeURIComponent(mensajeFinal);
+
     window.open(`https://wa.me/${numeroWhatsapp}?text=${texto}`, "_blank");
   };
 
@@ -41,6 +66,7 @@ export function WhatsappChat() {
               type="button"
               className="whatsapp-close"
               onClick={() => setAbierto(false)}
+              aria-label="Cerrar chat"
             >
               ×
             </button>
@@ -51,38 +77,17 @@ export function WhatsappChat() {
               Hola, bienvenida a LumiSkin. ¿En qué podemos ayudarte?
             </p>
 
-            <button
-              type="button"
-              onClick={() =>
-                abrirWhatsapp(
-                  "Hola LumiSkin, quiero consultar por sus productos."
-                )
-              }
-            >
-              Ver productos
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                abrirWhatsapp(
-                  "Hola LumiSkin, quiero consultar por el estado de mi pedido."
-                )
-              }
-            >
-              Consultar mi pedido
-            </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                abrirWhatsapp(
-                  "Hola LumiSkin, necesito ayuda para elegir un producto para mi piel."
-                )
-              }
-            >
-              Hablar con una asesora
-            </button>
+            <div className="whatsapp-options">
+              {opcionesWhatsapp.map((opcion, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => abrirWhatsapp(opcion.mensaje)}
+                >
+                  {opcion.texto}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -91,9 +96,9 @@ export function WhatsappChat() {
         type="button"
         className="whatsapp-main-button"
         onClick={() => setAbierto(!abierto)}
-        aria-label="Abrir chat de WhatsApp"
+        aria-label={abierto ? "Cerrar chat de WhatsApp" : "Abrir chat de WhatsApp"}
       >
-        <i className="bi bi-whatsapp"></i>
+        <i className={`bi ${abierto ? "bi-x-lg" : "bi-whatsapp"}`}></i>
       </button>
     </div>
   );
