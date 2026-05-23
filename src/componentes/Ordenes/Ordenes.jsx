@@ -6,10 +6,33 @@ export default function Ordenes() {
 
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
 
+  const obtenerToken = () => {
+    try {
+      const usuarioGuardado = localStorage.getItem("usuario");
+      if (!usuarioGuardado) return null;
+      const usuario = JSON.parse(usuarioGuardado);
+      return usuario?.token || null;
+    } catch (error) {
+      console.error("Error obteniendo token:", error);
+      return null;
+    }
+  };
+
+  const headersAuth = () => {
+    const token = obtenerToken();
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  };
+
   useEffect(() => {
     async function cargar() {
       try {
-        const res = await fetch("https://backend-pago.onrender.com/api/pagos");
+        const res = await fetch("https://backend-pago.onrender.com/api/pagos", {
+          headers: headersAuth()
+        });
+
         const data = await res.json();
 
         const ordenesFormateadas = data.map((p) => ({
