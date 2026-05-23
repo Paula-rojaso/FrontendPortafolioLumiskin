@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCarrito } from "../context/CarritoContext";
+import { useCarrito } from "../componentes/Carrito/ContextCarrito";
 
 export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
