@@ -186,7 +186,7 @@ export function InicioSesion() {
               <input className="form-check-input" type="checkbox" id="Recordar" />
               <label className="form-check-label" htmlFor="Recordar">Recordarme</label>
             </div>
-            <Link to="#" className="text-decoration-none">¿Olvidaste tu contraseña?</Link>
+            <Link to="/olvidaste-contrasena" className="text-decoration-none">¿Olvidaste tu contraseña?</Link>
           </div>
 
           <button type="submit" className="btn w-100 button1" disabled={cargando}>

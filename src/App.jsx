@@ -16,6 +16,7 @@ import { Navbar } from './componentes/Navbar/Navbar';
 import { TopBar } from './componentes/TopBar/TopBar';
 import { AdministracionProductos } from './componentes/Admin/AdministracionProductos';
 import { Usuario } from './componentes/Usuario/Usuario';
+import { OlvidasteContrasena } from "./componentes/OlvidasteContrasena/OlvidasteContrasena";
 import { MiPerfil } from './componentes/MiPerfil/MiPerfil'
 import Pago from './componentes/Pago/Pago'
 import CompraExitosa from './compra-exitosa/compra-exitosa'
@@ -47,6 +48,7 @@ function App() {
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/olvidaste-contrasena" element={<OlvidasteContrasena />} />
         <Route path="/inventario" element={<AdministracionProductos />} />
         <Route path="/admin" element={<PanelAdministracion />} />
         <Route path="/admin/usuarios" element={<AdministracionUsuarios />} />
