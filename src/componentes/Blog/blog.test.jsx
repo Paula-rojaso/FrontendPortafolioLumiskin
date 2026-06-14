@@ -12,43 +12,37 @@ describe("Componente Eventos (Blogs.jsx)", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: /nuestros eventos/i })
+      screen.getByRole("heading", { name: /consejos, tendencias y bienestar/i })
     ).toBeInTheDocument();
   });
 
-  it("muestra las tarjetas de los eventos", () => {
+  it("muestra las tarjetas de los blogs", () => {
     render(
       <MemoryRouter>
         <Eventos />
       </MemoryRouter>
     );
 
-    const mysticum = screen.getAllByRole("heading", {
-      name: /mysticum teatempore/i,
-    });
-    expect(mysticum.length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { name: /cómo construir una rutina facial/i })
+    ).toBeInTheDocument();
 
-    const feriaAddams = screen.getAllByRole("heading", {
-      name: /feria addams/i,
-    });
-    expect(feriaAddams.length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { name: /la importancia de cuidar tu piel/i })
+    ).toBeInTheDocument();
 
-    // AHORA: usar getAllByAltText porque hay más de 1 imagen con ese alt
-    const gothicImgs = screen.getAllByAltText(/evento gótico/i);
-    expect(gothicImgs.length).toBeGreaterThan(0);
-
-    const metalImgs = screen.getAllByAltText(/concierto metal/i);
-    expect(metalImgs.length).toBeGreaterThan(0);
+    expect(screen.getByAltText(/rutina de cuidado facial/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/cuidado corporal/i)).toBeInTheDocument();
   });
 
-  it("muestra los botones 'Ver más'", () => {
+  it("muestra los botones 'Leer más'", () => {
     render(
       <MemoryRouter>
         <Eventos />
       </MemoryRouter>
     );
 
-    const botones = screen.getAllByRole("button", { name: /ver más/i });
+    const botones = screen.getAllByRole("button", { name: /leer más/i });
     expect(botones.length).toBe(2);
   });
 
@@ -59,7 +53,7 @@ describe("Componente Eventos (Blogs.jsx)", () => {
       </MemoryRouter>
     );
 
-    expect(document.getElementById("modalEvento1")).toBeInTheDocument();
-    expect(document.getElementById("modalEvento2")).toBeInTheDocument();
+    expect(document.getElementById("modalBlog1")).toBeInTheDocument();
+    expect(document.getElementById("modalBlog2")).toBeInTheDocument();
   });
 });
