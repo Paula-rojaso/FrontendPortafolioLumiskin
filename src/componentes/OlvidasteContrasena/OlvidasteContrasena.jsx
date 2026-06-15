@@ -25,13 +25,16 @@ export function OlvidasteContrasena() {
 
     try {
       const respuesta = await fetch(
-        "https://backend-usuario.onrender.com/api/usuarios/olvidaste-contrasena",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+    "https://backend-usuario.onrender.com/api/usuarios/olvidaste-contrasena",
+    {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        email,
+        redirectUrl: "https://frontend-portafolio-lumiskin-yebo.vercel.app/actualizar-contrasena",
+        }),
+    }
+    );
 
       const data = await respuesta.json();
 
