@@ -36,7 +36,13 @@ export function OlvidasteContrasena() {
     }
     );
 
-      const data = await respuesta.json();
+      let data = {};
+
+      try {
+        data = await respuesta.json();
+      } catch {
+        data = {};
+      }
 
       if (!respuesta.ok) {
         setMensaje({
@@ -104,7 +110,7 @@ export function OlvidasteContrasena() {
           )}
 
           <p className="text-center mt-3 mb-0">
-            ¿Recordaste tu contraseña? <Link to="/inicio-sesion">Inicia sesión</Link>
+            ¿Recordaste tu contraseña? <Link to="/login">Inicia sesión</Link>
           </p>
         </form>
       </div>
