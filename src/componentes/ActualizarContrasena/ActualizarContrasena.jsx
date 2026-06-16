@@ -66,14 +66,14 @@ export function ActualizarContrasena() {
         return;
       }
 
-      setMensaje({
+        setMensaje({
         tipo: "exito",
-        texto: "Contraseña actualizada correctamente.",
-      });
+        texto: "Tu contraseña ha sido cambiada con éxito. Por favor inicia sesión nuevamente.",
+        });
 
-      setTimeout(() => {
-        navigate("/inicio-sesion");
-      }, 2000);
+        setNuevaContrasena("");
+        setConfirmarContrasena("");
+
     } catch (error) {
       console.error("Error al actualizar contraseña:", error);
       setMensaje({
@@ -132,7 +132,7 @@ export function ActualizarContrasena() {
           )}
 
           <p className="text-center mt-3 mb-0">
-            <Link to="/inicio-sesion">Volver al inicio de sesión</Link>
+            <Link to="/login">Iniciar sesión</Link>
           </p>
         </form>
       </div>
