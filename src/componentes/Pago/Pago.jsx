@@ -161,11 +161,11 @@ export default function Pago() {
         metodoPago: "WEBPAY",
         detalles: carrito.map((item) => ({
           idProducto: item.id,
-          nombre: item.nombre,
+          producto: item.nombre,
           cantidad: item.cantidad,
           precioUnitario: item.precio,
           subtotal: item.precio * item.cantidad,
-          imagenUrl: item.imagenUrl,
+          imagenUrl: item.imagenUrl || item.foto,
         })),
       };
 
