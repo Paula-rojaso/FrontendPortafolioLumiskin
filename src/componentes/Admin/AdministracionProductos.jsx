@@ -29,68 +29,43 @@ export function AdministracionProductos() {
     }
   }
 
-  async function subirImagenProducto(id, archivo) {
-    if (!archivo) return;
-
-    const formData = new FormData();
-    formData.append("archivo", archivo);
-
-    try {
-      const res = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${id}/imagen`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        alert("❌ Error al subir la imagen");
-        return;
-      }
-
-      alert("✅ Imagen subida correctamente");
-      await cargarProductos();
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("⚠️ No se pudo subir la imagen");
-    }
-  }
-
   useEffect(() => {
     cargarProductos();
   }, []);
 
   const normalizarTexto = (valor) => {
-  return String(valor || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-};
+    return String(valor || "")
+      .toLowerCase()
+      .trim()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
 
-const filtrados = useMemo(() => {
-  const texto = normalizarTexto(filtroTexto);
-  const cat = normalizarTexto(filtroCategoria);
+  const filtrados = useMemo(() => {
+    const texto = normalizarTexto(filtroTexto);
+    const cat = normalizarTexto(filtroCategoria);
 
-  return productos.filter((p) => {
-    const categoriaProducto = normalizarTexto(
-      p.categoria?.nombre ||
-      p.categoriaNombre ||
-      p.categoria ||
-      ""
-    );
+    return productos.filter((p) => {
+      const categoriaProducto = normalizarTexto(
+        p.categoria?.nombre ||
+        p.categoriaNombre ||
+        p.categoria ||
+        ""
+      );
 
-    const nombreProducto = normalizarTexto(p.nombre);
-    const descripcionProducto = normalizarTexto(p.descripcion);
+      const nombreProducto = normalizarTexto(p.nombre);
+      const descripcionProducto = normalizarTexto(p.descripcion);
 
-    const okCat = !cat || categoriaProducto === cat;
+      const okCat = !cat || categoriaProducto === cat;
 
-    const okTxt =
-      !texto ||
-      nombreProducto.includes(texto) ||
-      descripcionProducto.includes(texto);
+      const okTxt =
+        !texto ||
+        nombreProducto.includes(texto) ||
+        descripcionProducto.includes(texto);
 
-    return okCat && okTxt;
-  });
-}, [productos, filtroTexto, filtroCategoria]);
+      return okCat && okTxt;
+    });
+  }, [productos, filtroTexto, filtroCategoria]);
 
   function abrirModalCrear() {
     setModo("crear");
@@ -179,8 +154,6 @@ const filtrados = useMemo(() => {
           >
             Limpiar filtros
           </button>
-          
-          
         </div>
       </div>
 
