@@ -25,7 +25,7 @@ import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
 import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
 import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
-import { Estadisticas } from "./Admin/Estadisticas"; 
+import { Estadisticas } from "./componentes/Admin/Estadisticas";
 import { WhatsappChat } from "./componentes/WhatsappChat/WhatsappChat";
 
 function App() {
