@@ -162,26 +162,17 @@ export function AdministracionUsuarios() {
     setMensaje(null);
 
     if (!formulario.nombre.trim()) {
-      setMensaje({
-        tipo: "error",
-        texto: "El nombre es obligatorio.",
-      });
+      setMensaje({ tipo: "error", texto: "El nombre es obligatorio." });
       return;
     }
 
     if (!formulario.email.trim()) {
-      setMensaje({
-        tipo: "error",
-        texto: "El correo es obligatorio.",
-      });
+      setMensaje({ tipo: "error", texto: "El correo es obligatorio." });
       return;
     }
 
     if (modo === "crear" && formulario.password.trim().length < 8) {
-      setMensaje({
-        tipo: "error",
-        texto: "La contraseña debe tener al menos 8 caracteres.",
-      });
+      setMensaje({ tipo: "error", texto: "La contraseña debe tener al menos 8 caracteres." });
       return;
     }
 
@@ -199,6 +190,7 @@ export function AdministracionUsuarios() {
 
       const metodo = modo === "crear" ? "POST" : "PUT";
 
+      // 👇 AQUÍ ESTÁ EL CAMBIO CLAVE
       const body = {
         nombre: formulario.nombre,
         email: formulario.email,
@@ -208,8 +200,11 @@ export function AdministracionUsuarios() {
         direccion: formulario.direccion,
         departamento: formulario.departamento,
         infoEnvio: formulario.infoEnvio,
-        rol_id: formulario.rol_id,
         estado: formulario.estado === 1,
+        // Enviamos el rol como un objeto para que Spring Boot lo mapee correctamente
+        rol: {
+          id: formulario.rol_id
+        }
       };
 
       if (formulario.password.trim()) {
