@@ -129,7 +129,7 @@ export function Estadisticas() {
     return fecha >= limite;
   }).length;
 
-  const ticketPromedio = cantidadBoletasRango > 0 ? totalRango / cantidadBoletasRango : 0;
+  const ticketPromedio = cantidadBoletasRango > 0 ? Math.round(totalRango / cantidadBoletasRango) : 0;
 
   return (
     <main
