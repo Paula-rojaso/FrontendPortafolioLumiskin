@@ -17,11 +17,10 @@ import {
 export function Estadisticas() {
   const navigate = useNavigate();
   const [boletas, setBoletas] = useState([]);
-  const [productosInventario, setProductosInventario] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [diasFiltro, setDiasFiltro] = useState(7); // 7, 15 o 30 días
 
-  // Paleta de colores contrastantes y elegantes para diferenciar bien las porciones
+  // Paleta de colores contrastantes y elegantes
   const COLORES_TORTA = ["#c46a7a", "#2a9d8f", "#e9c46a", "#264653", "#e76f51"];
 
   useEffect(() => {
@@ -30,24 +29,14 @@ export function Estadisticas() {
 
   const cargarDatos = async () => {
     try {
-      // Hacemos ambas peticiones en paralelo para que cargue más rápido
-      const [resPagos, resInventario] = await Promise.all([
-        fetch("https://backend-pago.onrender.com/api/pagos"),
-        fetch("https://backend-inventario.onrender.com/api/productos")
-      ]);
-
-      if (resPagos.ok) {
-        const dataPagos = await resPagos.json();
-        setBoletas(Array.isArray(dataPagos) ? dataPagos : []);
+      // Volvemos a hacer solo 1 petición rápida
+      const res = await fetch("https://backend-pago.onrender.com/api/pagos");
+      if (res.ok) {
+        const data = await res.json();
+        setBoletas(Array.isArray(data) ? data : []);
       }
-
-      if (resInventario.ok) {
-        const dataInv = await resInventario.json();
-        setProductosInventario(Array.isArray(dataInv) ? dataInv : []);
-      }
-
     } catch (error) {
-      console.error("Error cargando datos:", error);
+      console.error("Error cargando boletas:", error);
     } finally {
       setCargando(false);
     }
@@ -56,13 +45,6 @@ export function Estadisticas() {
   const formatearPrecio = (valor) => {
     return Number(valor || 0).toLocaleString("es-CL");
   };
-
-  // =======================================================
-  // ALERTA DE STOCK CRÍTICO (Menos de 5 unidades)
-  // =======================================================
-  const stockCritico = useMemo(() => {
-    return productosInventario.filter((p) => p.stock < 5);
-  }, [productosInventario]);
 
   // =======================================================
   // LÓGICA GRÁFICO DE BARRAS: Ventas por día
@@ -138,7 +120,7 @@ export function Estadisticas() {
   const totalRango = datosBarras.reduce((acc, curr) => acc + curr.ventas, 0);
   const totalProductosVendidos = datosTorta.reduce((acc, curr) => acc + curr.value, 0);
   
-  // Calcular cantidad de boletas en el rango para el ticket promedio
+  // Cálculo instantáneo en el frontend sin llamar al backend
   const cantidadBoletasRango = boletas.filter(b => {
     const fecha = new Date(b.fechaPago || b.fecha);
     const limite = new Date();
@@ -162,7 +144,7 @@ export function Estadisticas() {
         <div className="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
           <div>
             <h1 style={{ color: "#4b2b32", fontWeight: "900" }}>Estadísticas</h1>
-            <p className="text-muted mb-0">Rendimiento y logística en tiempo real.</p>
+            <p className="text-muted mb-0">Rendimiento de la tienda en tiempo real.</p>
           </div>
 
           <div className="d-flex align-items-center gap-3">
@@ -195,29 +177,10 @@ export function Estadisticas() {
         {cargando ? (
           <div className="text-center py-5">
             <div className="spinner-border" style={{ color: "#c46a7a" }}></div>
-            <p className="mt-3 text-muted">Procesando gráficos e inventario...</p>
+            <p className="mt-3 text-muted">Procesando gráficos...</p>
           </div>
         ) : (
           <>
-            {/* ALERTA DE STOCK CRÍTICO */}
-            {stockCritico.length > 0 && (
-              <div className="card border-0 rounded-4 shadow-sm mb-4" style={{ backgroundColor: "#fff5f5", borderLeft: "5px solid #dc3545" }}>
-                <div className="card-body p-4">
-                  <h5 className="text-danger fw-bold mb-3">
-                    <span className="me-2">⚠️</span> Alerta de Stock Crítico
-                  </h5>
-                  <p className="text-muted small mb-3">Los siguientes productos tienen menos de 5 unidades disponibles y podrían agotarse pronto.</p>
-                  <div className="d-flex flex-wrap gap-2">
-                    {stockCritico.map((p) => (
-                      <span key={p.id} className="badge bg-white text-danger border border-danger p-2" style={{ fontSize: "13px" }}>
-                        {p.nombre} <strong className="ms-1">(Quedan: {p.stock})</strong>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* MINI RESUMEN DE 3 TARJETAS */}
             <div className="row g-4 mb-4">
               <div className="col-md-4">
