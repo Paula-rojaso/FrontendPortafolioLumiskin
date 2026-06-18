@@ -190,17 +190,16 @@ export function AdministracionUsuarios() {
 
       const metodo = modo === "crear" ? "POST" : "PUT";
 
+      // 👇 Limpiamos el payload y usamos la ruta alternativa: rolNombre
       const body = {
         nombre: formulario.nombre,
         email: formulario.email,
         telefono: formulario.telefono,
         region: formulario.region,
         comuna: formulario.comuna,
-        direccion: formulario.direccion,
-        departamento: formulario.departamento,
-        infoEnvio: formulario.infoEnvio,
         estado: formulario.estado === 1,
-        rolId: formulario.rol_id
+        // Tu backend soporta buscar por nombre, ¡usémoslo para evitar el conflicto del ID!
+        rolNombre: formulario.rol_id === 2 ? "admin" : "cliente"
       };
 
       if (formulario.password.trim()) {
@@ -213,12 +212,19 @@ export function AdministracionUsuarios() {
         body: JSON.stringify(body),
       });
 
+      // 👇 Mejoramos el escáner de errores para saber EXACTAMENTE qué falla
       const texto = await res.text();
-      const data = texto ? JSON.parse(texto) : {};
+      let data = {};
+      try {
+        data = texto ? JSON.parse(texto) : {};
+      } catch (parseError) {
+        console.error("El servidor no devolvió JSON válido:", texto);
+      }
 
       if (!res.ok) {
+        console.error("Error del backend:", data || texto);
         throw new Error(
-          data.error || data.mensaje || "No se pudo guardar el usuario."
+          data.error || data.message || data.mensaje || `Error del servidor: ${texto.substring(0, 50)}...`
         );
       }
 
@@ -234,10 +240,10 @@ export function AdministracionUsuarios() {
       limpiarFormulario();
       cargarUsuarios();
     } catch (error) {
-      console.error("Error guardando usuario:", error);
+      console.error("Excepción capturada:", error);
       setMensaje({
         tipo: "error",
-        texto: error.message || "No se pudo guardar el usuario.",
+        texto: error.message || "Error fatal al guardar el usuario.",
       });
     }
   };
