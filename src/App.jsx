@@ -25,6 +25,7 @@ import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
 import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
 import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
+import { Estadisticas } from "./Admin/Estadisticas"; 
 import { WhatsappChat } from "./componentes/WhatsappChat/WhatsappChat";
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
         <Route path="/pago" element={<Pago/>}/>
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/ordenes" element={<Ordenes/>}/>
+        <Route path="/admin/estadisticas" element={<Estadisticas />} />
 
 
       </Routes>
