@@ -190,7 +190,6 @@ export function AdministracionUsuarios() {
 
       const metodo = modo === "crear" ? "POST" : "PUT";
 
-      // 👇 AQUÍ ESTÁ EL CAMBIO CLAVE
       const body = {
         nombre: formulario.nombre,
         email: formulario.email,
@@ -201,10 +200,7 @@ export function AdministracionUsuarios() {
         departamento: formulario.departamento,
         infoEnvio: formulario.infoEnvio,
         estado: formulario.estado === 1,
-        // Enviamos el rol como un objeto para que Spring Boot lo mapee correctamente
-        rol: {
-          id: formulario.rol_id
-        }
+        rolId: formulario.rol_id
       };
 
       if (formulario.password.trim()) {
@@ -245,7 +241,6 @@ export function AdministracionUsuarios() {
       });
     }
   };
-
   const desactivarUsuario = async (usuario) => {
     const confirmar = confirm(
       `¿Seguro que deseas desactivar a ${usuario.nombre}?`
