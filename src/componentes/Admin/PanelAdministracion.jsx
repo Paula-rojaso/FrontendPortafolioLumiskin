@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export function PanelAdministracion() {
   const navigate = useNavigate();
-
-  const [boletas, setBoletas] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
+  const [totalVendido, setTotalVendido] = useState(0);
   const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
@@ -14,18 +12,16 @@ export function PanelAdministracion() {
 
   const cargarDatos = async () => {
     setCargando(true);
-
     try {
+      // Solo traemos los pagos para sacar el total rápido en el panel
       const resPagos = await fetch("https://backend-pago.onrender.com/api/pagos");
       if (resPagos.ok) {
         const dataPagos = await resPagos.json();
-        setBoletas(Array.isArray(dataPagos) ? dataPagos : []);
-      }
-
-      const resUsuarios = await fetch("https://backend-usuario.onrender.com/api/usuarios");
-      if (resUsuarios.ok) {
-        const dataUsuarios = await resUsuarios.json();
-        setUsuarios(Array.isArray(dataUsuarios) ? dataUsuarios : []);
+        const total = (Array.isArray(dataPagos) ? dataPagos : []).reduce(
+          (acc, boleta) => acc + Number(boleta.total || 0),
+          0
+        );
+        setTotalVendido(total);
       }
     } catch (error) {
       console.error("Error cargando datos del panel:", error);
@@ -38,78 +34,12 @@ export function PanelAdministracion() {
     return Number(valor || 0).toLocaleString("es-CL");
   };
 
-  const ventasSemanaPorDia = () => {
-    const dias = {
-      lunes: 0,
-      martes: 0,
-      miercoles: 0,
-      jueves: 0,
-      viernes: 0,
-      sabado: 0,
-      domingo: 0,
-    };
-
-    const hoy = new Date();
-    const inicioSemana = new Date(hoy);
-    const diaActual = hoy.getDay();
-    const diferencia = diaActual === 0 ? 6 : diaActual - 1;
-    inicioSemana.setDate(hoy.getDate() - diferencia);
-    inicioSemana.setHours(0, 0, 0, 0);
-
-    boletas.forEach((boleta) => {
-      const fecha = new Date(boleta.fechaCreacion || boleta.fecha);
-      if (isNaN(fecha)) return;
-
-      if (fecha >= inicioSemana && fecha <= hoy) {
-        const dia = fecha.getDay();
-
-        const nombresDias = [
-          "domingo",
-          "lunes",
-          "martes",
-          "miercoles",
-          "jueves",
-          "viernes",
-          "sabado",
-        ];
-
-        const nombreDia = nombresDias[dia];
-        dias[nombreDia] += Number(boleta.total || 0);
-      }
-    });
-
-    return dias;
-  };
-
-  const ventasPorAnio = () => {
-    const resumen = {};
-
-    boletas.forEach((boleta) => {
-      const fecha = new Date(boleta.fechaCreacion || boleta.fecha);
-      if (isNaN(fecha)) return;
-
-      const anio = fecha.getFullYear();
-      resumen[anio] = (resumen[anio] || 0) + Number(boleta.total || 0);
-    });
-
-    return resumen;
-  };
-
-  const totalVendido = boletas.reduce(
-    (total, boleta) => total + Number(boleta.total || 0),
-    0
-  );
-
-  const ventasSemana = ventasSemanaPorDia();
-  const ventasAnuales = ventasPorAnio();
-
   return (
     <main
       className="py-5"
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
+        background: "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
       }}
     >
       <div className="container">
@@ -136,35 +66,31 @@ export function PanelAdministracion() {
           </h1>
 
           <p className="text-muted">
-            Gestiona productos, usuarios y revisa las ventas de la tienda.
+            Gestiona productos, usuarios y analiza el rendimiento de tu tienda.
           </p>
         </div>
 
         {cargando && (
-          <div className="alert alert-info text-center">
-            Cargando información del panel...
+          <div className="text-center mb-4">
+            <div className="spinner-border text-danger" role="status"></div>
+            <p className="text-muted mt-2">Cargando panel...</p>
           </div>
         )}
 
         {/* TARJETAS PRINCIPALES */}
-        <div className="row g-4 mb-5">
-          <div className="col-md-4">
+        <div className="row g-4 justify-content-center">
+          
+          {/* TARJETA PRODUCTOS */}
+          <div className="col-md-6 col-lg-3">
             <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center">
-                <h3 style={{ color: "#61333d", fontWeight: "800" }}>
-                  Productos
-                </h3>
-                <p className="text-muted">
-                  Crear, editar, eliminar y revisar stock.
-                </p>
-
+              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h3 style={{ color: "#61333d", fontWeight: "800" }}>Productos</h3>
+                  <p className="text-muted small">Crea, edita, elimina y revisa el stock de la tienda.</p>
+                </div>
                 <button
-                  className="btn w-100 py-3 rounded-pill"
-                  style={{
-                    backgroundColor: "#c46a7a",
-                    color: "white",
-                    fontWeight: "700",
-                  }}
+                  className="btn w-100 py-2 rounded-pill mt-3"
+                  style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "700" }}
                   onClick={() => navigate("/inventario")}
                 >
                   Ir a productos
@@ -173,24 +99,17 @@ export function PanelAdministracion() {
             </div>
           </div>
 
-          <div className="col-md-4">
+          {/* TARJETA USUARIOS */}
+          <div className="col-md-6 col-lg-3">
             <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center">
-                <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                  Usuarios
-                </h3>
-                <p className="text-muted">
-                  Ver clientes, administradores y estados.
-                </p>
-
+              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Usuarios</h3>
+                  <p className="text-muted small">Ver clientes, asignar roles y administrar estados.</p>
+                </div>
                 <button
-                  className="btn w-100 py-3 rounded-pill"
-                  style={{
-                    backgroundColor: "#c46a7a",
-                    color: "#ffffff",
-                    fontWeight: "700",
-                    border: "1px solid #e8b8c2",
-                  }}
+                  className="btn w-100 py-2 rounded-pill mt-3"
+                  style={{ backgroundColor: "#fff", color: "#c46a7a", fontWeight: "700", border: "1px solid #e8b8c2" }}
                   onClick={() => navigate("/admin/usuarios")}
                 >
                   Administrar usuarios
@@ -199,148 +118,47 @@ export function PanelAdministracion() {
             </div>
           </div>
 
-        <div className="col-md-3">
+          {/* TARJETA ÓRDENES */}
+          <div className="col-md-6 col-lg-3">
             <div className="card border-0 rounded-4 shadow-sm h-100">
-            <div className="card-body p-4 text-center">
-                <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                Órdenes
-                </h3>
-                <p className="text-muted">
-                Revisar compras, pagos y boletas.
-                </p>
-
+              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Órdenes</h3>
+                  <p className="text-muted small">Revisa el historial de compras y detalles de boletas.</p>
+                </div>
                 <button
-                className="btn w-100 py-3 rounded-pill"
-                style={{
-                    backgroundColor: "#c46a7a",
-                    color: "#ffffff",
-                    fontWeight: "700",
-                    border: "1px solid #e8b8c2",
-                }}
-                onClick={() => navigate("/admin/ordenes")}
+                  className="btn w-100 py-2 rounded-pill mt-3"
+                  style={{ backgroundColor: "#fff", color: "#c46a7a", fontWeight: "700", border: "1px solid #e8b8c2" }}
+                  onClick={() => navigate("/admin/ordenes")}
                 >
-                Ver órdenes
+                  Ver órdenes
                 </button>
-            </div>
-            </div>
-        </div>
-
-          <div className="col-md-4">
-            <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center">
-                <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                  Total vendido
-                </h3>
-
-                <h2 style={{ color: "#c46a7a", fontWeight: "900" }}>
-                  ${formatearPrecio(totalVendido)}
-                </h2>
-
-                <p className="text-muted mb-0">
-                  Total acumulado según boletas registradas.
-                </p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ESTADÍSTICAS SEMANALES */}
-        <div className="card border-0 rounded-4 shadow-sm mb-4">
-          <div className="card-body p-4">
-            <h2 style={{ color: "#4b2b32", fontWeight: "800" }}>
-              Ventas de la semana por día
-            </h2>
-
-            <p className="text-muted">
-              Resumen de ventas desde lunes hasta hoy.
-            </p>
-
-            <div className="table-responsive">
-              <table className="table align-middle">
-                <thead>
-                  <tr>
-                    <th>Día</th>
-                    <th>Total vendido</th>
-                    <th>Visual</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {Object.entries(ventasSemana).map(([dia, totalDia]) => (
-                    <tr key={dia}>
-                      <td className="text-capitalize fw-bold">{dia}</td>
-                      <td>${formatearPrecio(totalDia)}</td>
-                      <td style={{ width: "45%" }}>
-                        <div
-                          style={{
-                            height: "14px",
-                            backgroundColor: "#f7dbe2",
-                            borderRadius: "999px",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <div
-                            style={{
-                              height: "100%",
-                              width: `${Math.min(
-                                totalVendido > 0
-                                  ? (totalDia / totalVendido) * 100
-                                  : 0,
-                                100
-                              )}%`,
-                              backgroundColor: "#c46a7a",
-                              borderRadius: "999px",
-                            }}
-                          ></div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* TARJETA ESTADÍSTICAS */}
+          <div className="col-md-6 col-lg-3">
+            <div className="card border-0 rounded-4 shadow-sm h-100" style={{ border: "2px solid #f7dbe2" }}>
+              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Estadísticas</h3>
+                  <p className="text-muted small mb-1">Métricas y gráficos de la tienda.</p>
+                  <span className="badge bg-light text-success border px-2 py-1 mb-2 fs-6">
+                    Total: ${formatearPrecio(totalVendido)}
+                  </span>
+                </div>
+                <button
+                  className="btn w-100 py-2 rounded-pill mt-3"
+                  style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "700" }}
+                  onClick={() => navigate("/admin/estadisticas")}
+                >
+                  Ver gráficos
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ESTADÍSTICAS ANUALES */}
-        <div className="card border-0 rounded-4 shadow-sm mb-4">
-          <div className="card-body p-4">
-            <h2 style={{ color: "#4b2b32", fontWeight: "800" }}>
-              Ventas por año
-            </h2>
-
-            <p className="text-muted">
-              Resumen anual de ventas registradas.
-            </p>
-
-            <div className="table-responsive">
-              <table className="table align-middle">
-                <thead>
-                  <tr>
-                    <th>Año</th>
-                    <th>Total vendido</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {Object.keys(ventasAnuales).length === 0 ? (
-                    <tr>
-                      <td colSpan="2" className="text-center text-muted">
-                        No hay ventas registradas.
-                      </td>
-                    </tr>
-                  ) : (
-                    Object.entries(ventasAnuales).map(([anio, totalAnio]) => (
-                      <tr key={anio}>
-                        <td className="fw-bold">{anio}</td>
-                        <td>${formatearPrecio(totalAnio)}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
     </main>
