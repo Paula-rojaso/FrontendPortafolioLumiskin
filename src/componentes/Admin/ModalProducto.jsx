@@ -8,7 +8,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
     precio: "",
     stock: "",
     descripcion: "",
-    imagen: "",
     categoriaId: "",
   });
 
@@ -44,11 +43,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
       test: (v) => v !== "",
       ok: "Categoría seleccionada.",
       bad: "Selecciona una categoría.",
-    },
-    imagen: {
-      test: (v) => v.trim() === "" || /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(v.trim()),
-      ok: "URL válida.",
-      bad: "Debe ser una URL válida de imagen (http/https).",
     },
   };
 
@@ -96,7 +90,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
         precio: producto.precio ?? "",
         stock: producto.stock ?? "",
         descripcion: producto.descripcion || "",
-        imagen: producto.imagenUrl || producto.imagen || "",
         categoriaId: producto.categoria?.id || producto.categoriaId || "",
       });
       setPreview(producto.imagenUrl || producto.imagen || null);
@@ -107,7 +100,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
         precio: "",
         stock: "",
         descripcion: "",
-        imagen: "",
         categoriaId: "",
       });
       setPreview(null);
@@ -127,7 +119,8 @@ export function ModalProducto({ modo, producto, onGuardar }) {
   const handleFileChange = (e) => {
     const f = e.target.files?.[0] || null;
     setArchivo(f);
-    setPreview(f ? URL.createObjectURL(f) : form.imagen || null);
+    // Si hay archivo, muestra su preview local. Si no, intenta mostrar la imagen actual del producto a editar.
+    setPreview(f ? URL.createObjectURL(f) : (producto?.imagenUrl || producto?.imagen || null));
   };
 
   // ===== Envío =====
@@ -270,23 +263,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
                     <div className="invalid-feedback">{errores.descripcion}</div>
                   )}
                   {ok.descripcion && <div className="valid-feedback">{ok.descripcion}</div>}
-                </div>
-
-                <div className="col-12">
-                  <label className="form-label">URL Imagen (opcional)</label>
-                  <input type="text" name="imagen"
-                    value={form.imagen}
-                    onChange={(e) => {
-                      handleChange(e);
-                      if (!archivo) setPreview(e.target.value || null);
-                    }}
-                    placeholder="https://..."
-                    className={`form-control ${
-                      errores.imagen ? "is-invalid" : ok.imagen ? "is-valid" : ""
-                    }`}
-                  />
-                  {errores.imagen && <div className="invalid-feedback">{errores.imagen}</div>}
-                  {ok.imagen && <div className="valid-feedback">{ok.imagen}</div>}
                 </div>
 
                 <div className="col-12">
