@@ -11,8 +11,7 @@ export default function CompraExitosa() {
     return Number(valor || 0).toLocaleString("es-CL");
   };
   
-  // ¡Añadimos 'carrito' aquí!
-  const { carrito, vaciarCarrito } = useCarrito();
+  const { vaciarCarrito } = useCarrito();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -21,33 +20,47 @@ export default function CompraExitosa() {
     if (idBoleta) {
       fetch(`https://backend-pago.onrender.com/api/pagos/boleta/${idBoleta}`)
         .then(res => res.json())
-        .then(data => {
-          setBoleta(data);
-          localStorage.setItem("boleta", JSON.stringify(data));
+        .then(async (dataBoleta) => {
+          setBoleta(dataBoleta);
+          localStorage.setItem("boleta", JSON.stringify(dataBoleta));
 
-          const yaDescontado = localStorage.getItem("stock_descontado");
+          // Clave única por boleta para no bloquear futuras compras
+          const yaDescontado = localStorage.getItem(`stock_descontado_${idBoleta}`);
+          
           if (!yaDescontado) {
-            // Usamos el carrito en lugar de data.detalles porque el carrito SI tiene los IDs
-            // Si por algún motivo el carrito se vació antes, hacemos un fallback seguro
-            const itemsADescontar = carrito.length > 0 ? carrito : data.detalles;
+            try {
+              // 1. Traemos el inventario real para extraer los IDs verdaderos
+              const resInv = await fetch("https://backend-inventario.onrender.com/api/productos");
+              const inventario = await resInv.json();
 
-            itemsADescontar.forEach((item) => {
-              // Aseguramos capturar el ID sin importar si en el context se llama id o idProducto
-              const idParaDescontar = item.idProducto || item.id; 
-              
-              if (idParaDescontar) {
-                fetch(
-                  `https://backend-inventario.onrender.com/api/productos/${idParaDescontar}/descontar?cantidad=${item.cantidad}`,
-                  { method: "PATCH" }
-                ).catch(err => console.error("Error al descontar:", err));
-              }
-            });
-            localStorage.setItem("stock_descontado", "true");
+              // 2. Cruzamos los datos usando el NOMBRE como puente
+              dataBoleta.detalles.forEach((itemBoleta) => {
+                const nombreBuscado = itemBoleta.producto || itemBoleta.nombre;
+                const productoReal = inventario.find(p => p.nombre === nombreBuscado);
+
+                if (productoReal) {
+                  // 3. Descontamos usando el ID verdadero de la base de inventario
+                  fetch(
+                    `https://backend-inventario.onrender.com/api/productos/${productoReal.id}/descontar?cantidad=${itemBoleta.cantidad}`,
+                    { method: "PATCH" }
+                  )
+                  .then(() => console.log(`✓ Stock descontado: ${nombreBuscado}`))
+                  .catch(err => console.error("Error al descontar en BD:", err));
+                } else {
+                  console.warn("No se encontró en inventario el producto:", nombreBuscado);
+                }
+              });
+
+              // Marcamos esta boleta específica como procesada
+              localStorage.setItem(`stock_descontado_${idBoleta}`, "true");
+            } catch (error) {
+              console.error("Error cruzando datos con inventario:", error);
+            }
           }
           
-          // ¡Vaciamos el carrito DESPUÉS de haber usado sus IDs!
           vaciarCarrito();
         })
+        .catch(err => console.error("Error cargando boleta:", err))
         .finally(() => {
           setCargando(false);
         });
@@ -386,8 +399,8 @@ export default function CompraExitosa() {
                 <button
                   className="btn w-100 py-3 rounded-pill"
                   onClick={() => {
+                    // Limpiamos todo al salir para no arrastrar basura
                     localStorage.removeItem("boleta");
-                    localStorage.removeItem("stock_descontado");
                     navigate("/");
                   }}
                   style={{
