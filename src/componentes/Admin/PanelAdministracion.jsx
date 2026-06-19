@@ -39,7 +39,8 @@ export function PanelAdministracion() {
       className="py-5"
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
+        background:
+          "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
       }}
     >
       <div className="container">
@@ -79,18 +80,25 @@ export function PanelAdministracion() {
 
         {/* TARJETAS PRINCIPALES */}
         <div className="row g-4 justify-content-center">
-          
           {/* TARJETA PRODUCTOS */}
           <div className="col-md-6 col-lg-3">
             <div className="card border-0 rounded-4 shadow-sm h-100">
               <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
                 <div>
-                  <h3 style={{ color: "#61333d", fontWeight: "800" }}>Productos</h3>
-                  <p className="text-muted small">Crea, edita, elimina y revisa el stock de la tienda.</p>
+                  <h3 style={{ color: "#61333d", fontWeight: "800" }}>
+                    Productos
+                  </h3>
+                  <p className="text-muted small">
+                    Crea, edita, elimina y revisa el stock de la tienda.
+                  </p>
                 </div>
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "700" }}
+                  style={{
+                    backgroundColor: "#c46a7a",
+                    color: "white",
+                    fontWeight: "700",
+                  }}
                   onClick={() => navigate("/inventario")}
                 >
                   Ir a productos
@@ -104,12 +112,21 @@ export function PanelAdministracion() {
             <div className="card border-0 rounded-4 shadow-sm h-100">
               <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
                 <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Usuarios</h3>
-                  <p className="text-muted small">Ver clientes, asignar roles y administrar estados.</p>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    Usuarios
+                  </h3>
+                  <p className="text-muted small">
+                    Ver clientes, asignar roles y administrar estados.
+                  </p>
                 </div>
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{ backgroundColor: "#fff", color: "#c46a7a", fontWeight: "700", border: "1px solid #e8b8c2" }}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#c46a7a",
+                    fontWeight: "700",
+                    border: "1px solid #e8b8c2",
+                  }}
                   onClick={() => navigate("/admin/usuarios")}
                 >
                   Administrar usuarios
@@ -123,12 +140,21 @@ export function PanelAdministracion() {
             <div className="card border-0 rounded-4 shadow-sm h-100">
               <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
                 <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Órdenes</h3>
-                  <p className="text-muted small">Revisa el historial de compras y detalles de boletas.</p>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    Órdenes
+                  </h3>
+                  <p className="text-muted small">
+                    Revisa el historial de compras y detalles de boletas.
+                  </p>
                 </div>
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{ backgroundColor: "#fff", color: "#c46a7a", fontWeight: "700", border: "1px solid #e8b8c2" }}
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#c46a7a",
+                    fontWeight: "700",
+                    border: "1px solid #e8b8c2",
+                  }}
                   onClick={() => navigate("/admin/ordenes")}
                 >
                   Ver órdenes
@@ -139,18 +165,29 @@ export function PanelAdministracion() {
 
           {/* TARJETA ESTADÍSTICAS */}
           <div className="col-md-6 col-lg-3">
-            <div className="card border-0 rounded-4 shadow-sm h-100" style={{ border: "2px solid #f7dbe2" }}>
+            <div
+              className="card border-0 rounded-4 shadow-sm h-100"
+              style={{ border: "2px solid #f7dbe2" }}
+            >
               <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
                 <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>Estadísticas</h3>
-                  <p className="text-muted small mb-1">Métricas y gráficos de la tienda.</p>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    Estadísticas
+                  </h3>
+                  <p className="text-muted small mb-1">
+                    Métricas y gráficos de la tienda.
+                  </p>
                   <span className="badge bg-light text-success border px-2 py-1 mb-2 fs-6">
                     Total: ${formatearPrecio(totalVendido)}
                   </span>
                 </div>
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "700" }}
+                  style={{
+                    backgroundColor: "#c46a7a",
+                    color: "white",
+                    fontWeight: "700",
+                  }}
                   onClick={() => navigate("/admin/estadisticas")}
                 >
                   Ver gráficos
@@ -159,6 +196,34 @@ export function PanelAdministracion() {
             </div>
           </div>
 
+          {/* TARJETA FORMULARIO DE CONTACTO */}
+          <div className="col-md-6 col-lg-3">
+            <div className="card border-0 rounded-4 shadow-sm h-100">
+              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    Contacto
+                  </h3>
+                  <p className="text-muted small">
+                    Revisa los mensajes enviados desde el formulario de contacto.
+                  </p>
+                </div>
+
+                <button
+                  className="btn w-100 py-2 rounded-pill mt-3"
+                  style={{
+                    backgroundColor: "#fff",
+                    color: "#c46a7a",
+                    fontWeight: "700",
+                    border: "1px solid #e8b8c2",
+                  }}
+                  onClick={() => navigate("/admin/contactos")}
+                >
+                  Ver formularios
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
