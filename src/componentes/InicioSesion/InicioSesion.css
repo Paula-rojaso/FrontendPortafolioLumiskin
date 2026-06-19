@@ -12,3 +12,42 @@
       height:auto; 
       margin:20px auto;
     }
+    
+    .password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input {
+  padding-right: 60px;
+}
+
+.btn-ver-password {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #d6188a;
+  cursor: pointer;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+  z-index: 3;
+}
+
+.btn-ver-password:hover {
+  color: #a51269;
+}
+
+.btn-ver-password:focus {
+  outline: none;
+}
+
+/* Esto evita que el ícono de validación de Bootstrap choque con el ojito */
+.password-container .form-control.is-valid,
+.password-container .form-control.is-invalid {
+  background-position: right 45px center;
+  padding-right: 80px;
+}

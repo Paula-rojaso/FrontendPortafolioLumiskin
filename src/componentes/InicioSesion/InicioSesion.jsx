@@ -8,6 +8,7 @@ export function InicioSesion() {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState(null);
   const [cargando, setCargando] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const emailPermitido = /^[^\s@]+@(duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/i;
 
@@ -166,17 +167,32 @@ export function InicioSesion() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Contraseña</label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={(e) => validarCampo("password", e.target.value)}
-            />
+        <label htmlFor="password" className="form-label">
+          Contraseña
+        </label>
+
+        <div className="password-container">
+          <input
+            type={mostrarPassword ? "text" : "password"}
+            className="form-control"
+            id="password"
+            name="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onBlur={(e) => validarCampo("password", e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="btn-ver-password"
+            onClick={() => setMostrarPassword(!mostrarPassword)}
+            aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+          >
+            {mostrarPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
+
             <div id="err-password" className="invalid-feedback"></div>
             <div id="ok-password" className="valid-feedback"></div>
           </div>
