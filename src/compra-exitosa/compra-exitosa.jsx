@@ -30,7 +30,7 @@ export default function CompraExitosa() {
           if (!yaDescontado) {
             try {
               // 1. Traemos el inventario real para extraer los IDs verdaderos
-              const resInv = await fetch("https://backend-inventario.onrender.com/api/productos");
+              const resInv = await fetch("https://backendportafolio-635z.onrender.com/api/productos");
               const inventario = await resInv.json();
 
               // 2. Cruzamos los datos usando el NOMBRE como puente
@@ -41,7 +41,7 @@ export default function CompraExitosa() {
                 if (productoReal) {
                   // 3. Descontamos usando el ID verdadero de la base de inventario
                   fetch(
-                    `https://backend-inventario.onrender.com/api/productos/${productoReal.id}/descontar?cantidad=${itemBoleta.cantidad}`,
+                    `https://backendportafolio-635z.onrender.com/api/productos/${productoReal.id}/descontar?cantidad=${itemBoleta.cantidad}`,
                     { method: "PATCH" }
                   )
                   .then(() => console.log(`✓ Stock descontado: ${nombreBuscado}`))
