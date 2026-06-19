@@ -203,7 +203,7 @@ export function Estadisticas() {
                     🧾
                   </div>
                   <div>
-                    <p className="text-muted mb-0 small fw-bold text-uppercase">Ticket Promedio</p>
+                    <p className="text-muted mb-0 small fw-bold text-uppercase">Boleta Promedio</p>
                     <h3 className="m-0" style={{ color: "#264653", fontWeight: "900" }}>
                       ${formatearPrecio(ticketPromedio)}
                     </h3>

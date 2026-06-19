@@ -6,43 +6,96 @@ export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
+  const { vaciarCarrito } = useCarrito();
+
   const formatearPrecio = (valor) => {
     return Number(valor || 0).toLocaleString("es-CL");
   };
-  const { vaciarCarrito } = useCarrito();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const idBoleta = params.get("idBoleta");
 
-    if (idBoleta) {
-      fetch(`https://backend-pago.onrender.com/api/pagos/boleta/${idBoleta}`)
-        .then(res => res.json())
-        .then(data => {
+    async function cargarBoletaYDescontarStock() {
+      try {
+        if (idBoleta) {
+          const res = await fetch(
+            `https://backend-pago.onrender.com/api/pagos/boleta/${idBoleta}`
+          );
+
+          if (!res.ok) {
+            throw new Error("Error al obtener la boleta");
+          }
+
+          const data = await res.json();
+
+          console.log("Boleta recibida:", data);
+          console.log("Detalles de la boleta:", data.detalles);
+
           setBoleta(data);
           localStorage.setItem("boleta", JSON.stringify(data));
+
+          // Vacía carrito cuando la compra fue exitosa
           vaciarCarrito();
 
-          const yaDescontado = localStorage.getItem("stock_descontado");
-          if (!yaDescontado) {
-            data.detalles.forEach((item) => {
-              fetch(
-                `https://backend-inventario.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
-                { method: "PATCH" }
-              );
-            });
-            localStorage.setItem("stock_descontado", "true");
+          // Clave única por boleta para no descontar dos veces la misma compra
+          const claveDescuento = `stock_descontado_boleta_${data.idBoleta}`;
+          const yaDescontado = localStorage.getItem(claveDescuento);
+
+          if (!yaDescontado && Array.isArray(data.detalles)) {
+            await Promise.all(
+              data.detalles.map(async (item) => {
+                const idProducto = item.idProducto;
+                const cantidad = item.cantidad;
+
+                if (!idProducto) {
+                  console.error("Este producto no trae idProducto:", item);
+                  throw new Error("Producto sin idProducto");
+                }
+
+                if (!cantidad || cantidad <= 0) {
+                  console.error("Cantidad inválida:", item);
+                  throw new Error("Cantidad inválida");
+                }
+
+                const respuestaDescuento = await fetch(
+                  `https://backend-inventario.onrender.com/api/productos/${idProducto}/descontar?cantidad=${cantidad}`,
+                  {
+                    method: "PATCH",
+                  }
+                );
+
+                if (!respuestaDescuento.ok) {
+                  throw new Error(
+                    `Error al descontar stock del producto ${idProducto}`
+                  );
+                }
+
+                console.log(
+                  `Stock descontado correctamente. Producto: ${idProducto}, cantidad: ${cantidad}`
+                );
+              })
+            );
+
+            localStorage.setItem(claveDescuento, "true");
+            console.log("Stock descontado para la boleta:", data.idBoleta);
           }
-        })
-        .finally(() => {
-          setCargando(false);
-        });
-    } else {
-      const guardada = localStorage.getItem("boleta");
-      if (guardada) setBoleta(JSON.parse(guardada));
-      setCargando(false);
+        } else {
+          const guardada = localStorage.getItem("boleta");
+
+          if (guardada) {
+            setBoleta(JSON.parse(guardada));
+          }
+        }
+      } catch (error) {
+        console.error("Error en CompraExitosa:", error);
+      } finally {
+        setCargando(false);
+      }
     }
-  }, []);
+
+    cargarBoletaYDescontarStock();
+  }, [idBoleta, vaciarCarrito]);
 
   if (cargando) {
     return (
@@ -50,11 +103,20 @@ export default function CompraExitosa() {
         className="py-5 d-flex align-items-center"
         style={{
           minHeight: "100vh",
-          background: "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
+          background:
+            "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
         }}
       >
         <div className="container text-center">
-          <div className="spinner-border mb-4" style={{ color: "#c46a7a", width: "3rem", height: "3rem" }} role="status"></div>
+          <div
+            className="spinner-border mb-4"
+            style={{
+              color: "#c46a7a",
+              width: "3rem",
+              height: "3rem",
+            }}
+            role="status"
+          ></div>
           <p className="text-muted fs-5">Cargando tu boleta...</p>
         </div>
       </main>
@@ -85,7 +147,8 @@ export default function CompraExitosa() {
             </h2>
 
             <p className="text-muted mt-3">
-              Es posible que aún no hayas realizado una compra o que la boleta haya sido eliminada.
+              Es posible que aún no hayas realizado una compra o que la boleta
+              haya sido eliminada.
             </p>
 
             <Link
@@ -119,7 +182,6 @@ export default function CompraExitosa() {
       }}
     >
       <div className="container">
-
         {/* ENCABEZADO */}
         <div className="text-center mb-5">
           <div
@@ -182,14 +244,16 @@ export default function CompraExitosa() {
         <div className="row g-4">
           {/* COLUMNA IZQUIERDA */}
           <div className="col-lg-8">
-
             {/* INFORMACIÓN DEL CLIENTE */}
             <div
               className="card border-0 rounded-4 shadow-sm mb-4"
               style={{ backgroundColor: "rgba(255,255,255,0.95)" }}
             >
               <div className="card-body p-4">
-                <h2 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>
+                <h2
+                  className="mb-1"
+                  style={{ color: "#4b2b32", fontWeight: "800" }}
+                >
                   Información del cliente
                 </h2>
 
@@ -199,37 +263,62 @@ export default function CompraExitosa() {
 
                 <div className="row g-3">
                   <div className="col-md-6">
-                    <div className="p-3 rounded-4" style={{ backgroundColor: "#fff7f9" }}>
+                    <div
+                      className="p-3 rounded-4"
+                      style={{ backgroundColor: "#fff7f9" }}
+                    >
                       <small className="text-muted">Nombre</small>
-                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>{boleta.nombreCliente}</p>
+                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>
+                        {boleta.nombreCliente}
+                      </p>
                     </div>
                   </div>
 
                   <div className="col-md-6">
-                    <div className="p-3 rounded-4" style={{ backgroundColor: "#fff7f9" }}>
+                    <div
+                      className="p-3 rounded-4"
+                      style={{ backgroundColor: "#fff7f9" }}
+                    >
                       <small className="text-muted">Correo</small>
-                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>{boleta.correoCliente}</p>
+                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>
+                        {boleta.correoCliente}
+                      </p>
                     </div>
                   </div>
 
                   <div className="col-md-6">
-                    <div className="p-3 rounded-4" style={{ backgroundColor: "#fff7f9" }}>
+                    <div
+                      className="p-3 rounded-4"
+                      style={{ backgroundColor: "#fff7f9" }}
+                    >
                       <small className="text-muted">Teléfono</small>
-                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>{boleta.telefonoCliente}</p>
+                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>
+                        {boleta.telefonoCliente}
+                      </p>
                     </div>
                   </div>
 
                   <div className="col-md-6">
-                    <div className="p-3 rounded-4" style={{ backgroundColor: "#fff7f9" }}>
+                    <div
+                      className="p-3 rounded-4"
+                      style={{ backgroundColor: "#fff7f9" }}
+                    >
                       <small className="text-muted">Dirección</small>
-                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>{boleta.direccionCliente}</p>
+                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>
+                        {boleta.direccionCliente}
+                      </p>
                     </div>
                   </div>
 
                   <div className="col-12">
-                    <div className="p-3 rounded-4" style={{ backgroundColor: "#fff7f9" }}>
+                    <div
+                      className="p-3 rounded-4"
+                      style={{ backgroundColor: "#fff7f9" }}
+                    >
                       <small className="text-muted">Indicaciones</small>
-                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>{boleta.indicacionesEnvio || "Sin indicaciones"}</p>
+                      <p className="mb-0 fw-bold" style={{ color: "#4b2b32" }}>
+                        {boleta.indicacionesEnvio || "Sin indicaciones"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -244,10 +333,15 @@ export default function CompraExitosa() {
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <div>
-                    <h2 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    <h2
+                      className="mb-1"
+                      style={{ color: "#4b2b32", fontWeight: "800" }}
+                    >
                       Productos comprados
                     </h2>
-                    <p className="text-muted mb-0">Detalle de los productos incluidos en tu pedido.</p>
+                    <p className="text-muted mb-0">
+                      Detalle de los productos incluidos en tu pedido.
+                    </p>
                   </div>
 
                   <span
@@ -270,13 +364,17 @@ export default function CompraExitosa() {
                     </thead>
 
                     <tbody>
-                      {boleta.detalles.map((item, index) => (
+                      {boleta.detalles?.map((item, index) => (
                         <tr key={index}>
                           <td>
                             <div className="d-flex align-items-center gap-3">
                               <img
-                                src={item.imagenUrl || item.imagen || "/sin-imagen.png"}
-                                alt={item.no}
+                                src={
+                                  item.imagenUrl ||
+                                  item.imagen ||
+                                  "/sin-imagen.png"
+                                }
+                                alt={item.nombre || "Producto Lumiskin"}
                                 style={{
                                   width: 78,
                                   height: 78,
@@ -287,8 +385,18 @@ export default function CompraExitosa() {
                                 }}
                               />
                               <div>
-                                <h6 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>{item.nombre}</h6>
-                                <small className="text-muted">Producto Lumiskin</small>
+                                <h6
+                                  className="mb-1"
+                                  style={{
+                                    color: "#4b2b32",
+                                    fontWeight: "800",
+                                  }}
+                                >
+                                  {item.nombre}
+                                </h6>
+                                <small className="text-muted">
+                                  Producto Lumiskin
+                                </small>
                               </div>
                             </div>
                           </td>
@@ -296,14 +404,26 @@ export default function CompraExitosa() {
                           <td className="text-center">
                             <span
                               className="px-3 py-2 rounded-pill"
-                              style={{ backgroundColor: "#fff1f4", color: "#7a3f4b", fontWeight: "800" }}
+                              style={{
+                                backgroundColor: "#fff1f4",
+                                color: "#7a3f4b",
+                                fontWeight: "800",
+                              }}
                             >
                               {item.cantidad}
                             </span>
                           </td>
 
-                          <td className="text-center">${formatearPrecio(item.precioUnitario)}</td>
-                          <td className="text-end" style={{ color: "#4b2b32", fontWeight: "800" }}>${formatearPrecio(item.subtotal)}</td>
+                          <td className="text-center">
+                            ${formatearPrecio(item.precioUnitario)}
+                          </td>
+
+                          <td
+                            className="text-end"
+                            style={{ color: "#4b2b32", fontWeight: "800" }}
+                          >
+                            ${formatearPrecio(item.subtotal)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -324,18 +444,31 @@ export default function CompraExitosa() {
               }}
             >
               <div className="card-body p-4">
-                <h3 className="mb-4" style={{ color: "#4b2b32", fontWeight: "900" }}>
+                <h3
+                  className="mb-4"
+                  style={{ color: "#4b2b32", fontWeight: "900" }}
+                >
                   Resumen de pago
                 </h3>
 
-                <div className="rounded-4 p-3 mb-4" style={{ backgroundColor: "#fff1f4" }}>
+                <div
+                  className="rounded-4 p-3 mb-4"
+                  style={{ backgroundColor: "#fff1f4" }}
+                >
                   <small className="text-muted">Método de compra</small>
-                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.pago?.metodoPago}</p>
+                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>
+                    {boleta.pago?.metodoPago}
+                  </p>
                 </div>
 
-                <div className="rounded-4 p-3 mb-4" style={{ backgroundColor: "#fff1f4" }}>
+                <div
+                  className="rounded-4 p-3 mb-4"
+                  style={{ backgroundColor: "#fff1f4" }}
+                >
                   <small className="text-muted">Fecha de compra</small>
-                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>{boleta.pago?.fechaPago}</p>
+                  <p className="mb-0 fw-bold" style={{ color: "#7a3f4b" }}>
+                    {boleta.pago?.fechaPago}
+                  </p>
                 </div>
 
                 <div className="d-flex justify-content-between mb-3">
@@ -351,8 +484,24 @@ export default function CompraExitosa() {
                 <hr />
 
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                  <span style={{ color: "#4b2b32", fontWeight: "900", fontSize: "20px" }}>Total</span>
-                  <span style={{ color: "#c46a7a", fontWeight: "900", fontSize: "30px" }}>${formatearPrecio(total)}</span>
+                  <span
+                    style={{
+                      color: "#4b2b32",
+                      fontWeight: "900",
+                      fontSize: "20px",
+                    }}
+                  >
+                    Total
+                  </span>
+                  <span
+                    style={{
+                      color: "#c46a7a",
+                      fontWeight: "900",
+                      fontSize: "30px",
+                    }}
+                  >
+                    ${formatearPrecio(total)}
+                  </span>
                 </div>
 
                 <button
@@ -372,7 +521,6 @@ export default function CompraExitosa() {
                   className="btn w-100 py-3 rounded-pill"
                   onClick={() => {
                     localStorage.removeItem("boleta");
-                    localStorage.removeItem("stock_descontado");
                     navigate("/");
                   }}
                   style={{
@@ -395,11 +543,15 @@ export default function CompraExitosa() {
 
         {/* MENSAJE FINAL */}
         <div className="text-center mt-5 mb-4">
-          <h3 className="fst-italic" style={{ color: "#7a3f4b", fontWeight: "600" }}>
+          <h3
+            className="fst-italic"
+            style={{ color: "#7a3f4b", fontWeight: "600" }}
+          >
             Gracias por confiar en Lumiskin.
           </h3>
           <p className="text-muted">
-            Estamos trabajando para ofrecerte la mejor experiencia de cuidado personal.
+            Estamos trabajando para ofrecerte la mejor experiencia de cuidado
+            personal.
           </p>
         </div>
       </div>
