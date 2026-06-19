@@ -280,7 +280,7 @@ export default function Pago() {
                                     />
                                     <div>
                                       <h6 className="mb-1" style={{ fontWeight: "700", color: "#4b2b32" }}>{item.nombre}</h6>
-                                      <small className="text-muted">Producto Lumiskin</small>
+                                      <small className="text-muted">{item.categoria}</small>
                                     </div>
                                   </div>
                                 </td>

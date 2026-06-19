@@ -316,7 +316,7 @@ export default function CompraExitosa() {
                               />
                               <div>
                                 <h6 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>{item.nombre || item.producto}</h6>
-                                <small className="text-muted">Producto Lumiskin</small>
+                                <small className="text-muted">{item.categoria}</small>
                               </div>
                             </div>
                           </td>
