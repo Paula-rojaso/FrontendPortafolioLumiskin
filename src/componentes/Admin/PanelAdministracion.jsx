@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Package,
+  Users,
+  ReceiptText,
+  BarChart3,
+  Mail,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
+import "./PanelAdministracion.css";
 
 export function PanelAdministracion() {
   const navigate = useNavigate();
@@ -12,8 +22,8 @@ export function PanelAdministracion() {
 
   const cargarDatos = async () => {
     setCargando(true);
+
     try {
-      // Solo traemos los pagos para sacar el total rápido en el panel
       const resPagos = await fetch("https://backend-pago.onrender.com/api/pagos");
 
       if (resPagos.ok) {
@@ -37,204 +47,103 @@ export function PanelAdministracion() {
     return Number(valor || 0).toLocaleString("es-CL");
   };
 
+  const opcionesPanel = [
+    {
+      titulo: "Productos",
+      descripcion: "Crea, edita, elimina y revisa el stock de la tienda.",
+      boton: "Ir a productos",
+      ruta: "/inventario",
+      icono: <Package size={28} />,
+      destacado: true,
+    },
+    {
+      titulo: "Usuarios",
+      descripcion: "Ver clientes, asignar roles y administrar estados.",
+      boton: "Administrar usuarios",
+      ruta: "/admin/usuarios",
+      icono: <Users size={28} />,
+    },
+    {
+      titulo: "Órdenes",
+      descripcion: "Revisa el historial de compras y detalles de boletas.",
+      boton: "Ver órdenes",
+      ruta: "/admin/ordenes",
+      icono: <ReceiptText size={28} />,
+    },
+    {
+      titulo: "Estadísticas",
+      descripcion: "Métricas, ventas y gráficos de la tienda.",
+      boton: "Ver gráficos",
+      ruta: "/admin/estadisticas",
+      icono: <BarChart3 size={28} />,
+      destacado: true,
+      extra: `Total vendido: $${formatearPrecio(totalVendido)}`,
+    },
+    {
+      titulo: "Contacto",
+      descripcion: "Revisa los mensajes enviados desde el formulario de contacto.",
+      boton: "Ver formularios",
+      ruta: "/admin/contactos",
+      icono: <Mail size={28} />,
+    },
+  ];
+
   return (
-    <main
-      className="py-5"
-      style={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #fff7f9 0%, #f8eef2 45%, #fffdfb 100%)",
-      }}
-    >
-      <div className="container">
-        <div className="text-center mb-5">
-          <span
-            className="px-4 py-2 rounded-pill"
-            style={{
-              backgroundColor: "#f7dbe2",
-              color: "#9b4d5d",
-              fontWeight: "700",
-            }}
-          >
-            Administración Lumiskin
-          </span>
+    <main className="admin-page">
+      <div className="container py-5">
+        <section className="admin-hero">
+          <div>
+            <span className="admin-badge">Administración Lumiskin</span>
 
-          <h1
-            className="mt-4"
-            style={{
-              color: "#4b2b32",
-              fontWeight: "900",
-            }}
-          >
-            Panel de Administración
-          </h1>
+            <h1>Panel de Administración</h1>
 
-          <p className="text-muted">
-            Gestiona productos, usuarios y analiza el rendimiento de tu tienda.
-          </p>
-        </div>
-
-        {cargando && (
-          <div className="text-center mb-4">
-            <div className="spinner-border text-danger" role="status"></div>
-            <p className="text-muted mt-2">Cargando panel...</p>
+            <p>
+              Gestiona productos, usuarios, órdenes, formularios y estadísticas
+              generales de tu tienda.
+            </p>
           </div>
-        )}
 
-        {/* TARJETAS PRINCIPALES */}
-        <div className="row g-4 justify-content-center">
-          {/* TARJETA PRODUCTOS */}
-          <div className="col-md-6 col-lg-3">
-            <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
+          <div className="admin-total-card">
+            <span>Total vendido</span>
+
+            {cargando ? (
+              <div className="admin-loading">
+                <Loader2 size={22} className="spin" />
+                Cargando...
+              </div>
+            ) : (
+              <strong>${formatearPrecio(totalVendido)}</strong>
+            )}
+          </div>
+        </section>
+
+        <section className="row g-4 mt-2">
+          {opcionesPanel.map((item) => (
+            <div className="col-md-6 col-lg-4" key={item.titulo}>
+              <article
+                className={`admin-card ${item.destacado ? "destacada" : ""}`}
+              >
                 <div>
-                  <h3 style={{ color: "#61333d", fontWeight: "800" }}>
-                    Productos
-                  </h3>
-                  <p className="text-muted small">
-                    Crea, edita, elimina y revisa el stock de la tienda.
-                  </p>
+                  <div className="admin-icon">{item.icono}</div>
+
+                  <h3>{item.titulo}</h3>
+
+                  <p>{item.descripcion}</p>
+
+                  {item.extra && <span className="admin-extra">{item.extra}</span>}
                 </div>
 
                 <button
-                  className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{
-                    backgroundColor: "#c46a7a",
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                  onClick={() => navigate("/inventario")}
+                  className={item.destacado ? "admin-btn primary" : "admin-btn"}
+                  onClick={() => navigate(item.ruta)}
                 >
-                  Ir a productos
+                  {item.boton}
+                  <ArrowRight size={18} />
                 </button>
-              </div>
+              </article>
             </div>
-          </div>
-
-          {/* TARJETA USUARIOS */}
-          <div className="col-md-6 col-lg-3">
-            <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
-                <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                    Usuarios
-                  </h3>
-                  <p className="text-muted small">
-                    Ver clientes, asignar roles y administrar estados.
-                  </p>
-                </div>
-
-                <button
-                  className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{
-                    backgroundColor: "#fff",
-                    color: "#c46a7a",
-                    fontWeight: "700",
-                    border: "1px solid #e8b8c2",
-                  }}
-                  onClick={() => navigate("/admin/usuarios")}
-                >
-                  Administrar usuarios
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* TARJETA ÓRDENES */}
-          <div className="col-md-6 col-lg-3">
-            <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
-                <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                    Órdenes
-                  </h3>
-                  <p className="text-muted small">
-                    Revisa el historial de compras y detalles de boletas.
-                  </p>
-                </div>
-
-                <button
-                  className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{
-                    backgroundColor: "#fff",
-                    color: "#c46a7a",
-                    fontWeight: "700",
-                    border: "1px solid #e8b8c2",
-                  }}
-                  onClick={() => navigate("/admin/ordenes")}
-                >
-                  Ver órdenes
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* TARJETA ESTADÍSTICAS */}
-          <div className="col-md-6 col-lg-3">
-            <div
-              className="card border-0 rounded-4 shadow-sm h-100"
-              style={{ border: "2px solid #f7dbe2" }}
-            >
-              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
-                <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                    Estadísticas
-                  </h3>
-
-                  <p className="text-muted small mb-1">
-                    Métricas y gráficos de la tienda.
-                  </p>
-
-                  <span className="badge bg-light text-success border px-2 py-1 mb-2 fs-6">
-                    Total: ${formatearPrecio(totalVendido)}
-                  </span>
-                </div>
-
-                <button
-                  className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{
-                    backgroundColor: "#c46a7a",
-                    color: "white",
-                    fontWeight: "700",
-                  }}
-                  onClick={() => navigate("/admin/estadisticas")}
-                >
-                  Ver gráficos
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* TARJETA FORMULARIO DE CONTACTO */}
-          <div className="col-md-6 col-lg-3">
-            <div className="card border-0 rounded-4 shadow-sm h-100">
-              <div className="card-body p-4 text-center d-flex flex-column justify-content-between">
-                <div>
-                  <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                    Contacto
-                  </h3>
-
-                  <p className="text-muted small">
-                    Revisa los mensajes enviados desde el formulario de contacto.
-                  </p>
-                </div>
-
-                <button
-                  className="btn w-100 py-2 rounded-pill mt-3"
-                  style={{
-                    backgroundColor: "#fff",
-                    color: "#c46a7a",
-                    fontWeight: "700",
-                    border: "1px solid #e8b8c2",
-                  }}
-                  onClick={() => navigate("/admin/contactos")}
-                >
-                  Ver formularios
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+          ))}
+        </section>
       </div>
     </main>
   );
