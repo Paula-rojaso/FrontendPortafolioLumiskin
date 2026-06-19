@@ -35,10 +35,10 @@ export default function CompraExitosa() {
           setBoleta(data);
           localStorage.setItem("boleta", JSON.stringify(data));
 
-          // Vacía carrito cuando la compra fue exitosa
+          // Vaciar carrito después de compra exitosa
           vaciarCarrito();
 
-          // Clave única por boleta para no descontar dos veces la misma compra
+          // Clave única por boleta para evitar descontar dos veces la misma boleta
           const claveDescuento = `stock_descontado_boleta_${data.idBoleta}`;
           const yaDescontado = localStorage.getItem(claveDescuento);
 
@@ -95,7 +95,7 @@ export default function CompraExitosa() {
     }
 
     cargarBoletaYDescontarStock();
-  }, [idBoleta, vaciarCarrito]);
+  }, []);
 
   if (cargando) {
     return (
@@ -384,6 +384,7 @@ export default function CompraExitosa() {
                                   backgroundColor: "#fff7f9",
                                 }}
                               />
+
                               <div>
                                 <h6
                                   className="mb-1"
@@ -493,6 +494,7 @@ export default function CompraExitosa() {
                   >
                     Total
                   </span>
+
                   <span
                     style={{
                       color: "#c46a7a",
