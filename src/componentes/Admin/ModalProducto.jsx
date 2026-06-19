@@ -20,9 +20,9 @@ export function ModalProducto({ modo, producto, onGuardar }) {
 
   const reglas = {
     nombre: {
-      test: (v) => /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]{3,100}$/.test((v || "").trim()),
+      test: (v) => v.trim().length >= 3,
       ok: "Nombre válido.",
-      bad: "Debe tener al menos 3 caracteres y solo puede contener letras.",
+      bad: "Debe tener al menos 3 caracteres.",
     },
     precio: {
       test: (v) => Number(v) > 0,
