@@ -15,12 +15,15 @@ export function PanelAdministracion() {
     try {
       // Solo traemos los pagos para sacar el total rápido en el panel
       const resPagos = await fetch("https://backend-pago.onrender.com/api/pagos");
+
       if (resPagos.ok) {
         const dataPagos = await resPagos.json();
+
         const total = (Array.isArray(dataPagos) ? dataPagos : []).reduce(
           (acc, boleta) => acc + Number(boleta.total || 0),
           0
         );
+
         setTotalVendido(total);
       }
     } catch (error) {
@@ -92,6 +95,7 @@ export function PanelAdministracion() {
                     Crea, edita, elimina y revisa el stock de la tienda.
                   </p>
                 </div>
+
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
                   style={{
@@ -119,6 +123,7 @@ export function PanelAdministracion() {
                     Ver clientes, asignar roles y administrar estados.
                   </p>
                 </div>
+
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
                   style={{
@@ -147,6 +152,7 @@ export function PanelAdministracion() {
                     Revisa el historial de compras y detalles de boletas.
                   </p>
                 </div>
+
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
                   style={{
@@ -174,13 +180,16 @@ export function PanelAdministracion() {
                   <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
                     Estadísticas
                   </h3>
+
                   <p className="text-muted small mb-1">
                     Métricas y gráficos de la tienda.
                   </p>
+
                   <span className="badge bg-light text-success border px-2 py-1 mb-2 fs-6">
                     Total: ${formatearPrecio(totalVendido)}
                   </span>
                 </div>
+
                 <button
                   className="btn w-100 py-2 rounded-pill mt-3"
                   style={{
@@ -204,6 +213,7 @@ export function PanelAdministracion() {
                   <h3 style={{ color: "#4b2b32", fontWeight: "800" }}>
                     Contacto
                   </h3>
+
                   <p className="text-muted small">
                     Revisa los mensajes enviados desde el formulario de contacto.
                   </p>
