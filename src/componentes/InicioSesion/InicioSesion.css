@@ -1,27 +1,43 @@
-.container-login{
-      display:block;
-      max-width:450px;
-      margin:100px auto 100px;
-    }
-    .card-login{
-      background:#fff;
-      border-radius:15px;
-      box-shadow:0 8px 20px rgba(166,0,255,.36);
-      padding:30px 25px;
-      max-width:600px;
-      height:auto; 
-      margin:20px auto;
-    }
-    
-    .password-container {
+.container-login {
+  display: block;
+  max-width: 450px;
+  margin: 0 auto 50px;
+  padding-top: 0;
+}
+
+.container-login h2 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.container-login h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.card-login {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(166, 0, 255, 0.36);
+  padding: 24px 25px;
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto 20px;
+}
+
+/* Contenedor del input contraseña */
+.password-container {
   position: relative;
   width: 100%;
 }
 
+/* Espacio para que no choque el texto con el ojito */
 .password-container input {
   padding-right: 60px;
 }
 
+/* Botón del ojito */
 .btn-ver-password {
   position: absolute;
   top: 50%;
@@ -35,6 +51,9 @@
   font-size: 18px;
   line-height: 1;
   z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-ver-password:hover {
@@ -45,9 +64,30 @@
   outline: none;
 }
 
-/* Esto evita que el ícono de validación de Bootstrap choque con el ojito */
+/* Evita que el ícono de validación de Bootstrap choque con el ojito */
 .password-container .form-control.is-valid,
 .password-container .form-control.is-invalid {
   background-position: right 45px center;
-  padding-right: 80px;
+  padding-right: 85px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .container-login {
+    max-width: 95%;
+    margin: 0 auto 40px;
+    padding-top: 0;
+  }
+
+  .card-login {
+    padding: 22px 18px;
+  }
+
+  .container-login h2 {
+    font-size: 1.5rem;
+  }
+
+  .container-login h3 {
+    font-size: 0.95rem;
+  }
 }
