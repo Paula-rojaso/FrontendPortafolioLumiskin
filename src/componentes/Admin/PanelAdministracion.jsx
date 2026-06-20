@@ -29,12 +29,35 @@ export function PanelAdministracion() {
       if (resPagos.ok) {
         const dataPagos = await resPagos.json();
 
-        const total = (Array.isArray(dataPagos) ? dataPagos : []).reduce(
-          (acc, boleta) => acc + Number(boleta.total || 0),
-          0
-        );
+        const pagos = Array.isArray(dataPagos) ? dataPagos : [];
 
-        setTotalVendido(total);
+const hoy = new Date();
+const limite = new Date();
+limite.setDate(hoy.getDate() - 7);
+limite.setHours(0, 0, 0, 0);
+
+const totalUltimos7Dias = pagos
+  .filter((pago) => {
+    const fecha = new Date(
+      pago.fechaPago ||
+      pago.fecha ||
+      pago.fechaEmision ||
+      pago.boleta?.fechaEmision
+    );
+
+    return !isNaN(fecha) && fecha >= limite;
+  })
+  .reduce((acc, pago) => {
+    const totalPago =
+      Number(pago.total || 0) ||
+      Number(pago.monto || 0) ||
+      Number(pago.totalPago || 0) ||
+      Number(pago.boleta?.total || 0);
+
+    return acc + totalPago;
+  }, 0);
+
+setTotalVendido(totalUltimos7Dias);
       }
     } catch (error) {
       console.error("Error cargando datos del panel:", error);
@@ -104,7 +127,7 @@ export function PanelAdministracion() {
           </div>
 
           <div className="admin-total-card">
-            <span>Total vendido</span>
+            <span>Ingresos últimos 7 días</span>
 
             {cargando ? (
               <div className="admin-loading">
