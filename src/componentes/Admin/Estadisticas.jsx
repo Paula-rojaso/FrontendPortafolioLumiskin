@@ -45,7 +45,7 @@ export function Estadisticas() {
   };
 
   // =======================================================
-  // LÓGICA GRÁFICO DE BARRAS: Agrupación dinámica
+  // LÓGICA GRÁFICO DE BARRAS: Agrupación dinámica inteligente
   // =======================================================
   const datosBarras = useMemo(() => {
     if (boletas.length === 0) return [];
@@ -112,7 +112,7 @@ export function Estadisticas() {
   }, [boletas, diasFiltro]);
 
   // =======================================================
-  // LÓGICA GRÁFICO DE TORTA: Nombres completos
+  // LÓGICA GRÁFICO DE TORTA: Top 5 Productos
   // =======================================================
   const datosTorta = useMemo(() => {
     if (boletas.length === 0) return [];
@@ -143,10 +143,22 @@ export function Estadisticas() {
   }, [boletas, diasFiltro]);
 
   // =======================================================
-  // RESUMEN RÁPIDO SUPERIOR
+  // RESUMEN RÁPIDO SUPERIOR Y MÉTRICAS EXACTAS
   // =======================================================
   const totalRango = datosBarras.reduce((acc, curr) => acc + curr.ventas, 0);
-  const totalProductosVendidos = datosTorta.reduce((acc, curr) => acc + curr.value, 0);
+  
+  // Calcula TODAS las unidades vendidas en el periodo, no solo el top 5
+  const totalProductosVendidos = boletas.reduce((acc, b) => {
+    const fecha = new Date(b.fechaPago || b.fecha);
+    const limite = new Date();
+    limite.setDate(limite.getDate() - diasFiltro);
+    limite.setHours(0,0,0,0);
+    
+    if (fecha >= limite && b.boleta?.detalles) {
+      return acc + b.boleta.detalles.reduce((sum, det) => sum + Number(det.cantidad || 0), 0);
+    }
+    return acc;
+  }, 0);
   
   const cantidadBoletasRango = boletas.filter(b => {
     const fecha = new Date(b.fechaPago || b.fecha);
@@ -159,7 +171,7 @@ export function Estadisticas() {
   const ticketPromedio = cantidadBoletasRango > 0 ? Math.round(totalRango / cantidadBoletasRango) : 0;
 
   // =======================================================
-  // ICONOS SVG 
+  // ICONOS SVG
   // =======================================================
   const IconoIngresos = () => (
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -263,7 +275,7 @@ export function Estadisticas() {
                     <IconoTicket />
                   </div>
                   <div>
-                    <p className="text-muted mb-0 small fw-bold text-uppercase">Ticket Promedio</p>
+                    <p className="text-muted mb-0 small fw-bold text-uppercase">Boleta Promedio</p>
                     <h3 className="m-0" style={{ color: "#264653", fontWeight: "900" }}>
                       ${formatearPrecio(ticketPromedio)}
                     </h3>
@@ -277,7 +289,7 @@ export function Estadisticas() {
                     <IconoPaquete />
                   </div>
                   <div>
-                    <p className="text-muted mb-0 small fw-bold text-uppercase">Unidades Top 5</p>
+                    <p className="text-muted mb-0 small fw-bold text-uppercase">Unidades Vendidas</p>
                     <h3 className="m-0" style={{ color: "#4b2b32", fontWeight: "900" }}>
                       {totalProductosVendidos} u.
                     </h3>
@@ -352,16 +364,19 @@ export function Estadisticas() {
                             ))}
                           </Pie>
                           <Tooltip 
-                            formatter={(value) => [`${value} unidades`, "Vendidos"]}
+                            formatter={(value, name) => [`${value} unidades`, name]}
                             contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
                           />
                           <Legend 
-                            verticalAlign="bottom" 
-                            height={140}
+                            layout="vertical"
+                            verticalAlign="bottom"
+                            align="center"
+                            height={150}
                             wrapperStyle={{ 
-                              fontSize: "11px", 
+                              fontSize: "13px", 
                               color: "#4b2b32", 
-                              lineHeight: "1.5",
+                              lineHeight: "1.8",
+                              paddingTop: "20px"
                             }}
                           />
                         </PieChart>
