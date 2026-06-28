@@ -353,7 +353,7 @@ export function Estadisticas() {
                           <Pie
                             data={datosTorta}
                             cx="50%"
-                            cy="35%"
+                            cy="45%"
                             innerRadius={70}
                             outerRadius={100}
                             paddingAngle={4}
@@ -371,12 +371,12 @@ export function Estadisticas() {
                             layout="vertical"
                             verticalAlign="bottom"
                             align="center"
-                            height={150}
+                            height={140}
                             wrapperStyle={{ 
                               fontSize: "13px", 
                               color: "#4b2b32", 
                               lineHeight: "1.8",
-                              paddingTop: "20px"
+                              paddingTop: "10px"
                             }}
                           />
                         </PieChart>
