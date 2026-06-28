@@ -5,6 +5,10 @@ export default function Ordenes() {
   const [cargando, setCargando] = useState(true);
   const [filtroTexto, setFiltroTexto] = useState("");
   const [boletaSeleccionada, setBoletaSeleccionada] = useState(null);
+  
+  // Estados para la paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+  const ordenesPorPagina = 10;
 
   const obtenerToken = () => {
     try {
@@ -49,6 +53,9 @@ export default function Ordenes() {
         detalles: p.boleta?.detalles || [],
       }));
 
+      // Ordenar por defecto: Las más recientes primero
+      ordenesFormateadas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
       setOrdenes(ordenesFormateadas);
     } catch (error) {
       console.error("Error cargando órdenes:", error);
@@ -59,9 +66,15 @@ export default function Ordenes() {
 
   useEffect(() => {
     cargarOrdenes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Normalizador para que las búsquedas ignoren mayúsculas y tildes
+  // Si el usuario escribe en el buscador, regresamos a la página 1
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [filtroTexto]);
+
+  // Normalizador para ignorar mayúsculas y tildes
   const normalizarTexto = (valor) => {
     return String(valor || "")
       .toLowerCase()
@@ -70,7 +83,7 @@ export default function Ordenes() {
       .replace(/[\u0300-\u036f]/g, "");
   };
 
-  // Filtro en tiempo real por Nombre, Correo o N° de Boleta
+  // Filtro en tiempo real
   const ordenesFiltradas = useMemo(() => {
     const texto = normalizarTexto(filtroTexto);
     if (!texto) return ordenes;
@@ -84,12 +97,23 @@ export default function Ordenes() {
     });
   }, [ordenes, filtroTexto]);
 
+  // Lógica matemática para cortar la lista en pedazos (Paginación)
+  const indiceUltimaOrden = paginaActual * ordenesPorPagina;
+  const indicePrimeraOrden = indiceUltimaOrden - ordenesPorPagina;
+  const ordenesMostradas = ordenesFiltradas.slice(indicePrimeraOrden, indiceUltimaOrden);
+  const totalPaginas = Math.ceil(ordenesFiltradas.length / ordenesPorPagina);
+
   const abrirModal = (orden) => {
     setBoletaSeleccionada(orden);
     const modal = new window.bootstrap.Modal(
       document.getElementById("modalDetallesBoleta")
     );
     modal.show();
+  };
+
+  const formatearFechaLimpia = (fechaIso) => {
+    const opciones = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(fechaIso).toLocaleDateString("es-CL", opciones);
   };
 
   return (
@@ -163,18 +187,19 @@ export default function Ordenes() {
           )}
         </div>
 
-        {/* TABLA DE ÓRDENES */}
+        {/* TABLA DE ÓRDENES Y PAGINACIÓN */}
         <div className="card border-0 rounded-4 shadow-sm">
-          <div className="card-body p-4">
-            <div className="table-responsive">
+          <div className="card-body p-0">
+            <div className="table-responsive p-4 pb-0">
               <table className="table table-hover align-middle">
                 <thead>
-                  <tr>
+                  <tr style={{ color: "#8a5a64" }}>
                     <th>N° Orden</th>
+                    <th>Estado</th>
                     <th>Cliente</th>
                     <th>Correo</th>
                     <th>Fecha</th>
-                    <th>Total</th>
+                    <th className="text-end">Total</th>
                     <th className="text-center">Acción</th>
                   </tr>
                 </thead>
@@ -182,30 +207,36 @@ export default function Ordenes() {
                 <tbody>
                   {cargando ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-4 text-muted">
+                      <td colSpan="7" className="text-center py-5 text-muted">
+                        <div className="spinner-border spinner-border-sm me-2" style={{ color: "#c46a7a" }}></div>
                         Cargando historial de órdenes...
                       </td>
                     </tr>
-                  ) : ordenesFiltradas.length === 0 ? (
+                  ) : ordenesMostradas.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-4 text-muted">
+                      <td colSpan="7" className="text-center py-5 text-muted">
                         {filtroTexto 
                           ? "No se encontraron resultados para tu búsqueda." 
                           : "No hay órdenes registradas en el sistema."}
                       </td>
                     </tr>
                   ) : (
-                    ordenesFiltradas.map((o) => (
+                    ordenesMostradas.map((o) => (
                       <tr key={o.idPago}>
                         <td>
                           <span className="badge bg-light text-dark border px-2 py-1">
                             #{o.idBoleta}
                           </span>
                         </td>
-                        <td className="fw-bold">{o.nombre}</td>
-                        <td>{o.correo}</td>
-                        <td>{new Date(o.fecha).toLocaleString("es-CL")}</td>
-                        <td className="text-success fw-bold">
+                        <td>
+                          <span className="badge rounded-pill" style={{ backgroundColor: "#e2f2e9", color: "#2a9d8f" }}>
+                            ✓ Pagado
+                          </span>
+                        </td>
+                        <td className="fw-bold" style={{ color: "#4b2b32" }}>{o.nombre}</td>
+                        <td className="text-muted small">{o.correo}</td>
+                        <td className="text-muted small">{formatearFechaLimpia(o.fecha)}</td>
+                        <td className="text-success fw-bold text-end">
                           ${Number(o.total).toLocaleString("es-CL")}
                         </td>
                         <td className="text-center">
@@ -222,6 +253,52 @@ export default function Ordenes() {
                 </tbody>
               </table>
             </div>
+
+            {/* CONTROLES DE PAGINACIÓN */}
+            {!cargando && totalPaginas > 1 && (
+              <div 
+                className="d-flex justify-content-between align-items-center px-4 py-3 border-top"
+                style={{ backgroundColor: "#fffdfb", borderBottomLeftRadius: "16px", borderBottomRightRadius: "16px" }}
+              >
+                <span className="text-muted small fw-semibold">
+                  Mostrando {indicePrimeraOrden + 1} a {Math.min(indiceUltimaOrden, ordenesFiltradas.length)} de {ordenesFiltradas.length} órdenes
+                </span>
+                
+                <div className="d-flex gap-2">
+                  <button 
+                    className="btn btn-sm rounded-pill px-3"
+                    style={{ 
+                      backgroundColor: paginaActual === 1 ? "#f5f5f5" : "#fff", 
+                      border: "1px solid #dee2e6",
+                      color: paginaActual === 1 ? "#aaa" : "#4b2b32",
+                      fontWeight: "600"
+                    }}
+                    onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+                    disabled={paginaActual === 1}
+                  >
+                    Anterior
+                  </button>
+                  
+                  <span className="d-flex align-items-center px-2 fw-bold" style={{ color: "#c46a7a" }}>
+                    Página {paginaActual} de {totalPaginas}
+                  </span>
+
+                  <button 
+                    className="btn btn-sm rounded-pill px-3"
+                    style={{ 
+                      backgroundColor: paginaActual === totalPaginas ? "#f5f5f5" : "#fff", 
+                      border: "1px solid #dee2e6",
+                      color: paginaActual === totalPaginas ? "#aaa" : "#4b2b32",
+                      fontWeight: "600"
+                    }}
+                    onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+                    disabled={paginaActual === totalPaginas}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
