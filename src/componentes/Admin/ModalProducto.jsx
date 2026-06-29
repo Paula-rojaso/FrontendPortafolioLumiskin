@@ -17,6 +17,7 @@ export function ModalProducto({ modo, producto, onGuardar }) {
   const [mensaje, setMensaje] = useState(null);
   const [errores, setErrores] = useState({});
   const [ok, setOk] = useState({});
+  const [guardando, setGuardando] = useState(false); // NUEVO: Estado antipánico para congelar la UI
 
   const reglas = {
     nombre: {
@@ -119,11 +120,9 @@ export function ModalProducto({ modo, producto, onGuardar }) {
   const handleFileChange = (e) => {
     const f = e.target.files?.[0] || null;
     setArchivo(f);
-    // Si hay archivo, muestra su preview local. Si no, intenta mostrar la imagen actual del producto a editar.
     setPreview(f ? URL.createObjectURL(f) : (producto?.imagenUrl || producto?.imagen || null));
   };
 
-  // ===== Envío =====
   async function handleSubmit(e) {
     e.preventDefault();
     setMensaje(null);
@@ -132,6 +131,8 @@ export function ModalProducto({ modo, producto, onGuardar }) {
       setMensaje({ tipo: "error", texto: "❌ Revisa los campos marcados en rojo." });
       return;
     }
+
+    setGuardando(true); // Activación del estado de bloqueo
 
     try {
       const url = esEditar
@@ -157,7 +158,6 @@ export function ModalProducto({ modo, producto, onGuardar }) {
       const prodGuardado = await res.json();
       const productId = prodGuardado.id ?? producto?.id;
 
-      // Subir imagen si corresponde
       if (archivo && productId) {
         const fd = new FormData();
         fd.append("archivo", archivo);
@@ -173,31 +173,42 @@ export function ModalProducto({ modo, producto, onGuardar }) {
     } catch (error) {
       console.error(error);
       setMensaje({ tipo: "error", texto: "❌ No se pudo guardar el producto." });
+    } finally {
+      setGuardando(false); // Liberación del estado de bloqueo
     }
   }
 
   return (
-    <div className="modal fade" id="modalProducto" tabIndex="-1" aria-hidden="true">
-      <div className="modal-dialog modal-lg">
-        <div className="modal-content">
+    <div className="modal fade" id="modalProducto" tabIndex="-1" aria-hidden="true" data-bs-backdrop={guardando ? "static" : "true"}>
+      <div className="modal-dialog modal-lg modal-dialog-centered">
+        <div 
+          className="modal-content border-0 rounded-4 shadow-lg"
+          style={{ background: "linear-gradient(180deg, #ffffff 0%, #fff7f9 100%)" }}
+        >
           <form onSubmit={handleSubmit}>
-            <div className="modal-header">
-              <h5 className="modal-title">{esEditar ? "Editar producto" : "Agregar producto"}</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" />
+            <div className="modal-header border-0 px-4 pt-4">
+              <h4 className="modal-title" style={{ color: "#4b2b32", fontWeight: "900" }}>
+                {esEditar ? "Modificar producto existente" : "Agregar nuevo producto"}
+              </h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" disabled={guardando} />
             </div>
 
-            <div className="modal-body">
+            <div className="modal-body px-4">
               {mensaje && (
-                <div className={`alert ${mensaje.tipo === "error" ? "alert-danger" : "alert-success"}`}>
+                <div className={`alert ${mensaje.tipo === "error" ? "alert-danger" : "alert-success"} rounded-3 shadow-sm border-0 mb-4`}>
                   {mensaje.texto}
                 </div>
               )}
 
               <div className="row g-3">
                 <div className="col-md-6">
-                  <label className="form-label">Nombre</label>
-                  <input name="nombre" value={form.nombre} onChange={handleChange}
-                    className={`form-control ${
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Nombre</label>
+                  <input 
+                    name="nombre" 
+                    value={form.nombre} 
+                    onChange={handleChange}
+                    disabled={guardando}
+                    className={`form-control rounded-3 border-0 shadow-sm ${
                       errores.nombre ? "is-invalid" : ok.nombre ? "is-valid" : ""
                     }`}
                   />
@@ -206,14 +217,17 @@ export function ModalProducto({ modo, producto, onGuardar }) {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label">Categoría</label>
-                  <select name="categoriaId" value={form.categoriaId}
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Categoría</label>
+                  <select 
+                    name="categoriaId" 
+                    value={form.categoriaId}
                     onChange={handleChange}
-                    className={`form-select ${
+                    disabled={guardando}
+                    className={`form-select rounded-3 border-0 shadow-sm ${
                       errores.categoriaId ? "is-invalid" : ok.categoriaId ? "is-valid" : ""
                     }`}
                   >
-                    <option value="">Seleccione...</option>
+                    <option value="">Seleccione una categoría...</option>
                     {categorias.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.nombre}
@@ -225,11 +239,14 @@ export function ModalProducto({ modo, producto, onGuardar }) {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label">Precio</label>
-                  <input type="number" name="precio"
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Precio (CLP)</label>
+                  <input 
+                    type="number" 
+                    name="precio"
                     value={form.precio}
                     onChange={handleChange}
-                    className={`form-control ${
+                    disabled={guardando}
+                    className={`form-control rounded-3 border-0 shadow-sm ${
                       errores.precio ? "is-invalid" : ok.precio ? "is-valid" : ""
                     }`}
                   />
@@ -238,11 +255,14 @@ export function ModalProducto({ modo, producto, onGuardar }) {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label">Stock</label>
-                  <input type="number" name="stock"
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Unidades en Stock</label>
+                  <input 
+                    type="number" 
+                    name="stock"
                     value={form.stock}
                     onChange={handleChange}
-                    className={`form-control ${
+                    disabled={guardando}
+                    className={`form-control rounded-3 border-0 shadow-sm ${
                       errores.stock ? "is-invalid" : ok.stock ? "is-valid" : ""
                     }`}
                   />
@@ -251,38 +271,75 @@ export function ModalProducto({ modo, producto, onGuardar }) {
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label">Descripción</label>
-                  <textarea name="descripcion" value={form.descripcion}
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Descripción del producto</label>
+                  <textarea 
+                    name="descripcion" 
+                    value={form.descripcion}
                     onChange={handleChange}
-                    rows="2"
-                    className={`form-control ${
+                    disabled={guardando}
+                    rows="3"
+                    className={`form-control rounded-3 border-0 shadow-sm ${
                       errores.descripcion ? "is-invalid" : ok.descripcion ? "is-valid" : ""
                     }`}
                   />
-                  {errores.descripcion && (
-                    <div className="invalid-feedback">{errores.descripcion}</div>
-                  )}
+                  {errores.descripcion && <div className="invalid-feedback">{errores.descripcion}</div>}
                   {ok.descripcion && <div className="valid-feedback">{ok.descripcion}</div>}
                 </div>
 
                 <div className="col-12">
-                  <label className="form-label">Subir imagen</label>
-                  <input type="file" accept="image/*" className="form-control" onChange={handleFileChange} />
+                  <label className="form-label text-muted small fw-bold text-uppercase mb-1">Imagen del Producto</label>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    className="form-control rounded-3 border-0 shadow-sm" 
+                    onChange={handleFileChange} 
+                    disabled={guardando}
+                  />
                   {preview && (
-                    <div className="mt-2">
-                      <img src={preview} alt="Vista previa" style={{ width: 90, height: 90, borderRadius: 8, objectFit: "cover", border: "1px solid #ddd",}}/>
+                    <div className="mt-3">
+                      <img 
+                        src={preview} 
+                        alt="Vista previa" 
+                        style={{ 
+                          width: 100, 
+                          height: 100, 
+                          borderRadius: 12, 
+                          objectFit: "cover", 
+                          border: "1px solid #f0f0f0",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+                        }}
+                      />
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+            <div className="modal-footer border-0 px-4 pb-4 mt-3">
+              <button 
+                type="button" 
+                className="btn rounded-pill px-4 shadow-sm" 
+                data-bs-dismiss="modal" 
+                disabled={guardando}
+                style={{ backgroundColor: "#fff", color: "#7a3f4b", fontWeight: "700", border: "1px solid #e8b8c2" }}
+              >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary">
-                {esEditar ? "Guardar cambios" : "Crear producto"}
+              
+              <button 
+                type="submit" 
+                className="btn rounded-pill px-4 shadow-sm d-flex align-items-center" 
+                disabled={guardando}
+                style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "800" }}
+              >
+                {guardando ? (
+                  <>
+                    <div className="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Guardando...
+                  </>
+                ) : (
+                  esEditar ? "Guardar cambios" : "Crear producto"
+                )}
               </button>
             </div>
           </form>
