@@ -3,22 +3,19 @@ import { useCarrito } from "../Carrito/ContextCarrito";
 import "./UltimosProductos.css";
 
 // ------------------------------------------------------------------
-// COMPONENTE SECUNDARIO: TARJETA INDIVIDUAL (Para manejar estados)
+// COMPONENTE SECUNDARIO: TARJETA INDIVIDUAL
 // ------------------------------------------------------------------
 function TarjetaProducto({ p, categorias, mostrarMensaje }) {
   const { agregarProducto } = useCarrito();
   const [cantidad, setCantidad] = useState(1);
-  const [estadoBoton, setEstadoBoton] = useState("normal"); // normal, cargando, exito
+  const [estadoBoton, setEstadoBoton] = useState("normal"); 
 
-  // Encontrar la categoría para usarla como "Marca" arriba del título
   const categoria = categorias.find((c) => c.id === (p.categoria?.id || p.categoria_id));
   const nombreCategoria = categoria ? categoria.nombre : "Destacado";
 
-  // Lógica del selector de cantidad en el modal
   const handleSumar = () => { if (cantidad < p.stock) setCantidad(c => c + 1); };
   const handleRestar = () => { if (cantidad > 1) setCantidad(c => c - 1); };
 
-  // Lógica de agregado inteligente
   const handleAgregar = (e, desdeModal = false) => {
     if (e) e.stopPropagation();
 
@@ -28,14 +25,9 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
     }
 
     const cantAAgregar = desdeModal ? cantidad : 1;
-    
-    // Cambiamos estado a cargando
     setEstadoBoton("cargando");
 
-    // Simulamos un micro-retraso para que el usuario perciba que el sistema trabajó
     setTimeout(() => {
-      // Como no conocemos el código de tu context, un bucle for asegura que 
-      // si agregas 5, ejecute la función 5 veces correctamente.
       for (let i = 0; i < cantAAgregar; i++) {
         agregarProducto(p);
       }
@@ -43,20 +35,18 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
       setEstadoBoton("exito");
       mostrarMensaje(`🛒 ${cantAAgregar} unid. de ${p.nombre} por $${(p.precio * cantAAgregar).toLocaleString()} CLP`);
 
-      // Restauramos el botón y cerramos el modal si corresponde
       setTimeout(() => {
         setEstadoBoton("normal");
         if (desdeModal) {
           const modalEl = document.getElementById(`modal${p.id}`);
           const modalInstance = window.bootstrap.Modal.getInstance(modalEl);
           if (modalInstance) modalInstance.hide();
-          setCantidad(1); // Reseteamos la cantidad para la próxima vez
+          setCantidad(1); 
         }
       }, 1000);
     }, 600);
   };
 
-  // ICONOS SVG PARA EL BOTÓN
   const IconoCarrito = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
   );
@@ -68,15 +58,13 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
   return (
     <div className="col-12 col-sm-6 col-md-4 col-lg-3">
       {/* TARJETA PRINCIPAL EN VITRINA */}
-      <div className="card product-card h-100 border-0 shadow-sm">
+      <div className="card product-card h-100 border-0 shadow-sm d-flex flex-column">
         
-        {/* ÁREA CLIQUEABLE (Solo la imagen y el texto abren el modal) */}
         <div 
           className="clickable-area"
           data-bs-toggle="modal"
           data-bs-target={`#modal${p.id}`}
         >
-          {/* Contenedor de imagen estandarizado */}
           <div className="img-container">
             {p.imagenUrl ? (
               <img src={p.imagenUrl} alt={p.nombre} />
@@ -85,30 +73,32 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
             )}
           </div>
 
-          <div className="card-body pb-0">
-            {/* Categoría simulando ser la "Marca" */}
-            <span className="text-uppercase fw-bold mb-1 d-block" style={{ fontSize: "10px", letterSpacing: "1px", color: "#a07c85" }}>
+          <div className="card-body pb-0 text-center">
+            {/* Color de categoría igualado al modal (#c46a7a) */}
+            <span className="text-uppercase fw-bold mb-1 d-block" style={{ fontSize: "10px", letterSpacing: "1px", color: "#c46a7a" }}>
               {nombreCategoria}
             </span>
             
-            <h6 className="card-title text-dark fw-bold mb-3" style={{ height: "40px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+            <h6 className="card-title text-dark fw-bold mb-2" style={{ height: "40px", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
               {p.nombre}
             </h6>
           </div>
         </div>
 
-        {/* ÁREA NO CLIQUEABLE (Precio y botón) */}
-        <div className="card-body pt-0 mt-auto">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <span className="fs-5 fw-bolder" style={{ color: "#4b2b32" }}>
+        {/* Zona inferior de la tarjeta */}
+        <div className="card-body pt-2 mt-auto d-flex flex-column align-items-center">
+          {/* Precio SIN el CLP, manteniendo color verde */}
+          <div className="mb-3">
+            <span className="fs-5 fw-bolder" style={{ color: "#2a9d8f" }}>
               ${Number(p.precio).toLocaleString()}
             </span>
           </div>
 
           <button
-            className={`btn w-100 fw-bold rounded-3 d-flex align-items-center justify-content-center ${estadoBoton === 'exito' ? 'btn-success' : 'btn-dark'}`}
+            className={`btn w-100 fw-bold rounded-3 d-flex align-items-center justify-content-center shadow-sm ${estadoBoton === 'exito' ? 'btn-success' : ''}`}
             style={{ 
-              backgroundColor: estadoBoton === 'exito' ? '#2a9d8f' : '#4b2b32',
+              backgroundColor: estadoBoton === 'exito' ? '#2a9d8f' : '#c46a7a',
+              color: '#fff',
               transition: 'all 0.3s ease'
             }}
             onClick={(e) => handleAgregar(e, false)}
@@ -134,12 +124,10 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
             <button type="button" className="btn-close position-absolute top-0 end-0 m-3 z-3" data-bs-dismiss="modal" style={{ backgroundColor: "#fff", padding: "10px", borderRadius: "50%", boxShadow: "0 2px 5px rgba(0,0,0,0.1)" }}></button>
             
             <div className="row g-0">
-              {/* Lado Izquierdo: Imagen */}
               <div className="col-md-5 bg-white d-flex align-items-center justify-content-center p-4 border-end" style={{ minHeight: "350px" }}>
                 <img src={p.imagenUrl || "/sin-imagen.png"} alt={p.nombre} className="img-fluid" style={{ maxHeight: "300px", objectFit: "contain" }} />
               </div>
 
-              {/* Lado Derecho: Detalles */}
               <div className="col-md-7 p-4 p-md-5 d-flex flex-column justify-content-center" style={{ background: "linear-gradient(135deg, #fffcfd 0%, #fff 100%)" }}>
                 
                 <span className="text-uppercase fw-bold mb-2" style={{ fontSize: "12px", letterSpacing: "1px", color: "#c46a7a" }}>
@@ -158,7 +146,6 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
                   {p.descripcion}
                 </p>
 
-                {/* Zona de Selección y Compra */}
                 <div className="mt-auto">
                   {p.stock === 0 ? (
                     <div className="alert alert-danger fw-bold border-0 text-center rounded-3">
@@ -216,7 +203,6 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
     </div>
   );
 }
-
 
 // ------------------------------------------------------------------
 // COMPONENTE PRINCIPAL
@@ -278,7 +264,6 @@ export function UltimosProductos() {
         </p>
       </div>
 
-      {/* MENSAJE TOAST FLOTANTE */}
       {mensaje && (
         <div
           className="toast-mensaje-centro"
@@ -290,7 +275,7 @@ export function UltimosProductos() {
         </div>
       )}
 
-      <div className="row g-4">
+      <div className="row g-4 justify-content-center">
         {productos.length === 0 ? (
           <div className="col-12 text-center py-5">
             <h5 className="text-muted">No hay productos disponibles por el momento.</h5>
