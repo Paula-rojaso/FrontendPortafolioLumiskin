@@ -29,9 +29,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
     setEstadoBoton("cargando");
 
     setTimeout(() => {
-      for (let i = 0; i < cantAAgregar; i++) {
-        agregarProducto(p);
-      }
+      agregarProducto(p, cantAAgregar);
 
       setEstadoBoton("exito");
       mostrarMensaje(`🛒 ${cantAAgregar} unid. de ${p.nombre} por $${(p.precio * cantAAgregar).toLocaleString()} CLP`);

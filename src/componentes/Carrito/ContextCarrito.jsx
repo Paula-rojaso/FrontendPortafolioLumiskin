@@ -4,7 +4,6 @@ const CarritoContext = createContext();
 const CARRITO_STORAGE_KEY = "contextcarrito";
 
 export const CarritoProvider = ({ children }) => {
-
   const [carrito, setCarrito] = useState(() => {
     try {
       const guardado = localStorage.getItem(CARRITO_STORAGE_KEY);
@@ -16,7 +15,6 @@ export const CarritoProvider = ({ children }) => {
 
   const [errores, setErrores] = useState({});
 
-  // Guardar carrito en localStorage
   useEffect(() => {
     localStorage.setItem(CARRITO_STORAGE_KEY, JSON.stringify(carrito));
   }, [carrito]);
@@ -32,7 +30,6 @@ export const CarritoProvider = ({ children }) => {
     );
   };
 
-
   const obtenerStockBackend = async (idProducto) => {
     try {
       const res = await fetch(`https://backendportafolio-635z.onrender.com/api/productos/${idProducto}`);
@@ -44,39 +41,40 @@ export const CarritoProvider = ({ children }) => {
     }
   };
 
-  const agregarProducto = async (producto) => {
+  // 👇 AHORA ACEPTA LA CANTIDAD DIRECTAMENTE (Por defecto 1)
+  const agregarProducto = async (producto, cantidadAAgregar = 1) => {
     const idReal = obtenerId(producto);
-
     if (idReal == null || isNaN(idReal)) return;
 
-    const productoEnCarrito = carrito.find((p) => p.id === idReal);
-
-    const cantidadActual = productoEnCarrito ? productoEnCarrito.cantidad : 0;
-    const cantidadNueva = cantidadActual + 1;
-
     const stockDisponible = await obtenerStockBackend(idReal);
+
+    // Revisamos el carrito actual
+    const productoEnCarrito = carrito.find((p) => p.id === idReal);
+    const cantidadActual = productoEnCarrito ? productoEnCarrito.cantidad : 0;
+    const cantidadNueva = cantidadActual + cantidadAAgregar;
 
     if (cantidadNueva > stockDisponible) {
       setErrores((prev) => ({
         ...prev,
         [idReal]: "No hay más stock disponible",
       }));
-      return;
+      return; // Evitamos agregar si pasa el stock
     }
 
     setErrores((prev) => ({ ...prev, [idReal]: null }));
 
-    if (productoEnCarrito) {
-      setCarrito((prev) =>
-        prev.map((item) =>
-          item.id === idReal ? { ...item, cantidad: item.cantidad + 1 } : item
-        )
-      );
-    } else {
-      setCarrito((prev) => [...prev, { ...producto, id: idReal, cantidad: 1 }]);
-    }
+    // Usamos el setCarrito con el prev para asegurar que no haya desfases
+    setCarrito((prev) => {
+      const existe = prev.find((item) => item.id === idReal);
+      if (existe) {
+        return prev.map((item) =>
+          item.id === idReal ? { ...item, cantidad: item.cantidad + cantidadAAgregar } : item
+        );
+      } else {
+        return [...prev, { ...producto, id: idReal, cantidad: cantidadAAgregar }];
+      }
+    });
   };
-
 
   const actualizarCantidad = async (idProducto, nuevaCantidad) => {
     if (nuevaCantidad < 1) return;
@@ -102,7 +100,6 @@ export const CarritoProvider = ({ children }) => {
 
   const eliminarProducto = (id) => {
     setCarrito((prev) => prev.filter((item) => item.id !== id));
-
     setErrores((prev) => {
       const copia = { ...prev };
       delete copia[id];
@@ -122,7 +119,7 @@ export const CarritoProvider = ({ children }) => {
         eliminarProducto,
         totalProductos,
         errores,
-        vaciarCarrito, 
+        vaciarCarrito,
       }}
     >
       {children}
