@@ -11,9 +11,12 @@ export function ContactoForm() {
   const [errores, setErrores] = useState({});
   const [ok, setOk] = useState({});
   const [mensaje, setMensaje] = useState(null);
+  const [enviando, setEnviando] = useState(false);
+
+  const API_CONTACTOS = "https://backend-usuario.onrender.com/api/contactos";
 
   const correoValido = (email) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || "").trim());
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || "").trim());
 
   const reglas = {
     nombre: {
@@ -22,10 +25,10 @@ export function ContactoForm() {
       bad: "Debe tener al menos 4 letras, sin números.",
     },
     email: {
-    test: (v) => v.length <= 100 && correoValido(v),
-    ok: "Correo válido.",
-    bad: "Ingresa un correo electrónico válido.",
-  },
+      test: (v) => v.length <= 100 && correoValido(v),
+      ok: "Correo válido.",
+      bad: "Ingresa un correo electrónico válido.",
+    },
     contenido: {
       test: (v) => (v || "").trim().length >= 10,
       ok: "Mensaje válido.",
@@ -35,81 +38,109 @@ export function ContactoForm() {
 
   const validarCampo = (name, valor) => {
     const regla = reglas[name];
-    if (!regla) return;
+
+    if (!regla) return false;
 
     if (regla.test(valor)) {
       setErrores((prev) => ({ ...prev, [name]: "" }));
       setOk((prev) => ({ ...prev, [name]: regla.ok }));
+      return true;
     } else {
       setOk((prev) => ({ ...prev, [name]: "" }));
       setErrores((prev) => ({ ...prev, [name]: regla.bad }));
+      return false;
     }
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setMensaje(null);
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    validarCampo(name, value);
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  let valido = true;
+    let valido = true;
 
-  Object.keys(reglas).forEach((campo) => {
-    const valor = form[campo];
-    validarCampo(campo, valor);
+    Object.keys(reglas).forEach((campo) => {
+      const valor = form[campo];
+      const campoValido = validarCampo(campo, valor);
 
-    if (!reglas[campo].test(valor)) {
-      valido = false;
-    }
-  });
-
-  if (!valido) {
-    setMensaje({
-      tipo: "error",
-      texto: "Revisa los campos marcados antes de enviar.",
-    });
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:8080/api/contacto", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form), // ya tiene {nombre, email, contenido}
+      if (!campoValido) {
+        valido = false;
+      }
     });
 
-    if (!response.ok) {
-      throw new Error("Error al enviar el mensaje");
+    if (!valido) {
+      setMensaje({
+        tipo: "error",
+        texto: "Revisa los campos marcados antes de enviar.",
+      });
+      return;
     }
 
-    setMensaje({
-      tipo: "exito",
-      texto: "Mensaje enviado correctamente. Pronto nos pondremos en contacto contigo.",
-    });
+    try {
+      setEnviando(true);
+      setMensaje(null);
 
-    setForm({
-      nombre: "",
-      email: "",
-      contenido: "",
-    });
+      const res = await fetch(API_CONTACTOS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre: form.nombre.trim(),
+          email: form.email.trim(),
+          contenido: form.contenido.trim(),
+        }),
+      });
 
-    setErrores({});
-    setOk({});
-  } catch (error) {
-    console.error(error);
-    setMensaje({
-      tipo: "error",
-      texto: "Hubo un problema al enviar tu mensaje. Intenta de nuevo.",
-    });
-  }
-};
+      if (!res.ok) {
+        throw new Error("Error al enviar formulario");
+      }
+
+      setMensaje({
+        tipo: "exito",
+        texto:
+          "Mensaje enviado correctamente. Pronto nos pondremos en contacto contigo.",
+      });
+
+      setForm({
+        nombre: "",
+        email: "",
+        contenido: "",
+      });
+
+      setErrores({});
+      setOk({});
+    } catch (error) {
+      console.error("Error al enviar contacto:", error);
+
+      setMensaje({
+        tipo: "error",
+        texto: "No se pudo enviar el mensaje. Intenta nuevamente.",
+      });
+    } finally {
+      setEnviando(false);
+    }
+  };
 
   return (
     <main className="contacto-lumiskin">
       <div className="container">
         <div className="contacto-encabezado text-center">
-
-          <h1><br></br>Estamos aquí para ayudarte</h1>
+          <h1>
+            <br />
+            Estamos aquí para ayudarte
+          </h1>
 
           <p>
             Completa el formulario y nos pondremos en contacto contigo lo antes
@@ -123,7 +154,6 @@ export function ContactoForm() {
               <form onSubmit={handleSubmit}>
                 <h2 className="text-center mb-2">Formulario de contacto</h2>
 
-
                 <div className="mb-3">
                   <label className="form-label">Nombre</label>
 
@@ -133,7 +163,11 @@ export function ContactoForm() {
                     value={form.nombre}
                     onChange={handleChange}
                     className={`form-control rounded-3 ${
-                      errores.nombre ? "is-invalid" : ok.nombre ? "is-valid" : ""
+                      errores.nombre
+                        ? "is-invalid"
+                        : ok.nombre
+                        ? "is-valid"
+                        : ""
                     }`}
                   />
 
@@ -156,7 +190,11 @@ export function ContactoForm() {
                     value={form.email}
                     onChange={handleChange}
                     className={`form-control rounded-3 ${
-                      errores.email ? "is-invalid" : ok.email ? "is-valid" : ""
+                      errores.email
+                        ? "is-invalid"
+                        : ok.email
+                        ? "is-valid"
+                        : ""
                     }`}
                   />
 
@@ -198,8 +236,12 @@ export function ContactoForm() {
                   )}
                 </div>
 
-                <button type="submit" className="btn-contacto-lumiskin">
-                  Enviar mensaje
+                <button
+                  type="submit"
+                  className="btn-contacto-lumiskin"
+                  disabled={enviando}
+                >
+                  {enviando ? "Enviando..." : "Enviar mensaje"}
                 </button>
 
                 {mensaje && (

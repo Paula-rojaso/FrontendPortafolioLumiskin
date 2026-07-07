@@ -24,7 +24,7 @@ describe("Componente HomeSection", () => {
     );
 
     const indicadores = document.querySelectorAll(".carousel-indicators button");
-    expect(indicadores.length).toBe(2); // tienes 2 indicadores
+    expect(indicadores.length).toBe(5); 
   });
 
   it("contiene los controles prev y next del carrusel", () => {

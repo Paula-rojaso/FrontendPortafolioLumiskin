@@ -1,0 +1,21 @@
+.container-login {
+  max-width: 520px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.card-login {
+  padding: 25px;
+  border-radius: 16px;
+}
+
+.button1 {
+  background-color: #d63384;
+  color: white;
+  border: none;
+}
+
+.button1:hover {
+  background-color: #b82d70;
+  color: white;
+}

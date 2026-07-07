@@ -25,7 +25,6 @@ export function Navbar() {
       if (guardado) {
         try {
           const user = JSON.parse(guardado);
-
           const rolNormalizado =
             typeof user.rol === "string"
               ? user.rol.toLowerCase()
@@ -89,17 +88,33 @@ export function Navbar() {
   };
 
   const totalCarrito = carrito.reduce(
-    (total, item) =>
-      total + Number(item.precio || 0) * Number(item.cantidad || 0),
+    (total, item) => total + Number(item.precio || 0) * Number(item.cantidad || 0),
     0
+  );
+
+  // ICONOS SVG MODERNOS PARA EL CARRITO
+  const IconoBasurero = () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="3 6 5 6 21 6"></polyline>
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    </svg>
+  );
+
+  const IconoCarritoVacio = () => (
+    <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e8b8c2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mb-3">
+      <circle cx="9" cy="21" r="1"></circle>
+      <circle cx="20" cy="21" r="1"></circle>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      <line x1="9" y1="10" x2="15" y2="10"></line>
+    </svg>
   );
 
   return (
     <>
-      <nav className="navbar navbar-expand-sm mi-navbar position-relative">
+      <nav className="navbar navbar-expand-sm mi-navbar position-relative shadow-sm">
         <div className="container-fluid">
           <button
-            className="navbar-toggler"
+            className="navbar-toggler border-0"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#Menu"
@@ -107,76 +122,78 @@ export function Navbar() {
             aria-expanded="false"
             aria-label="Abrir menú"
           >
-            <img src="/img/Menu.png" alt="Menu" />
+            <img src="/img/Menu.png" alt="Menu" style={{ width: "30px" }} />
           </button>
 
-          <Link className="navbar-brand order-0 me-3" to="/">
+          <Link className="navbar-brand order-0 me-3 ms-2 ms-sm-0" to="/">
             <img src="/img/LumiSkin.png" alt="Logo" width="120" />
           </Link>
 
           <form
-            className="d-none d-lg-flex buscador-navbar ms-3 me-4"
+            className="d-none d-lg-flex buscador-navbar ms-3 me-4 flex-grow-1"
+            style={{ maxWidth: "500px" }}
             onSubmit={handleBuscar}
           >
             <input
               type="text"
-              className="form-control me-2"
-              placeholder="Buscar productos..."
+              className="form-control rounded-pill px-4 bg-light border-0"
+              placeholder="🔍 Buscar productos..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
             />
-
-            <button type="submit" className="btn btn-buscar-navbar">
-              Buscar
-            </button>
           </form>
 
-          <div className="iconos-navbar d-flex align-items-center gap-3">
+          <div className="iconos-navbar d-flex align-items-center gap-2 gap-md-4 ms-auto">
             {usuarioActivo && (
               <span
-                className="d-none d-md-inline"
+                className="d-none d-xl-inline"
                 style={{
                   color: "#4b2b32",
-                  fontWeight: "500",
+                  fontWeight: "600",
                   fontSize: "15px",
                 }}
               >
-                Hola 👋, {usuarioActivo.nombre}
+                Hola 👋, {usuarioActivo.nombre.split(" ")[0]}
               </span>
             )}
 
+            {/* BOTÓN ABRIR CARRITO */}
             <button
               type="button"
-              className="btn btn-transparent p-0 position-relative"
+              className="btn btn-light rounded-circle p-2 position-relative border-0 shadow-sm"
               data-bs-toggle="modal"
               data-bs-target="#carritoModal"
+              style={{ width: "45px", height: "45px" }}
             >
-              <img src="/img/carrito1.png" alt="Carrito" />
+              <img src="/img/carrito1.png" alt="Carrito" style={{ width: "22px" }} />
 
               {totalProductos() > 0 && (
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span 
+                  className="position-absolute translate-middle badge rounded-pill"
+                  style={{ top: "5px", left: "85%", backgroundColor: "#c46a7a", border: "2px solid #fff" }}
+                >
                   {totalProductos()}
                 </span>
               )}
             </button>
 
+            {/* BOTÓN ABRIR MODAL USUARIO */}
             <button
               type="button"
-              className="btn btn-transparent p-0"
+              className="btn btn-light rounded-circle p-2 border-0 shadow-sm"
               data-bs-toggle="modal"
               data-bs-target="#usuarioModal"
+              style={{ width: "45px", height: "45px" }}
             >
-              <img src="/img/user.png" alt="Usuario" />
+              <img src="/img/user.png" alt="Usuario" style={{ width: "20px" }} />
             </button>
           </div>
 
-          <div className="collapse navbar-collapse" id="Menu">
+          <div className="collapse navbar-collapse mt-3 mt-sm-0" id="Menu">
             <div className="w-100">
-              <ul className="navbar-nav me-auto ms-4 mb-2 mb-lg-0 menu-principal-navbar">
+              <ul className="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 menu-principal-navbar fw-semibold">
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">
-                    Home
-                  </Link>
+                  <Link className="nav-link" to="/">Home</Link>
                 </li>
 
                 <li className="nav-item dropdown">
@@ -188,67 +205,31 @@ export function Navbar() {
                     Productos
                   </Link>
 
-                  <ul className="dropdown-menu">
-                    <li>
-                      <Link className="dropdown-item" to="/productos">
-                        Todos los productos
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="dropdown-item" to="/Cuidado-Capilar">
-                        Cuidado Capilar
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="dropdown-item" to="/cuidado-facial">
-                        Cuidado Facial
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="dropdown-item" to="/cuidado-corporal">
-                        Cuidado Corporal
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="dropdown-item" to="/fragancias">
-                        Perfumes y fragancias
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="dropdown-item" to="/Cuidado-personal">
-                        Cuidado Personal
-                      </Link>
-                    </li>
+                  <ul className="dropdown-menu border-0 shadow-sm rounded-3">
+                    <li><Link className="dropdown-item py-2" to="/productos">Todos los productos</Link></li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li><Link className="dropdown-item py-2" to="/Cuidado-Capilar">Cuidado Capilar</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/cuidado-facial">Cuidado Facial</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/cuidado-corporal">Cuidado Corporal</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/fragancias">Perfumes y fragancias</Link></li>
+                    <li><Link className="dropdown-item py-2" to="/Cuidado-personal">Cuidado Personal</Link></li>
                   </ul>
                 </li>
 
                 <li className="nav-item">
-                  <Link className="nav-link" to="/nosotros">
-                    Nosotros
-                  </Link>
+                  <Link className="nav-link" to="/nosotros">Nosotros</Link>
                 </li>
-
                 <li className="nav-item">
-                  <Link className="nav-link" to="/blogs">
-                    Blogs
-                  </Link>
+                  <Link className="nav-link" to="/blogs">Blogs</Link>
                 </li>
-
                 <li className="nav-item">
-                  <Link className="nav-link" to="/contacto">
-                    Contacto
-                  </Link>
+                  <Link className="nav-link" to="/contacto">Contacto</Link>
                 </li>
 
                 {(rol === "admin" || rol === "administrador") && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/admin">
-                      Panel de administración
+                    <Link className="nav-link text-primary" to="/admin">
+                      ⚙️ Panel
                     </Link>
                   </li>
                 )}
@@ -258,180 +239,173 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* MODAL CARRITO */}
+      {/* =========================================================
+          MODAL CARRITO REDISEÑADO (PREMIUM)
+      ========================================================= */}
       <div className="modal fade" id="carritoModal" tabIndex="-1">
         <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          style={{ maxWidth: "760px" }}
+          className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
+          style={{ maxWidth: "650px" }}
         >
           <div
             className="modal-content border-0 rounded-4 shadow-lg"
-            style={{
-              background: "linear-gradient(180deg, #ffffff 0%, #fff7f9 100%)",
-              border: "1px solid #f1d4dc",
-            }}
+            style={{ background: "#ffffff" }}
           >
-            <div className="modal-header border-0 px-4 pt-4">
-              <h2
-                className="modal-title w-100 text-center"
-                style={{
-                  color: "#4b2b32",
-                  fontWeight: "800",
-                  fontSize: "30px",
-                }}
+            <div className="modal-header border-bottom-0 px-4 pt-4 pb-2">
+              <h3
+                className="modal-title"
+                style={{ color: "#4b2b32", fontWeight: "900", fontSize: "28px" }}
               >
-                Mi carrito
-              </h2>
-
+                Mi Carrito
+              </h3>
               <button
                 type="button"
-                className="btn-close"
+                className="btn-close bg-light rounded-circle p-2"
                 data-bs-dismiss="modal"
                 aria-label="Cerrar"
               ></button>
             </div>
 
-            <div className="modal-body px-4 pb-4">
+            <div className="modal-body px-4 custom-scrollbar">
               {carrito.length === 0 ? (
-                <div className="text-center py-4">
-                  <h4 style={{ color: "#4b2b32", fontWeight: "800" }}>
-                    Tu carrito está vacío
-                  </h4>
-
-                  <p className="text-muted mb-4">
-                    Agrega productos para continuar con tu compra.
-                  </p>
-
+                // ESTADO VACÍO ELEGANTE
+                <div className="text-center py-5">
+                  <IconoCarritoVacio />
+                  <h4 style={{ color: "#4b2b32", fontWeight: "800" }}>Tu carrito está vacío</h4>
+                  <p className="text-muted mb-4">¿Aún no te decides? Tenemos los mejores productos para tu piel.</p>
                   <button
                     type="button"
-                    className="btn rounded-pill px-4 py-2"
-                    style={{
-                      backgroundColor: "#c46a7a",
-                      color: "white",
-                      fontWeight: "700",
-                    }}
+                    className="btn rounded-pill px-5 py-3 shadow-sm"
+                    style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "800" }}
                     data-bs-dismiss="modal"
                     onClick={() => navigate("/productos")}
                   >
-                    Ver productos
+                    Ver catálogo de productos
                   </button>
                 </div>
               ) : (
-                <>
+                // LISTA DE PRODUCTOS (Tarjetas modernas)
+                <div className="d-flex flex-column gap-3">
                   {carrito.map((item) => (
                     <div
                       key={item.id}
-                      className="d-flex justify-content-between align-items-center border-bottom py-3 gap-3"
+                      className="card border-0 rounded-4 shadow-sm"
+                      style={{ backgroundColor: "#fdfbfb", border: "1px solid #f0f0f0" }}
                     >
-                      <div className="d-flex align-items-center gap-3">
-                        <img
-                          src={
-                            item.imagenUrl ||
-                            item.foto ||
-                            "https://via.placeholder.com/80"
-                          }
-                          alt={item.nombre}
-                          style={{
-                            width: "75px",
-                            height: "75px",
-                            objectFit: "cover",
-                            borderRadius: "14px",
-                          }}
-                        />
+                      <div className="card-body p-3 d-flex align-items-center gap-3">
+                        {/* Imagen del producto */}
+                        <div className="bg-white rounded-3 d-flex align-items-center justify-content-center p-2" style={{ width: "80px", height: "80px", border: "1px solid #eee" }}>
+                          <img
+                            src={item.imagenUrl || item.foto || "/sin-imagen.png"}
+                            alt={item.nombre}
+                            style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                          />
+                        </div>
 
-                        <div>
-                          <h5
-                            className="mb-1"
-                            style={{
-                              color: "#4b2b32",
-                              fontWeight: "800",
-                            }}
-                          >
-                            {item.nombre}
-                          </h5>
-
-                          <p className="mb-1 text-muted">
-                            ${formatearPrecio(item.precio)} x {item.cantidad}
+                        {/* Detalles */}
+                        <div className="flex-grow-1">
+                          <div className="d-flex justify-content-between align-items-start mb-1">
+                            <h6 className="fw-bold mb-0 me-2" style={{ color: "#4b2b32", lineHeight: "1.3" }}>
+                              {item.nombre}
+                            </h6>
+                            {/* Botón de basurero minimalista */}
+                            <button
+                              type="button"
+                              className="btn btn-link text-danger p-0 m-0 text-decoration-none opacity-75 hover-opacity-100"
+                              onClick={() => eliminarProducto(item.id)}
+                              title="Eliminar producto"
+                            >
+                              <IconoBasurero />
+                            </button>
+                          </div>
+                          
+                          <p className="mb-2 text-muted small" style={{ fontSize: "13px" }}>
+                            ${formatearPrecio(item.precio)} c/u
                           </p>
 
+                          <div className="d-flex justify-content-between align-items-center">
+                            {/* Control de Cantidad Mini */}
+                            <div className="d-inline-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm">
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2 fw-bold"
+                                onClick={() => actualizarCantidad(item.id, item.cantidad - 1)}
+                                disabled={item.cantidad <= 1}
+                              >
+                                −
+                              </button>
+                              <span className="fw-bold px-3" style={{ fontSize: "14px", color: "#4b2b32" }}>
+                                {item.cantidad}
+                              </span>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-link text-decoration-none text-dark p-0 px-2 fw-bold"
+                                onClick={() => actualizarCantidad(item.id, item.cantidad + 1)}
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            {/* Subtotal de la fila */}
+                            <span className="fw-bolder fs-6" style={{ color: "#2a9d8f" }}>
+                              ${formatearPrecio(item.precio * item.cantidad)}
+                            </span>
+                          </div>
+
+                          {/* Error de stock máximo */}
                           {errores[item.id] && (
-                            <small className="text-danger fw-bold">
-                              {errores[item.id]}
+                            <small className="text-danger fw-bold d-block mt-2" style={{ fontSize: "11px" }}>
+                              ⚠️ {errores[item.id]}
                             </small>
                           )}
                         </div>
                       </div>
-
-                      <div className="d-flex align-items-center gap-2">
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() =>
-                            actualizarCantidad(item.id, item.cantidad - 1)
-                          }
-                        >
-                          -
-                        </button>
-
-                        <span className="fw-bold px-2">{item.cantidad}</span>
-
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() =>
-                            actualizarCantidad(item.id, item.cantidad + 1)
-                          }
-                        >
-                          +
-                        </button>
-
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-outline-danger ms-2"
-                          onClick={() => eliminarProducto(item.id)}
-                        >
-                          Eliminar
-                        </button>
-                      </div>
                     </div>
                   ))}
-                </>
+                </div>
               )}
             </div>
 
+            {/* FOOTER DEL CARRITO (Total y botones) */}
             {carrito.length > 0 && (
-              <div className="modal-footer border-0 d-flex justify-content-between px-4 pb-4">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary rounded-pill px-4"
-                  onClick={vaciarCarrito}
-                >
-                  Vaciar carrito
-                </button>
+              <div 
+                className="modal-footer flex-column border-top-0 px-4 pb-4 pt-2"
+                style={{ background: "linear-gradient(0deg, #fffcfd 0%, #ffffff 100%)" }}
+              >
+                <div className="d-flex justify-content-between w-100 align-items-center mb-3 p-3 rounded-4" style={{ backgroundColor: "#f9f1f3" }}>
+                  <span className="text-muted fw-bold text-uppercase" style={{ fontSize: "14px", letterSpacing: "1px" }}>
+                    Total a Pagar
+                  </span>
+                  <span className="fs-3 fw-black" style={{ color: "#4b2b32", fontWeight: "900" }}>
+                    ${formatearPrecio(totalCarrito)}
+                  </span>
+                </div>
 
-                <div className="d-flex align-items-center gap-3">
-                  <h5
-                    className="mb-0"
-                    style={{
-                      color: "#4b2b32",
-                      fontWeight: "900",
-                    }}
-                  >
-                    Total: ${formatearPrecio(totalCarrito)}
-                  </h5>
-
+                <div className="d-flex w-100 align-items-center gap-3">
+                  {/* Botón Vaciar (Subordinado) */}
                   <button
                     type="button"
-                    className="btn rounded-pill px-4"
+                    className="btn btn-link text-muted text-decoration-none fw-semibold p-0 flex-shrink-0"
+                    onClick={vaciarCarrito}
+                    style={{ fontSize: "14px" }}
+                  >
+                    Vaciar carrito
+                  </button>
+
+                  {/* Botón Pagar (Protagonista) */}
+                  <button
+                    type="button"
+                    className="btn w-100 py-3 rounded-pill shadow-sm"
                     style={{
                       backgroundColor: "#c46a7a",
                       color: "white",
                       fontWeight: "800",
+                      fontSize: "17px"
                     }}
                     data-bs-dismiss="modal"
                     onClick={() => navigate("/pago")}
                   >
-                    Ir a pagar
+                    Ir a pagar de forma segura
                   </button>
                 </div>
               </div>
@@ -440,175 +414,99 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* MODAL USUARIO */}
+      {/* MODAL USUARIO (Se mantiene igual pero con esquinas más suaves) */}
       <div className="modal fade" id="usuarioModal" tabIndex="-1">
         <div
           className="modal-dialog modal-dialog-centered"
-          style={{ maxWidth: "620px" }}
+          style={{ maxWidth: "550px" }}
         >
           <div
             className="modal-content border-0 rounded-4 shadow-lg"
             style={{
               background: "linear-gradient(180deg, #ffffff 0%, #fff7f9 100%)",
-              border: "1px solid #f1d4dc",
             }}
           >
-            <div className="modal-header border-0 pb-0 px-5 pt-4">
-              <h2
+            <div className="modal-header border-0 pb-0 px-4 pt-4">
+              <h3
                 className="modal-title w-100 text-center"
-                style={{
-                  color: "#4b2b32",
-                  fontWeight: "800",
-                  fontSize: "34px",
-                }}
+                style={{ color: "#4b2b32", fontWeight: "900" }}
               >
-                Mi cuenta
-              </h2>
-
-              <button className="btn-close" data-bs-dismiss="modal"></button>
+                Mi Cuenta
+              </h3>
+              <button className="btn-close bg-light rounded-circle p-2" data-bs-dismiss="modal"></button>
             </div>
 
-            <div className="modal-body text-center px-5 pb-5 pt-3">
+            <div className="modal-body text-center px-4 pb-5 pt-3">
               {!usuarioActivo ? (
                 <>
-                  <h3
-                    className="mb-3"
-                    style={{
-                      color: "#080808",
-                      fontWeight: "800",
-                      fontSize: "30px",
-                    }}
-                  >
+                  <h4 className="mb-3" style={{ color: "#080808", fontWeight: "800" }}>
                     Bienvenid@ a Lumiskin
-                  </h3>
-
-                  <p
-                    className="text-muted mb-4"
-                    style={{
-                      fontSize: "16px",
-                      lineHeight: "1.6",
-                    }}
-                  >
+                  </h4>
+                  <p className="text-muted mb-4">
                     Inicia sesión o crea tu cuenta para continuar con tu compra y guardar tus datos.
                   </p>
 
-                  <button
-                    className="btn w-100 py-3 rounded-pill mb-3"
-                    style={{
-                      backgroundColor: "#c46a7a",
-                      color: "white",
-                      fontWeight: "500",
-                      fontSize: "20px",
-                      boxShadow: "0 10px 20px rgba(196, 106, 122, 0.25)",
-                    }}
-                    onClick={() => {
-                      navigate("/login");
-                      window.bootstrap.Modal.getInstance(
-                        document.getElementById("usuarioModal")
-                      ).hide();
-                    }}
-                  >
-                    Iniciar sesión
-                  </button>
-
-                  <button
-                    className="btn w-100 py-3 rounded-pill"
-                    style={{
-                      backgroundColor: "#fff",
-                      color: "#7a3f4b",
-                      fontWeight: "500",
-                      fontSize: "20px",
-                      border: "1px solid #e8b8c2",
-                    }}
-                    onClick={() => {
-                      navigate("/registro");
-                      window.bootstrap.Modal.getInstance(
-                        document.getElementById("usuarioModal")
-                      ).hide();
-                    }}
-                  >
-                    Crear cuenta
-                  </button>
+                  <div className="d-grid gap-3 px-3">
+                    <button
+                      className="btn py-3 rounded-pill shadow-sm"
+                      style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "700", fontSize: "18px" }}
+                      onClick={() => {
+                        navigate("/login");
+                        window.bootstrap.Modal.getInstance(document.getElementById("usuarioModal")).hide();
+                      }}
+                    >
+                      Iniciar sesión
+                    </button>
+                    <button
+                      className="btn py-3 rounded-pill"
+                      style={{ backgroundColor: "#fff", color: "#7a3f4b", fontWeight: "700", fontSize: "18px", border: "1px solid #e8b8c2" }}
+                      onClick={() => {
+                        navigate("/registro");
+                        window.bootstrap.Modal.getInstance(document.getElementById("usuarioModal")).hide();
+                      }}
+                    >
+                      Crear cuenta nueva
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
                   <div
-                    className="mx-auto mb-3 d-flex align-items-center justify-content-center"
-                    style={{
-                      width: "82px",
-                      height: "82px",
-                      borderRadius: "50%",
-                      backgroundColor: "#f7dbe2",
-                      color: "#9b4d5d",
-                      fontSize: "34px",
-                      fontWeight: "800",
-                    }}
+                    className="mx-auto mb-3 d-flex align-items-center justify-content-center shadow-sm"
+                    style={{ width: "80px", height: "80px", borderRadius: "50%", backgroundColor: "#f7dbe2", color: "#9b4d5d", fontSize: "32px", fontWeight: "800" }}
                   >
                     {usuarioActivo.nombre?.charAt(0)?.toUpperCase() || "U"}
                   </div>
 
-                  <h3
-                    className="mb-2"
-                    style={{
-                      color: "#4b2b32",
-                      fontWeight: "800",
-                      fontSize: "30px",
-                    }}
-                  >
-                    Hola, {usuarioActivo.nombre}
+                  <h3 className="mb-2" style={{ color: "#4b2b32", fontWeight: "800" }}>
+                    Hola, {usuarioActivo.nombre.split(" ")[0]}
                   </h3>
+                  <p className="text-muted mb-4">¿Qué deseas hacer ahora?</p>
 
-                  <p className="text-muted mb-4" style={{ fontSize: "17px" }}>
-                    ¿Qué deseas hacer ahora?
-                  </p>
-
-                  <div className="d-grid gap-3">
+                  <div className="d-grid gap-3 px-3">
                     <button
                       className="btn py-3 rounded-pill"
-                      style={{
-                        backgroundColor: "#fff",
-                        color: "#7a3f4b",
-                        fontWeight: "700",
-                        fontSize: "17px",
-                        border: "1px solid #e8b8c2",
-                      }}
+                      style={{ backgroundColor: "#fff", color: "#7a3f4b", fontWeight: "700", fontSize: "16px", border: "1px solid #e8b8c2" }}
                       onClick={() => {
                         navigate("/Perfil");
-                        window.bootstrap.Modal.getInstance(
-                          document.getElementById("usuarioModal")
-                        ).hide();
+                        window.bootstrap.Modal.getInstance(document.getElementById("usuarioModal")).hide();
                       }}
                     >
-                      Mi perfil
+                      Ver mi perfil
                     </button>
-
                     <button
-                      className="btn py-3 rounded-pill"
-                      style={{
-                        backgroundColor: "#c46a7a",
-                        color: "white",
-                        fontWeight: "800",
-                        fontSize: "17px",
-                        boxShadow: "0 10px 20px rgba(196, 106, 122, 0.25)",
-                      }}
+                      className="btn py-3 rounded-pill shadow-sm"
+                      style={{ backgroundColor: "#c46a7a", color: "white", fontWeight: "800", fontSize: "16px" }}
                       onClick={() => {
                         navigate("/productos");
-                        window.bootstrap.Modal.getInstance(
-                          document.getElementById("usuarioModal")
-                        ).hide();
+                        window.bootstrap.Modal.getInstance(document.getElementById("usuarioModal")).hide();
                       }}
                     >
                       Ir a comprar
                     </button>
-
                     <button
-                      className="btn py-3 rounded-pill"
-                      style={{
-                        backgroundColor: "#000000",
-                        color: "white",
-                        fontWeight: "500",
-                        fontSize: "19px",
-                      }}
+                      className="btn py-3 rounded-pill mt-2"
+                      style={{ backgroundColor: "#212529", color: "white", fontWeight: "600", fontSize: "16px" }}
                       onClick={handleLogout}
                     >
                       Cerrar sesión

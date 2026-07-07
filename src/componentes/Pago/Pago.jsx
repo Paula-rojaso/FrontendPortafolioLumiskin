@@ -161,11 +161,11 @@ export default function Pago() {
         metodoPago: "WEBPAY",
         detalles: carrito.map((item) => ({
           idProducto: item.id,
-          nombre: item.nombre,
+          producto: item.nombre,
           cantidad: item.cantidad,
           precioUnitario: item.precio,
           subtotal: item.precio * item.cantidad,
-          imagenUrl: item.imagenUrl,
+          imagenUrl: item.imagenUrl || item.foto,
         })),
       };
 
@@ -280,7 +280,11 @@ export default function Pago() {
                                     />
                                     <div>
                                       <h6 className="mb-1" style={{ fontWeight: "700", color: "#4b2b32" }}>{item.nombre}</h6>
-                                      <small className="text-muted">Producto Lumiskin</small>
+                                      <small className="text-muted">
+                                        {typeof item.categoria === "object"
+                                          ? item.categoria?.nombre
+                                          : item.categoria || "Sin categoría"}
+                                      </small>
                                     </div>
                                   </div>
                                 </td>

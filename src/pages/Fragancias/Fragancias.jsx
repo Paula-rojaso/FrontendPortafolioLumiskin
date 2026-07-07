@@ -10,7 +10,7 @@ export function Fragancias() {
           Descubre nuestra selección de perfumes y fragancias para complementar
           tu estilo y rutina diaria.
         </h2>
-        <ModalProductos categoriaNombre="Perfumes y fragancias" />
+        <ModalProductos categoriaNombre="Fragancias" />
       </div>
       <Footer />
     </>

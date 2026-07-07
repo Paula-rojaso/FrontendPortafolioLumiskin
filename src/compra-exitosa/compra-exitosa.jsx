@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCarrito } from "../componentes/Carrito/ContextCarrito";
 
 export default function CompraExitosa() {
   const [boleta, setBoleta] = useState(null);
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
+  
   const formatearPrecio = (valor) => {
     return Number(valor || 0).toLocaleString("es-CL");
   };
+  
+  const { vaciarCarrito } = useCarrito();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -16,21 +20,47 @@ export default function CompraExitosa() {
     if (idBoleta) {
       fetch(`https://backend-pago.onrender.com/api/pagos/boleta/${idBoleta}`)
         .then(res => res.json())
-        .then(data => {
-          setBoleta(data);
-          localStorage.setItem("boleta", JSON.stringify(data));
+        .then(async (dataBoleta) => {
+          setBoleta(dataBoleta);
+          localStorage.setItem("boleta", JSON.stringify(dataBoleta));
 
-          const yaDescontado = localStorage.getItem("stock_descontado");
+          // Clave única por boleta para no bloquear futuras compras
+          const yaDescontado = localStorage.getItem(`stock_descontado_${idBoleta}`);
+          
           if (!yaDescontado) {
-            data.detalles.forEach((item) => {
-              fetch(
-                `https://backend-inventario.onrender.com/api/productos/${item.idProducto}/descontar?cantidad=${item.cantidad}`,
-                { method: "PATCH" }
-              );
-            });
-            localStorage.setItem("stock_descontado", "true");
+            try {
+              // 1. Traemos el inventario real para extraer los IDs verdaderos
+              const resInv = await fetch("https://backendportafolio-635z.onrender.com/api/productos");
+              const inventario = await resInv.json();
+
+              // 2. Cruzamos los datos usando el NOMBRE como puente
+              dataBoleta.detalles.forEach((itemBoleta) => {
+                const nombreBuscado = itemBoleta.producto || itemBoleta.nombre;
+                const productoReal = inventario.find(p => p.nombre === nombreBuscado);
+
+                if (productoReal) {
+                  // 3. Descontamos usando el ID verdadero de la base de inventario
+                  fetch(
+                    `https://backendportafolio-635z.onrender.com/api/productos/${productoReal.id}/descontar?cantidad=${itemBoleta.cantidad}`,
+                    { method: "PATCH" }
+                  )
+                  .then(() => console.log(`✓ Stock descontado: ${nombreBuscado}`))
+                  .catch(err => console.error("Error al descontar en BD:", err));
+                } else {
+                  console.warn("No se encontró en inventario el producto:", nombreBuscado);
+                }
+              });
+
+              // Marcamos esta boleta específica como procesada
+              localStorage.setItem(`stock_descontado_${idBoleta}`, "true");
+            } catch (error) {
+              console.error("Error cruzando datos con inventario:", error);
+            }
           }
+          
+          vaciarCarrito();
         })
+        .catch(err => console.error("Error cargando boleta:", err))
         .finally(() => {
           setCargando(false);
         });
@@ -39,6 +69,7 @@ export default function CompraExitosa() {
       if (guardada) setBoleta(JSON.parse(guardada));
       setCargando(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (cargando) {
@@ -284,8 +315,8 @@ export default function CompraExitosa() {
                                 }}
                               />
                               <div>
-                                <h6 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>{item.nombre}</h6>
-                                <small className="text-muted">Producto Lumiskin</small>
+                                <h6 className="mb-1" style={{ color: "#4b2b32", fontWeight: "800" }}>{item.nombre || item.producto}</h6>
+                                <small className="text-muted">{item.categoria}</small>
                               </div>
                             </div>
                           </td>
@@ -368,8 +399,8 @@ export default function CompraExitosa() {
                 <button
                   className="btn w-100 py-3 rounded-pill"
                   onClick={() => {
+                    // Limpiamos todo al salir para no arrastrar basura
                     localStorage.removeItem("boleta");
-                    localStorage.removeItem("stock_descontado");
                     navigate("/");
                   }}
                   style={{

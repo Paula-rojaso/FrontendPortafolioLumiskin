@@ -16,6 +16,8 @@ import { Navbar } from './componentes/Navbar/Navbar';
 import { TopBar } from './componentes/TopBar/TopBar';
 import { AdministracionProductos } from './componentes/Admin/AdministracionProductos';
 import { Usuario } from './componentes/Usuario/Usuario';
+import { OlvidasteContrasena } from "./componentes/OlvidasteContrasena/OlvidasteContrasena";
+import { ActualizarContrasena } from "./componentes/ActualizarContrasena/ActualizarContrasena";
 import { MiPerfil } from './componentes/MiPerfil/MiPerfil'
 import Pago from './componentes/Pago/Pago'
 import CompraExitosa from './compra-exitosa/compra-exitosa'
@@ -23,6 +25,8 @@ import Ordenes from './componentes/Ordenes/Ordenes'
 import { ModalProductos } from'./componentes/MostrarProductos/MostrarProductos'
 import { PanelAdministracion } from "./componentes/Admin/PanelAdministracion";
 import { AdministracionUsuarios } from "./componentes/Admin/AdministracionUsuarios";
+import { Estadisticas } from "./componentes/Admin/Estadisticas";
+import { AdministracionContactos } from "./componentes/Admin/AdministracionContactos";
 import { WhatsappChat } from "./componentes/WhatsappChat/WhatsappChat";
 
 function App() {
@@ -47,6 +51,8 @@ function App() {
         <Route path="/contacto" element={<Contacto />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/olvidaste-contrasena" element={<OlvidasteContrasena />} />
+        <Route path="/actualizar-contrasena" element={<ActualizarContrasena />} />
         <Route path="/inventario" element={<AdministracionProductos />} />
         <Route path="/admin" element={<PanelAdministracion />} />
         <Route path="/admin/usuarios" element={<AdministracionUsuarios />} />
@@ -56,6 +62,8 @@ function App() {
         <Route path="/pago" element={<Pago/>}/>
         <Route path="/compra-exitosa" element={<CompraExitosa />} />
         <Route path="/ordenes" element={<Ordenes/>}/>
+        <Route path="/admin/estadisticas" element={<Estadisticas />} />
+        <Route path="/admin/contactos" element={<AdministracionContactos />} />
 
 
       </Routes>

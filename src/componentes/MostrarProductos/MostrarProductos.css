@@ -1,21 +1,99 @@
-.toast-mensaje {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #198754;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 9999;
-  animation: fadein 0.3s, fadeout 0.3s 1.7s;
+/* EFECTOS DE LA TARJETA PRINCIPAL */
+.product-card {
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-@keyframes fadein {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08) !important;
 }
-@keyframes fadeout {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-10px); }
+
+/* ÁREA CLIQUEABLE */
+.clickable-area {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ESTANDARIZACIÓN DE IMÁGENES */
+.img-container {
+  height: 220px;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.img-container img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* SELECTOR DE CANTIDAD DEL MODAL */
+.qty-selector {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.qty-btn {
+  background: #f8f9fa;
+  border: none;
+  padding: 8px 18px;
+  font-size: 1.2rem;
+  color: #4b2b32;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.qty-btn:hover:not(:disabled) {
+  background: #e8b8c2;
+  color: #fff;
+}
+
+.qty-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.qty-input {
+  width: 50px;
+  text-align: center;
+  border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* TOAST FLOTANTE PARA MENSAJES */
+.toast-mensaje-centro {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: #2a9d8f;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 999999 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: fadeInOut 2.5s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -20px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
 }
