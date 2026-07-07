@@ -13,9 +13,7 @@ export function ContactoForm() {
   const [mensaje, setMensaje] = useState(null);
 
   const correoValido = (email) =>
-    /^[^\s@]+@(duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/i.test(
-      (email || "").trim()
-    );
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || "").trim());
 
   const reglas = {
     nombre: {
@@ -24,10 +22,10 @@ export function ContactoForm() {
       bad: "Debe tener al menos 4 letras, sin números.",
     },
     email: {
-      test: (v) => v.length <= 100 && correoValido(v),
-      ok: "Correo válido.",
-      bad: "Solo se aceptan @duoc.cl, @profesor.duoc.cl o @gmail.com.",
-    },
+    test: (v) => v.length <= 100 && correoValido(v),
+    ok: "Correo válido.",
+    bad: "Ingresa un correo electrónico válido.",
+  },
     contenido: {
       test: (v) => (v || "").trim().length >= 10,
       ok: "Mensaje válido.",
@@ -48,44 +46,45 @@ export function ContactoForm() {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
 
-    setMensaje(null);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  let valido = true;
 
-    validarCampo(name, value);
-  };
+  Object.keys(reglas).forEach((campo) => {
+    const valor = form[campo];
+    validarCampo(campo, valor);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    if (!reglas[campo].test(valor)) {
+      valido = false;
+    }
+  });
 
-    let valido = true;
+  if (!valido) {
+    setMensaje({
+      tipo: "error",
+      texto: "Revisa los campos marcados antes de enviar.",
+    });
+    return;
+  }
 
-    Object.keys(reglas).forEach((campo) => {
-      const valor = form[campo];
-      validarCampo(campo, valor);
-
-      if (!reglas[campo].test(valor)) {
-        valido = false;
-      }
+  try {
+    const response = await fetch("http://localhost:8080/api/contacto", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form), // ya tiene {nombre, email, contenido}
     });
 
-    if (!valido) {
-      setMensaje({
-        tipo: "error",
-        texto: "Revisa los campos marcados antes de enviar.",
-      });
-      return;
+    if (!response.ok) {
+      throw new Error("Error al enviar el mensaje");
     }
 
     setMensaje({
       tipo: "exito",
-      texto: "Formulario validado correctamente. Pronto nos pondremos en contacto contigo.",
+      texto: "Mensaje enviado correctamente. Pronto nos pondremos en contacto contigo.",
     });
 
     setForm({
@@ -96,7 +95,14 @@ export function ContactoForm() {
 
     setErrores({});
     setOk({});
-  };
+  } catch (error) {
+    console.error(error);
+    setMensaje({
+      tipo: "error",
+      texto: "Hubo un problema al enviar tu mensaje. Intenta de nuevo.",
+    });
+  }
+};
 
   return (
     <main className="contacto-lumiskin">
