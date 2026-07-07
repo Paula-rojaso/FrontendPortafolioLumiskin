@@ -342,9 +342,25 @@ body {
   .mi-navbar .navbar-brand img {
     width: 125px;
   }
-  .mi-navbar .navbar-collapse {
-  margin-top: 0 !important;
-  }
-
 }
 
+/* Fuera del media query, aplica siempre */
+.mi-navbar .navbar-collapse {
+  margin-top: 0 !important;
+}
+
+@media (min-width: 576px) {
+  .mi-navbar .container-fluid {
+    flex-wrap: nowrap;
+  }
+
+  .mi-navbar .navbar-collapse {
+    flex-basis: auto;
+    flex-grow: 0;
+    order: 1;
+  }
+
+  .mi-navbar .iconos-navbar {
+    order: 2;
+  }
+}
