@@ -121,6 +121,11 @@ export function ContactoForm() {
 
       setErrores({});
       setOk({});
+
+      setTimeout(() => {
+        setMensaje(null);
+      }, 5000);
+
     } catch (error) {
       console.error("Error al enviar contacto:", error);
 
@@ -128,6 +133,11 @@ export function ContactoForm() {
         tipo: "error",
         texto: "No se pudo enviar el mensaje. Intenta nuevamente.",
       });
+
+      setTimeout(() => {
+        setMensaje(null);
+      }, 5000);
+
     } finally {
       setEnviando(false);
     }

@@ -136,6 +136,14 @@ body {
   align-items: center;
   gap: 4px;
 }
+
+.menu-principal-navbar .nav-link {
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1;
+}
 /*espacio entre pestañas*/
 .menu-principal-navbar .nav-item {
   margin-right: 2px;
