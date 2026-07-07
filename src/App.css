@@ -140,8 +140,8 @@ body {
 .menu-principal-navbar .nav-link {
   display: flex;
   align-items: center;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   line-height: 1;
 }
 /*espacio entre pestañas*/
@@ -341,6 +341,9 @@ body {
 
   .mi-navbar .navbar-brand img {
     width: 125px;
+  }
+  .mi-navbar .navbar-collapse {
+  margin-top: 0 !important;
   }
 
 }
