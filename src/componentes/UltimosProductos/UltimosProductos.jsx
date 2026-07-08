@@ -254,9 +254,9 @@ export function UltimosProductos() {
   return (
     <div className="container my-5 py-4">
       <div className="text-center mb-5">
-        <h2 className="fw-black mb-3" style={{ color: "#4b2b32", fontWeight: "900", letterSpacing: "-1px" }}>
+        <h1 className="fw-black mb-3">
           NUEVOS LANZAMIENTOS
-        </h2>
+        </h1>
         <p className="text-muted fs-5">
           Descubre nuestros productos y encuentra los artículos que están marcando tendencia.
         </p>
