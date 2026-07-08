@@ -71,7 +71,7 @@ body {
 .footer {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%);
   padding: 40px 0;
-  color: #000000;
+  color: #000000; /* marrón chocolate */
 }
 
 .footer-logo {
@@ -90,7 +90,7 @@ body {
 }
 
 .footer a:hover {
-  color: #f5c4dc;
+  color: #f5c4dc; /* rosado fuerte */
   text-decoration: underline;
 }
 
@@ -106,7 +106,6 @@ body {
   margin: 0;
   justify-content: center;
 }
-
 /* ===== NAVBAR LUMISKIN MEJORADO ===== */
 .mi-navbar {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%) !important;
@@ -122,7 +121,6 @@ body {
   justify-content: space-between;
 }
 
-/* Logo */
 .mi-navbar .navbar-brand {
   margin-right: 30px;
 }
@@ -133,7 +131,6 @@ body {
   display: block;
 }
 
-/* Menú principal */
 .menu-principal-navbar {
   display: flex;
   align-items: center;
@@ -169,7 +166,6 @@ body {
   background-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Panel admin como botón bonito */
 .mi-navbar .admin-link {
   background-color: rgba(255, 255, 255, 0.45);
   color: #7a3f4b !important;
@@ -182,7 +178,6 @@ body {
   color: #ffffff !important;
 }
 
-/* Dropdown productos */
 .mi-navbar .dropdown-menu {
   font-size: 1rem;
   min-width: 160px;
@@ -211,7 +206,6 @@ body {
   color: #4b2b32 !important;
 }
 
-/* Iconos del navbar */
 .iconos-navbar {
   display: flex;
   align-items: center;
@@ -239,7 +233,6 @@ body {
   display: block;
 }
 
-/* Texto saludo usuario */
 .saludo-usuario-navbar {
   color: #4b2b32;
   font-weight: 200;
@@ -250,9 +243,8 @@ body {
   white-space: nowrap;
 }
 
-/* ===== BUSCADOR NAVBAR ===== */
 .buscador-navbar {
-  max-width: 100px;  
+  max-width: 100px;
   flex-grow: 0 !important;
 }
 
@@ -302,14 +294,9 @@ body {
   outline: none !important;
 }
 
-/* Responsive */
 @media (max-width: 991px) {
   .mi-navbar {
     padding: 14px 18px;
-  }
-
-  .container-fluid > div {
-    flex-wrap: wrap;
   }
 
   .menu-principal-navbar {
