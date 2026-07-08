@@ -161,7 +161,7 @@ export function Navbar() {
 
           <form
             className="d-none d-lg-flex buscador-navbar ms-3 me-4 flex-grow-1"
-            style={{ maxWidth: "500px" }}
+            style={{ maxWidth: "300px" }}
             onSubmit={handleBuscar}
           >
             <input

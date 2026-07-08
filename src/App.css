@@ -68,44 +68,114 @@ body {
 }
 
 
+/* =========================
+   FOOTER GENERAL
+   Fondo, espacio y centrado general
+========================= */
 .footer {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%);
   padding: 40px 0;
-  color: #000000; /* marrón chocolate */
+  color: #000000;
+  text-align: center;
 }
 
+
+/* =========================
+   CONTENEDOR DEL FOOTER
+   Mantiene el footer centrado y con ancho controlado
+========================= */
+.footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* =========================
+   FILA DEL FOOTER
+   Centra las columnas del footer
+========================= */
+.footer .row {
+  margin: 0;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+}
+
+
+/* =========================
+   COLUMNAS DEL FOOTER
+   Centra el contenido dentro de cada columna
+========================= */
+.footer .col,
+.footer [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* =========================
+   LOGO DEL FOOTER
+   Controla el tamaño del logo
+========================= */
 .footer-logo {
   max-width: 180px;
+  margin-bottom: 15px;
 }
 
+
+/* =========================
+   TÍTULOS DEL FOOTER
+   Estilo para títulos como "Contacto", "Enlaces", etc.
+========================= */
 .footer-title {
   font-weight: bold;
   margin-bottom: 15px;
   color: #000000;
+  text-align: center;
 }
 
+
+/* =========================
+   ENLACES DEL FOOTER
+   Color y estilo normal de los links
+========================= */
 .footer a {
   color: #000000;
   text-decoration: none;
 }
 
+
+/* =========================
+   ENLACES AL PASAR EL MOUSE
+   Efecto hover de los links
+========================= */
 .footer a:hover {
-  color: #f5c4dc; /* rosado fuerte */
+  color: #f5c4dc;
   text-decoration: underline;
 }
 
+
+/* =========================
+   IMÁGENES DEL FOOTER
+   Controla imágenes pequeñas, medios de pago, iconos, etc.
+========================= */
 .footer-img {
   max-height: 70px;
+  margin: 8px auto;
 }
 
+
+/* =========================
+   TEXTOS DEL FOOTER
+   Color y centrado de párrafos
+========================= */
 .footer p {
   color: #5a2a27;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
-.footer .row {
-  margin: 0;
-  justify-content: center;
-}
 /* ===== NAVBAR LUMISKIN MEJORADO ===== */
 .mi-navbar {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%) !important;
@@ -465,4 +535,27 @@ body {
 
 .iconos-navbar {
   transform: translateY(-20px);
+}
+
+/* Quitar subrayado de los links del navbar */
+.mi-navbar .nav-link,
+.mi-navbar .nav-link:hover,
+.mi-navbar .nav-link:focus,
+.mi-navbar .nav-link:active {
+  text-decoration: none !important;
+}
+
+/* Hover bonito sin línea */
+.mi-navbar .nav-link:hover {
+  color: #8f3f53 !important;
+  background-color: rgba(255, 255, 255, 0.35);
+  text-decoration: none !important;
+}
+
+/* Quitar subrayado del dropdown Productos */
+.mi-navbar .dropdown-toggle,
+.mi-navbar .dropdown-toggle:hover,
+.mi-navbar .dropdown-toggle:focus,
+.mi-navbar .dropdown-toggle:active {
+  text-decoration: none !important;
 }
