@@ -56,7 +56,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
   return (
     <div className="col-12 col-sm-6 col-md-4 col-lg-3">
       {/* TARJETA PRINCIPAL EN VITRINA */}
-      <div className="card product-card h-100 border-0 shadow-sm d-flex flex-column">
+      <div className="card product-card h-100 border-0 d-flex flex-column">
         
         <div 
           className="clickable-area"
@@ -87,7 +87,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
         <div className="card-body pt-2 mt-auto d-flex flex-column align-items-center">
           {/* Precio SIN el CLP, manteniendo color verde */}
           <div className="mb-3">
-            <span className="fs-5 fw-bolder" style={{ color: "#2a9d8f" }}>
+            <span className="fs-5 fw-bolder" style={{ color: "#55072a" }}>
               ${Number(p.precio).toLocaleString()}
             </span>
           </div>
@@ -136,7 +136,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
                   {p.nombre}
                 </h3>
                 
-                <h4 className="fw-bold mb-4" style={{ color: "#2a9d8f" }}>
+                <h4 className="fw-bold mb-4" style={{ color: "#55072a" }}>
                   ${Number(p.precio).toLocaleString()} CLP
                 </h4>
                 

@@ -57,7 +57,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
   return (
     <div className="col-12 col-sm-6 col-md-4 col-lg-3">
       {/* TARJETA PRINCIPAL EN VITRINA */}
-      <div className="card product-card h-100 border-0 shadow-sm d-flex flex-column">
+      <div className="card product-card h-100 border-0 d-flex flex-column">
 
         <div
           className="clickable-area"
@@ -292,7 +292,7 @@ export function ModalProductos({ categoriaNombre }) {
           Descubre nuestra selección completa de productos para el cuidado de tu piel.
         </p>
       </div>
-      
+
       {/* MENSAJE TOAST FLOTANTE */}
       {mensaje && (
         <div
