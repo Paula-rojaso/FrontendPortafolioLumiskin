@@ -1,3 +1,292 @@
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 219, 229, 0.9), transparent 32%),
+    linear-gradient(135deg, #fff7f9 0%, #f8eef2 48%, #fffdfb 100%);
+  background-attachment: fixed;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.topbar-personalizado {
+  background-color: #000000;
+}
+
+.redes-topbar a {
+  color: rgb(255, 255, 255) !important;
+  font-size: 22px;
+  text-decoration: none;
+}
+
+.redes-topbar a:hover {
+  color: #222 !important;
+}
+
+.mensaje-topbar {
+  color: rgb(255, 255, 255) !important;
+  font-weight: bold;
+}
+
+
+.footer {
+  background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%);
+  padding: 40px 0;
+  color: #000000; /* marrón chocolate */
+}
+
+.footer-logo {
+  max-width: 180px;
+}
+
+.footer-title {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #000000;
+}
+
+.footer a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #f5c4dc; /* rosado fuerte */
+  text-decoration: underline;
+}
+
+.footer-img {
+  max-height: 70px;
+}
+
+.footer p {
+  color: #5a2a27;
+}
+
+.footer .row {
+  margin: 0;
+  justify-content: center;
+}
+/* ===== NAVBAR LUMISKIN MEJORADO ===== */
+.mi-navbar {
+  background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%) !important;
+  width: 100%;
+  min-height: 20px;
+  padding: 16px 32px;
+  box-shadow: 0 4px 18px rgba(90, 42, 39, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.mi-navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.mi-navbar .navbar-brand {
+  margin-right: 30px;
+}
+
+.mi-navbar .navbar-brand img {
+  width: 145px;
+  height: auto;
+  display: block;
+}
+
+/* Menú principal más a la izquierda */
+.menu-principal-navbar {
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 0 !important;
+}
+
+.menu-principal-navbar .nav-link {
+  display: flex;
+  align-items: center;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1;
+}
+/*espacio entre pestañas*/
+.menu-principal-navbar .nav-item {
+  margin-right: 2px;
+}
+/*tamaño de letras Home, Productos , Nosotros , Blogs Contacto*/
+.mi-navbar .nav-link {
+  color: #4b2b32 !important;
+  font-weight: 300;
+  font-size: 1.2rem;
+  letter-spacing: 0.1px;
+  padding: 10px 13px !important;
+  border-radius: 500px;
+  transition: all 0.25s ease;
+}
+
+.mi-navbar .nav-link:hover {
+  color: #8f3f53 !important;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Panel admin como botón bonito */
+.mi-navbar .admin-link {
+  background-color: rgba(255, 255, 255, 0.45);
+  color: #7a3f4b !important;
+  font-weight: 700 !important;
+  padding: 10px 16px !important;
+}
+
+.mi-navbar .admin-link:hover {
+  background-color: #4b2b32 !important;
+  color: #ffffff !important;
+}
+
+/* Dropdown productos */
+.mi-navbar .dropdown-menu {
+  font-size: 1rem;
+  min-width: 160px;
+  border-radius: 18px;
+  padding: 10px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(75, 43, 50, 0.15);
+  background-color: #ffffff;
+}
+
+.mi-navbar .dropdown-item {
+  font-size: 1rem;
+  padding: 10px 14px;
+  color: #4b2b32 !important;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.mi-navbar .dropdown-item:hover {
+  background-color: #fff1f4 !important;
+  color: #c46a7a !important;
+}
+
+.mi-navbar .dropdown-item:active {
+  background-color: #f7dbe2 !important;
+  color: #4b2b32 !important;
+}
+
+/* Iconos del navbar */
+.iconos-navbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.iconos-navbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+.iconos-navbar button:hover {
+  transform: translateY(-2px);
+}
+
+.iconos-navbar img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Texto saludo usuario */
+.saludo-usuario-navbar {
+  color: #4b2b32;
+  font-weight: 200;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* ===== BUSCADOR NAVBAR ===== */
+.buscador-navbar {
+  max-width: 150px;  
+  flex-grow: 0 !important
+}
+
+.buscador-navbar .form-control {
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid #e8b8c2;
+  box-shadow: none;
+  font-size: 0.92rem;
+  padding-left: 15px;
+  transition: all 0.2s ease;
+}
+
+.buscador-navbar .form-control:focus {
+  border-color: #c46a7a;
+  box-shadow: 0 0 0 0.2rem rgba(196, 106, 122, 0.18);
+}
+/*Boton Buscar Navbar*/
+.btn-buscar-navbar {
+  height: 30px;
+  min-width: 90px;
+  border: 1px solid #cc5d75;
+  border-radius: 999px;
+  background-color: #cc5d75;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
 
 .btn-buscar-navbar:hover {
   background-color: #d97c90;
@@ -91,4 +380,3 @@
     align-items: center;
   }
 }
- 
