@@ -1,112 +1,124 @@
-#root {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+/* =========================
+   NAVBAR LUMISKIN
+========================= */
+
+.mi-navbar {
+  background-color: #f2a4b9;
+  min-height: 75px;
+  z-index: 1050;
 }
 
-body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255, 219, 229, 0.9), transparent 32%),
-    linear-gradient(135deg, #fff7f9 0%, #f8eef2 48%, #fffdfb 100%);
-  background-attachment: fixed;
+.mi-navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.navbar-brand img {
+  display: block;
+  max-height: 55px;
+  object-fit: contain;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Contenedor de iconos */
+.iconos-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.topbar-personalizado {
-  background-color: #000000;
-}
-
-.redes-topbar a {
-  color: rgb(255, 255, 255) !important;
-  font-size: 22px;
-  text-decoration: none;
-}
-
-.redes-topbar a:hover {
-  color: #222 !important;
-}
-
-.mensaje-topbar {
-  color: rgb(255, 255, 255) !important;
-  font-weight: bold;
-}
-
-
-.footer {
-  background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%);
-  padding: 40px 0;
-  color: #000000; /* marrón chocolate */
-}
-
-.footer-logo {
-  max-width: 180px;
-}
-
-.footer-title {
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #000000;
-}
-
-.footer a {
-  color: #000000;
-  text-decoration: none;
-}
-
-.footer a:hover {
-  color: #f5c4dc; /* rosado fuerte */
-  text-decoration: underline;
-}
-
-.footer-img {
-  max-height: 70px;
-}
-
-.footer p {
-  color: #5a2a27;
-}
-
-.footer .row {
-  margin: 0;
+/* Botones circulares */
+.iconos-navbar .btn {
+  width: 45px;
+  height: 45px;
+  min-width: 45px;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
+
+/* Imágenes de iconos */
+.iconos-navbar img {
+  display: block;
+  object-fit: contain;
+}
+
+/* Badge del carrito */
+.iconos-navbar .badge {
+  font-size: 11px;
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Menú */
+.menu-principal-navbar .nav-link {
+  color: #4b2b32;
+  font-weight: 700;
+}
+
+.menu-principal-navbar .nav-link:hover {
+  color: #9b4d5d;
+}
+
+/* Buscador */
+.buscador-navbar input {
+  height: 42px;
+}
+
+/* Evita que el menú colapsado empuje los iconos */
+.navbar-collapse {
+  flex-grow: 0;
+}
+
+/* Responsive celular */
+@media (max-width: 575px) {
+  .mi-navbar {
+    min-height: 70px;
+  }
+
+  .mi-navbar .container-fluid {
+    gap: 8px;
+  }
+
+  .navbar-brand img {
+    width: 105px;
+  }
+
+  .iconos-navbar {
+    gap: 8px;
+  }
+
+  .iconos-navbar .btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 6px !important;
+  }
+
+  .iconos-navbar img {
+    width: 19px !important;
+  }
+
+  .navbar-collapse {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: #fff7f9;
+    padding: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    z-index: 1040;
+  }
+}
+
 /* ===== NAVBAR LUMISKIN MEJORADO ===== */
+
 .mi-navbar {
   background: linear-gradient(180deg, #f29db1 0%, #f5b1c3 100%) !important;
   width: 100%;
@@ -117,8 +129,8 @@ body {
 }
 
 .mi-navbar .container-fluid {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
   justify-content: space-between;
 }
 
@@ -133,7 +145,7 @@ body {
   display: block;
 }
 
-/* Menú principal más a la izquierda */
+/* Menú principal */
 .menu-principal-navbar {
   margin-left: 15px;
   display: flex;
@@ -149,11 +161,11 @@ body {
   padding-bottom: 0 !important;
   line-height: 1;
 }
-/*espacio entre pestañas*/
+
 .menu-principal-navbar .nav-item {
   margin-right: 2px;
 }
-/*tamaño de letras Home, Productos , Nosotros , Blogs Contacto*/
+
 .mi-navbar .nav-link {
   color: #4b2b32 !important;
   font-weight: 300;
@@ -169,7 +181,7 @@ body {
   background-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Panel admin como botón bonito */
+/* Panel admin */
 .mi-navbar .admin-link {
   background-color: rgba(255, 255, 255, 0.45);
   color: #7a3f4b !important;
@@ -211,13 +223,30 @@ body {
   color: #4b2b32 !important;
 }
 
+/* Iconos del navbar */
+.iconos-navbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  gap: 16px;
+  margin-left: auto;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 1 !important;
+  flex-shrink: 0;
+}
 
-/* Botones circulares del carrito y usuario */
+/* Botones carrito y usuario estilo glass */
 .iconos-navbar .btn {
   width: 45px !important;
   height: 45px !important;
   min-width: 45px !important;
   min-height: 45px !important;
+  max-width: 45px !important;
+  max-height: 45px !important;
 
   display: flex !important;
   align-items: center !important;
@@ -236,26 +265,23 @@ body {
   backdrop-filter: blur(8px);
 }
 
-/* Hover de los botones */
 .iconos-navbar .btn:hover {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.42) !important;
 }
 
-/* Imágenes dentro de los botones */
 .iconos-navbar .btn img {
   display: block !important;
   object-fit: contain !important;
-  margin: 0 !important;
+  margin: 0 auto !important;
+  line-height: 1 !important;
 }
 
-/* Carrito */
 .iconos-navbar .btn img[alt="Carrito"] {
   width: 22px !important;
   height: 22px !important;
 }
 
-/* Usuario */
 .iconos-navbar .btn img[alt="Usuario"] {
   width: 20px !important;
   height: 20px !important;
@@ -274,7 +300,6 @@ body {
   border: 2px solid #fff !important;
 }
 
-
 /* Texto saludo usuario */
 .saludo-usuario-navbar {
   color: #4b2b32;
@@ -286,10 +311,10 @@ body {
   white-space: nowrap;
 }
 
-/* ===== BUSCADOR NAVBAR ===== */
+/* Buscador navbar */
 .buscador-navbar {
-  max-width: 110px;  
-  flex-grow: 0 !important
+  max-width: 110px;
+  flex-grow: 0 !important;
 }
 
 .buscador-navbar .form-control {
@@ -306,7 +331,8 @@ body {
   border-color: #c46a7a;
   box-shadow: 0 0 0 0.2rem rgba(196, 106, 122, 0.18);
 }
-/*Boton Buscar Navbar*/
+
+/* Botón buscar navbar */
 .btn-buscar-navbar {
   height: 30px;
   min-width: 90px;
@@ -338,21 +364,13 @@ body {
   outline: none !important;
 }
 
-.btn-buscar-navbar:hover {
-  background-color: #cc5d75;
-  border-color: #d97c90;
-  color: #fff !important;
+/* Collapse */
+.mi-navbar .navbar-collapse {
+  align-items: center !important;
+  margin-top: 0 !important;
 }
 
-.btn-buscar-navbar:focus,
-.btn-buscar-navbar:active {
-  background-color: #cc5d75 !important;
-  border-color: #cc5d75 !important;
-  color: #fff !important;
-  box-shadow: none !important;
-}
-
-/* Responsive */
+/* Responsive tablet */
 @media (max-width: 991px) {
   .mi-navbar {
     padding: 14px 18px;
@@ -373,10 +391,13 @@ body {
   }
 }
 
+/* Responsive celular */
 @media (max-width: 576px) {
-  .iconos-navbar img {
-    width: 28px;
-    height: 28px;
+  .iconos-navbar .btn {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
   }
 
   .mi-navbar .navbar-brand img {
@@ -384,11 +405,7 @@ body {
   }
 }
 
-/* Fuera del media query, aplica siempre */
-.mi-navbar .navbar-collapse {
-  margin-top: 0 !important;
-}
-
+/* Pantallas desde 576px hacia arriba */
 @media (min-width: 576px) {
   .mi-navbar .container-fluid {
     flex-wrap: nowrap;
@@ -404,65 +421,15 @@ body {
   .mi-navbar .iconos-navbar {
     order: 2;
   }
- 
+
+  .mi-navbar .navbar-collapse,
+  .mi-navbar .iconos-navbar {
+    align-self: center !important;
+    height: auto;
+  }
 
   .mi-navbar .navbar-collapse .w-100 {
     display: flex;
     align-items: center;
   }
-}
-
-/* ===== CORRECCIÓN ICONOS NAVBAR CENTRADOS ===== */
-
-.mi-navbar .container-fluid {
-  display: flex !important;
-  align-items: center !important;
-}
-
-.iconos-navbar {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  align-self: center !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  line-height: 1 !important;
-}
-
-
-.iconos-navbar .btn img {
-  display: block !important;
-  margin: 0 auto !important;
-  object-fit: contain !important;
-  line-height: 1 !important;
-}
-
-.iconos-navbar .btn img[alt="Carrito"] {
-  width: 22px !important;
-  height: 22px !important;
-}
-
-.iconos-navbar .btn img[alt="Usuario"] {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* Evita que el collapse empuje los iconos hacia abajo */
-.mi-navbar .navbar-collapse {
-  align-items: center !important;
-  margin-top: 0 !important;
-}
-
-/* En pantallas grandes, todo centrado verticalmente */
-@media (min-width: 576px) {
-  .mi-navbar .navbar-collapse,
-  .mi-navbar .iconos-navbar {
-    align-self: center !important;
-  }
-}
-
-.iconos-navbar {
-  transform: translateY(-20px);
 }
