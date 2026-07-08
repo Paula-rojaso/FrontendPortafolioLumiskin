@@ -42,20 +42,6 @@ export function Navbar() {
       }
     };
 
-    useEffect(() => {
-  const texto = busqueda.trim();
-
-  const timer = setTimeout(() => {
-    if (texto === "") {
-      navigate("/productos");
-    } else {
-      navigate(`/productos?search=${encodeURIComponent(texto)}`);
-    }
-  }, 400);
-
-  return () => clearTimeout(timer);
-}, [busqueda, navigate]);
-
     cargarSesion();
     window.addEventListener("storage", cargarSesion);
 
@@ -71,6 +57,18 @@ export function Navbar() {
       localStorage.setItem = originalSetItem;
     };
   }, []);
+
+  useEffect(() => {
+    const texto = busqueda.trim();
+
+    if (texto === "") return;
+
+    const timer = setTimeout(() => {
+      navigate(`/productos?search=${encodeURIComponent(texto)}`);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [busqueda, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("usuario");
