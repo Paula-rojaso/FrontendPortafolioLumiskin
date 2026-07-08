@@ -86,7 +86,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
         {/* Zona inferior de la tarjeta */}
         <div className="card-body pt-2 mt-auto d-flex flex-column align-items-center">
           <div className="mb-3">
-            <span className="fs-5 fw-bolder" style={{ color: "#2a9d8f" }}>
+            <span className="fs-5 fw-bolder" style={{ color: "#55072a" }}>
               ${Number(p.precio).toLocaleString()}
             </span>
           </div>
@@ -135,7 +135,7 @@ function TarjetaProducto({ p, categorias, mostrarMensaje }) {
                   {p.nombre}
                 </h3>
 
-                <h4 className="fw-bold mb-4" style={{ color: "#2a9d8f" }}>
+                <h4 className="fw-bold mb-4" style={{ color: "#55072a" }}>
                   ${Number(p.precio).toLocaleString()} CLP
                 </h4>
 
@@ -283,6 +283,16 @@ export function ModalProductos({ categoriaNombre }) {
 
   return (
     <div className="container mb-5">
+      {/* TÍTULO DE LA PÁGINA */}
+      <div className="text-center my-5">
+        <h1 style={{ color: "#4b2b32", fontWeight: "900" }}>
+          {categoriaNombre ? categoriaNombre : "Todos nuestros productos"}
+        </h1>
+        <p className="text-muted">
+          Descubre nuestra selección completa de productos para el cuidado de tu piel.
+        </p>
+      </div>
+      
       {/* MENSAJE TOAST FLOTANTE */}
       {mensaje && (
         <div
