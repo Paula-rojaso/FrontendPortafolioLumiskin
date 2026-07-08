@@ -253,7 +253,7 @@ body {
 
 /* ===== BUSCADOR NAVBAR ===== */
 .buscador-navbar {
-  max-width: 150px;  
+  max-width: 110px;  
   flex-grow: 0 !important
 }
 
