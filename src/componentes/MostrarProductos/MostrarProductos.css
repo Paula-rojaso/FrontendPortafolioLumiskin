@@ -8,7 +8,7 @@
 }
 
 .product-card:hover {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* ÁREA CLIQUEABLE */

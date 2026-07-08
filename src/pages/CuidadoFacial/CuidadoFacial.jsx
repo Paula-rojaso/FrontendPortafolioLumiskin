@@ -4,14 +4,7 @@ import { ModalProductos } from "../../componentes/MostrarProductos/MostrarProduc
 export function CuidadoFacial() {
   return (
     <>
-      <div className="container my-5">
-        <h1>Conoce todos nuestros productos</h1>
-        <h2 className="mb-4">
-          Descubre nuestra selección de productos de cuidado facial pensados
-          para tu rutina diaria.
-        </h2>
-        <ModalProductos categoriaNombre="Cuidado facial" />
-      </div>
+      <ModalProductos categoriaNombre="Cuidado facial" />
       <Footer />
     </>
   );
