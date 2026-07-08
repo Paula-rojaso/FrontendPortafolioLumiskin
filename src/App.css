@@ -135,6 +135,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
+  margin-bottom: 0 !important;
 }
 
 .menu-principal-navbar .nav-link {
@@ -248,7 +249,7 @@ body {
 
 /* ===== BUSCADOR NAVBAR ===== */
 .buscador-navbar {
-  max-width: 250px;  
+  max-width: 150px;  
   flex-grow: 0 !important
 }
 
@@ -363,5 +364,15 @@ body {
 
   .mi-navbar .iconos-navbar {
     order: 2;
+  }
+  .mi-navbar .navbar-collapse,
+  .mi-navbar .iconos-navbar {
+    align-self: center;
+    height: auto;
+  }
+
+  .mi-navbar .navbar-collapse .w-100 {
+    display: flex;
+    align-items: center;
   }
 }

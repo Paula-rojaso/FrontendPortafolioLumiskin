@@ -1,14 +1,14 @@
 /* EFECTOS DE LA TARJETA PRINCIPAL */
 .product-card {
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
+  transition: box-shadow 0.2s ease;
+  border: none;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.08) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 /* ÁREA CLIQUEABLE */
@@ -80,7 +80,7 @@
   top: 15%;
   left: 50%;
   transform: translate(-50%, 0);
-  background: #2a9d8f;
+  background: #9d2a6f;
   color: white;
   padding: 15px 30px;
   border-radius: 8px;
