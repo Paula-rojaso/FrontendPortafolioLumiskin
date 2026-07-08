@@ -125,31 +125,73 @@ export function Navbar() {
             <img src="/img/Menu.png" alt="Menu" style={{ width: "30px" }} />
           </button>
 
-          {/* BLOQUE IZQUIERDO: logo + buscador */}
-          <div className="d-flex align-items-center">
-            <Link className="navbar-brand order-0 me-3 ms-2 ms-sm-0" to="/">
-              <img src="/img/LumiSkin.png" alt="Logo" width="120" />
-            </Link>
+          <Link className="navbar-brand order-0 me-3 ms-2 ms-sm-0" to="/">
+            <img src="/img/LumiSkin.png" alt="Logo" width="120" />
+          </Link>
 
-            <form
-              className="d-none d-lg-flex buscador-navbar ms-3 me-4 flex-grow-1"
-              style={{ maxWidth: "500px" }}
-              onSubmit={handleBuscar}
+          <form
+            className="d-none d-lg-flex buscador-navbar ms-3 me-4 flex-grow-1"
+            style={{ maxWidth: "500px" }}
+            onSubmit={handleBuscar}
+          >
+            <input
+              type="text"
+              className="form-control rounded-pill px-4 bg-light border-0"
+              placeholder="🔍 Buscar productos..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+          </form>
+
+          <div className="iconos-navbar d-flex align-items-center gap-2 gap-md-4 ms-auto">
+            {usuarioActivo && (
+              <span
+                className="d-none d-xl-inline"
+                style={{
+                  color: "#4b2b32",
+                  fontWeight: "600",
+                  fontSize: "15px",
+                }}
+              >
+                Hola 👋, {usuarioActivo.nombre.split(" ")[0]}
+              </span>
+            )}
+
+            {/* BOTÓN ABRIR CARRITO */}
+            <button
+              type="button"
+              className="btn btn-light rounded-circle p-2 position-relative border-0 shadow-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#carritoModal"
+              style={{ width: "45px", height: "45px" }}
             >
-              <input
-                type="text"
-                className="form-control rounded-pill px-4 bg-light border-0"
-                placeholder="🔍 Buscar productos..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
-            </form>
+              <img src="/img/carrito1.png" alt="Carrito" style={{ width: "22px" }} />
+
+              {totalProductos() > 0 && (
+                <span 
+                  className="position-absolute translate-middle badge rounded-pill"
+                  style={{ top: "5px", left: "85%", backgroundColor: "#c46a7a", border: "2px solid #fff" }}
+                >
+                  {totalProductos()}
+                </span>
+              )}
+            </button>
+
+            {/* BOTÓN ABRIR MODAL USUARIO */}
+            <button
+              type="button"
+              className="btn btn-light rounded-circle p-2 border-0 shadow-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#usuarioModal"
+              style={{ width: "45px", height: "45px" }}
+            >
+              <img src="/img/user.png" alt="Usuario" style={{ width: "20px" }} />
+            </button>
           </div>
 
-          {/* BLOQUE DERECHO: menú + íconos */}
-          <div className="d-flex align-items-center">
-            <div className="collapse navbar-collapse" id="Menu">
-              <ul className="navbar-nav menu-principal-navbar fw-semibold mb-0">
+          <div className="collapse navbar-collapse mt-3 mt-sm-0" id="Menu">
+            <div className="w-100">
+              <ul className="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 menu-principal-navbar fw-semibold">
                 <li className="nav-item">
                   <Link className="nav-link" to="/">Home</Link>
                 </li>
@@ -192,52 +234,6 @@ export function Navbar() {
                   </li>
                 )}
               </ul>
-            </div>
-
-            <div className="iconos-navbar d-flex align-items-center gap-2 gap-md-4 ms-4">
-              {usuarioActivo && (
-                <span
-                  className="d-none d-xl-inline"
-                  style={{
-                    color: "#4b2b32",
-                    fontWeight: "600",
-                    fontSize: "15px",
-                  }}
-                >
-                  Hola 👋, {usuarioActivo.nombre.split(" ")[0]}
-                </span>
-              )}
-
-              {/* BOTÓN ABRIR CARRITO */}
-              <button
-                type="button"
-                className="btn btn-light rounded-circle p-2 position-relative border-0 shadow-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#carritoModal"
-                style={{ width: "45px", height: "45px" }}
-              >
-                <img src="/img/carrito1.png" alt="Carrito" style={{ width: "22px" }} />
-
-                {totalProductos() > 0 && (
-                  <span 
-                    className="position-absolute translate-middle badge rounded-pill"
-                    style={{ top: "5px", left: "85%", backgroundColor: "#c46a7a", border: "2px solid #fff" }}
-                  >
-                    {totalProductos()}
-                  </span>
-                )}
-              </button>
-
-              {/* BOTÓN ABRIR MODAL USUARIO */}
-              <button
-                type="button"
-                className="btn btn-light rounded-circle p-2 border-0 shadow-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#usuarioModal"
-                style={{ width: "45px", height: "45px" }}
-              >
-                <img src="/img/user.png" alt="Usuario" style={{ width: "20px" }} />
-              </button>
             </div>
           </div>
         </div>
