@@ -13,7 +13,7 @@ export function TopBar() {
           </a>
 
           <a
-            href="https://www.facebook.com/"
+            href="https://www.facebook.com/profile.php?id=61591822261673"
             target="_blank"
             rel="noreferrer"
           >
@@ -24,7 +24,7 @@ export function TopBar() {
         <div className="text-center flex-grow-1 mensaje-topbar">
           <span>
             <i className="bi bi-truck me-2"></i>
-            Despacho gratis en la Región Metropolitana por compras sobre $30.000
+            Despachamos a todo Chile
           </span>
         </div>
 
